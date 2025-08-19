@@ -8,13 +8,17 @@ export default function RootAuthLayout({
 }>) {
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full h-full">
-        <nav className="p-4 bg-red-400 max-w-full">
-            <SidebarTrigger className="text-emerald-950 bg-red-100"/>
-        </nav>
-        {children}
-      </main>
+      <div className="flex min-h-screen min-w-screen">
+        <AppSidebar />
+        <main className="flex-1 flex flex-col w-full">
+          <nav className="h-16 p-4 bg-red-400 flex items-center justify-start">
+            <SidebarTrigger className="text-emerald-950 bg-red-100" />
+          </nav>
+          <div className="flex-1 p-4">
+            {children}
+          </div>
+        </main>
+      </div>
     </SidebarProvider>
   );
 }
