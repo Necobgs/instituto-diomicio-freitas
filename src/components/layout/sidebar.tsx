@@ -1,4 +1,4 @@
-import { ChevronDown, Home, LogOut, User } from "lucide-react";
+import { ChevronDown, Home, LogOut, User, Users } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +17,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import Link from "next/link"; // Importe o Link para navegação
+import { title } from "process";
 
 // Dados dos itens do menu principal
 const items = [
@@ -25,6 +26,11 @@ const items = [
     url: "/",
     icon: Home,
   },
+  {
+    title:'Usuários',
+    url:'/user',
+    icon:User
+  }
 ];
 
 // Dados do submenu colapsável
@@ -67,7 +73,7 @@ export default function AppSidebar() {
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
-                      <User className="h-5 w-5" />
+                      <Users className="h-5 w-5" />
                       <span>Alunos</span>
                       <ChevronDown className="ml-auto h-5 w-5 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
