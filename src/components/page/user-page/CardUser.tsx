@@ -11,7 +11,7 @@ import { iUser } from "@/types/user"
 
 export default function CardUser(user:iUser) {
   return (
-    <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in">
+    <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer">
       <CardHeader>
         <CardTitle>{user.name}</CardTitle>
       </CardHeader>
