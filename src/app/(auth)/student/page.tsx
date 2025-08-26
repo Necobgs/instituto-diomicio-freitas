@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
-export default function UserPage(){
+export default function StudentPage(){
     
     const students = [
         {
@@ -20,9 +20,10 @@ export default function UserPage(){
             date_of_birth: new Date(2006, 6, 20),
             cpf: '123'
         },
-    ]
+    ];
     
     return (
+        
         <div className="w-full h-full p-4">
             <section className="min-h-16 flex flex-col gap-5">
                 <div className="text-left">
