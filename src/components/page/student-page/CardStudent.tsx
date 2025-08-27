@@ -17,7 +17,7 @@ export default function CardStudent(student:iStudent) {
     const router = useRouter();
 
     return (
-        <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in" onClick={() => {router.push(`/student/${student.id}`)}}>
+        <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer" onClick={() => {router.push(`/student/${student.id}`)}}>
             <CardHeader>
                 <CardTitle>{student.name}</CardTitle>
             </CardHeader>
