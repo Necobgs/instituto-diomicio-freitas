@@ -8,10 +8,16 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { iUser } from "@/types/user"
+import React, { MouseEventHandler } from "react"
 
-export default function CardUser(user:iUser) {
+interface iProps{
+  user:iUser,
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void
+}
+
+export default function CardUser({user, onClick} : iProps) {
   return (
-    <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer">
+    <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer" onClick={onClick}>
       <CardHeader>
         <CardTitle>{user.name}</CardTitle>
       </CardHeader>
