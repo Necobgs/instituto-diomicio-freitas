@@ -4,13 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iStudent } from "@/types/student";
+import { iEnterprise } from "@/types/enterprise";
 
-export default function UserEditPage() {
+export default function EnterpriseEditPage() {
 
     const router = useRouter();
 
-    const [formData, setFormData] = useState<iStudent | null>(null);
+    const [formData, setFormData] = useState<iEnterprise | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -20,8 +20,8 @@ export default function UserEditPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (formData) {
-            console.log('Estudante Salvo:', formData);
-            alert('Estudante salvo com sucesso! (Simulação)');
+            console.log('Empresa Salva:', formData);
+            alert('Empresa salva com sucesso! (Simulação)');
             router.push('/student');
         }
     };
@@ -30,7 +30,7 @@ export default function UserEditPage() {
         <div className="w-full h-full p-4">
             <section className="min-h-16 flex flex-col gap-5">
                 <div className="text-left">
-                    <h1 className="text-2xl">Editar Estudante</h1>
+                    <h1 className="text-2xl">Editar Empresa</h1>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                     <div>
@@ -40,7 +40,7 @@ export default function UserEditPage() {
                             name="name"
                             value={formData?.name || ''}
                             onChange={handleInputChange}
-                            placeholder="Nome do estudante"
+                            placeholder="Nome da empresa"
                         />
                     </div>
                     <div>
@@ -50,32 +50,22 @@ export default function UserEditPage() {
                             name="phone"
                             value={formData?.phone || ''}
                             onChange={handleInputChange}
-                            placeholder="Telefone do estudante"
+                            placeholder="Telefone da empresa"
                         />
                     </div>
                     <div>
-                        <label htmlFor="date_of_birth" className="text-sm font-medium">CPF</label>
+                        <label htmlFor="cnpj" className="text-sm font-medium">CPF</label>
                         <Input
-                            id="date_of_birth"
-                            name="date_of_birth"
-                            value={formData?.date_of_birth.toLocaleDateString("pt-BR") || ''}
+                            id="cnpj"
+                            name="cnpj"
+                            value={formData?.cnpj || ''}
                             onChange={handleInputChange}
-                            placeholder="Data de nascimento do estudante"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="cpf" className="text-sm font-medium">Email</label>
-                        <Input
-                            id="cpf"
-                            name="cpf"
-                            value={formData?.cpf || ''}
-                            onChange={handleInputChange}
-                            placeholder="CPF do estudante"
+                            placeholder="CNPJ da empresa"
                         />
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
+                        <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                             Cancelar
                         </Button>
                     </div>
