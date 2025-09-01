@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Key } from "lucide-react";
+import { ArrowLeft, Key } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,18 +13,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
+import { isValidEmail } from "@/app/utils/validations";
 
 export default function RecoveryPasswordPage() {
   const [email, setEmail] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(true);
-
-  // Função para validar o e-mail
-  const isValidEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex simples para validar e-mail
-    return emailRegex.test(email);
-  };
 
   // Função para lidar com a recuperação de senha
   const handlePasswordRecovery = () => {
@@ -44,7 +39,6 @@ export default function RecoveryPasswordPage() {
       return;
     }
 
-    // Simulação de envio do e-mail
     try {
       // Aqui você pode adicionar a lógica real para enviar o e-mail
       console.log(`Enviando e-mail de recuperação para: ${email}`);
@@ -63,6 +57,10 @@ export default function RecoveryPasswordPage() {
 
   return (
     <div className="bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
+        <a className="flex items-center justify-start w-full gap-2" href="/login">
+            <ArrowLeft size={20}/>
+            <span className="text-sm">Voltar</span>
+        </a>
       <div className="flex justify-center items-center m-5">
         <Key />
       </div>
