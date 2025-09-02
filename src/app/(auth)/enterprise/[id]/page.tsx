@@ -2,15 +2,41 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iEnterprise } from "@/types/enterprise";
 
 export default function EnterpriseEditPage() {
 
+    const enterprises: iEnterprise[] = [
+        {
+            id: 1,
+            name:'Empresa 1',
+            phone: "(48) 12345-6789",
+            cnpj: '123',
+        },
+        {
+            id: 2,
+            name:'Empresa 2',
+            phone: "(48) 12345-6789",
+            cnpj: '123'
+        },
+    ];
+    
+    const params = useParams();
     const router = useRouter();
+    const { id } = params;
+    const enterprise = enterprises.find(enterprise => enterprise.id.toString() === id);
 
-    const [formData, setFormData] = useState<iEnterprise | null>(null);
+    const [formData, setFormData] = useState<iEnterprise | null>(enterprise || null);
+
+    if (!enterprise) {
+        return (
+            <div className="w-full h-full p-4 flex justify-center items-center text-center">
+                <p>Empresa não encontrada :(</p>
+            </div>
+        );
+    }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
