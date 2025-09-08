@@ -1,7 +1,12 @@
+'use client'
+
 import CardUser from "@/components/page/user-page/CardUser";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+
 
 export default function UserPage(){
     
@@ -44,8 +49,10 @@ export default function UserPage(){
         }
     ]
     
+    const router = useRouter()
+
     return (
-        <div className="w-full h-full p-4">
+        <div className="w-full h-full p-4 flex flex-col justify-between">
             <section className="min-h-16 flex flex-col gap-5">
                 <div className="text-left">
                     <h1 className="text-2xl">Buscar usuário</h1>
@@ -69,10 +76,16 @@ export default function UserPage(){
                 
                 <div className="mt-5 grid gap-5 grid-cols-4">
                     {users.map(user=>
-                        <CardUser {...user} key={user.id}/>
+                        <CardUser user={user} key={user.id} onClick={()=> router.push(`/user/${user.id}`)}/>
                     )}
                 </div>
             </section>
+             <PaginationComponent 
+                cbNext={()=>{console.log('Próxima página')}} 
+                cbPrevius={()=>{console.log('Página anterior')}}
+                hasNextPage={true}
+                hasPreviousPage={true}
+                pageActivated={3}/>
         </div>
     )
 }
