@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { iStudent } from "@/types/student";
 
-export default function UserEditPage() {
+export default function StudentEditPage() {
 
     const router = useRouter();
 
