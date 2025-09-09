@@ -163,6 +163,7 @@ function DefaultAlertDialog(props:PropsDefaultAlertDialog){
             <AlertDialogDescription>{props.message}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={props.onClickBtn}>
               {props.textBtn}
             </AlertDialogAction>
