@@ -2,16 +2,43 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iStudent } from "@/types/student";
 
-export default function UserEditPage() {
+export default function StudentEditPage() {
 
+    const students: iStudent[] = [
+        {
+            id:1,
+            name:'Marcos',
+            phone: "(48) 12345-6789",
+            date_of_birth: new Date(1990, 11, 17),
+            cpf: '123'
+        },
+        {
+            id: 2,
+            name:'Paulo',
+            phone: "(48) 12345-6789",
+            date_of_birth: new Date(2006, 6, 20),
+            cpf: '123'
+        },
+    ];
+    
+    const params = useParams();
     const router = useRouter();
+    const { id } = params;
+    const enterprise = students.find(enterprise => enterprise.id.toString() === id);
 
-    const [formData, setFormData] = useState<iStudent | null>(null);
+    const [formData, setFormData] = useState<iStudent | null>(enterprise || null);
 
+    if (!enterprise) {
+        return (
+            <div className="w-full h-full p-4 flex justify-center items-center text-center">
+                <p>Empresa não encontrada :(</p>
+            </div>
+        );
+    }
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => prev ? { ...prev, [name]: value } : null);
