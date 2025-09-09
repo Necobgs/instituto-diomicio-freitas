@@ -20,7 +20,7 @@ import {
 import { iEnterprise } from "@/types/enterprise";
 
 
-const enterprises = [
+const enterprises: iEnterprise[] = [
         {
             id: 1,
             name:'Empresa 1',
@@ -89,11 +89,10 @@ export function EnterpriseCombobox({
 
   const handleSelect = (currentValue: string) => {
     const selectedId = currentValue === value ? "" : currentValue;
-    setValue(selectedId);
 
     const selectedEnterprise = enterprises.find((s) => s.id.toString() === selectedId);
     setEnterprise(selectedEnterprise);
-
+    setValue(selectedEnterprise?.name);
     setOpen(false);
   };
 

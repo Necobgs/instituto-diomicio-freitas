@@ -81,8 +81,8 @@ export default function MonitoringEditPage() {
     const monitoring = monitoringData.find(monitoring => monitoring.id.toString() === id);
 
     const [formData, setFormData]                   = useState<iMonitoring | undefined>(monitoring);
-    const [cbStudentValue, setCbStudentValue]       = useState(formData?.student.name || "")
-    const [student, setStudent]                     = useState<iStudent | null>(formData?.student || null)
+    const [cbStudentValue, setCbStudentValue]       = useState(formData?.student.name ?? undefined)
+    const [student, setStudent]                     = useState<iStudent | undefined>(formData?.student || undefined)
     const [cbEnterpriseValue, setCbEnterpriseValue] = useState(formData?.enterprise.name)
     const [enterprise, setEnterprise]               = useState<iEnterprise | undefined>(undefined)
 

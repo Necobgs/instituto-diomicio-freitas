@@ -32,9 +32,9 @@ interface ComboboxItem {
 }
 
 interface StudentComboboxProps {
-  value: string | null;
-  setValue: (value: string) => void;
-  setStudent: (student: iStudent | null) => void;
+  value: string | undefined;
+  setValue: (value: string | undefined) => void;
+  setStudent: (student: iStudent | undefined) => void;
   placeholder?: string;
   searchPlaceholder?: string;
   notFoundMessage?: string;
@@ -80,10 +80,11 @@ export function StudentCombobox({
 
   const handleSelect = (currentValue: string) => {
     const selectedId = currentValue === value ? "" : currentValue;
-    setValue(selectedId);
+  
 
     const selectedStudent = students.find((s) => s.id.toString() === selectedId);
-    setStudent(selectedStudent ?? null);
+    setStudent(selectedStudent);
+    setValue(selectedStudent?.name);
 
     setOpen(false);
   };
