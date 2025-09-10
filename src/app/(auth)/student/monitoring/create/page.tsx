@@ -141,7 +141,7 @@ export default function MonitoringEditPage() {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => router.push("/student")}
+              onClick={() => router.back()}
             >
               Cancelar
             </Button>

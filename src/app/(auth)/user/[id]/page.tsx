@@ -94,7 +94,7 @@ export default function UserEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" variant="secondary" onClick={() => router.push('/users')}>
+                        <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>
                     </div>

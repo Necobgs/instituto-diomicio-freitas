@@ -1,9 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { iEnterprise } from "./enterprise";
 import { iStudent } from "./student";
+import { iRoot } from "./iRoot";
 
-export default interface iMonitoring{
-    id:number;
+export default interface iMonitoring extends iRoot{
     student:iStudent;
     admission_date: Date;
     enterprise:iEnterprise;

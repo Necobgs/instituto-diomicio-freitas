@@ -15,12 +15,14 @@ export default function MonitoringEditPage() {
     const monitoringData: iMonitoring[] = [
       {
         id: 1,
+        created_at:new Date('2025-10-10'),
         student: {
           id: 1,
           name: "João Silva",
           phone: "(11) 91234-5678",
           date_of_birth: new Date("2000-05-15"),
           cpf: "123.456.789-00",
+          created_at: new Date('2026-12-25')
         },
         admission_date: new Date("2023-02-01"),
         enterprise: {
@@ -28,6 +30,8 @@ export default function MonitoringEditPage() {
           name: "Tech Solutions Ltda",
           phone: "(11) 3232-1010",
           cnpj: "12.345.678/0001-99",
+          created_at:new Date('2025-10-10'),
+          
         },
         job_title: "Desenvolvedor Frontend",
         hr_contact: "rh@techsolutions.com",
@@ -35,12 +39,14 @@ export default function MonitoringEditPage() {
       },
       {
         id: 2,
+        created_at:new Date('2025-10-10'),
         student: {
           id: 2,
           name: "Maria Oliveira",
           phone: "(21) 98765-4321",
           date_of_birth: new Date("1998-11-22"),
           cpf: "987.654.321-00",
+          created_at: new Date('2026-12-25')
         },
         admission_date: new Date("2023-06-15"),
         enterprise: {
@@ -48,6 +54,7 @@ export default function MonitoringEditPage() {
           name: "Design Criativo S/A",
           phone: "(21) 4567-8901",
           cnpj: "98.765.432/0001-88",
+          created_at:new Date('2025-10-10'),
         },
         job_title: "Designer Gráfico",
         hr_contact: "rh@designcriativo.com",
@@ -55,12 +62,14 @@ export default function MonitoringEditPage() {
       },
       {
         id: 3,
+        created_at:new Date('2025-10-10'),
         student: {
           id: 3,
           name: "Pedro Santos",
           phone: "(31) 99876-5432",
           date_of_birth: new Date("2001-03-10"),
           cpf: "456.789.123-00",
+          created_at: new Date('2025-10-10')
         },
         admission_date: new Date("2024-01-20"),
         enterprise: {
@@ -68,6 +77,7 @@ export default function MonitoringEditPage() {
           name: "Inovação Consultoria",
           phone: "(31) 3344-5566",
           cnpj: "45.678.912/0001-77",
+          created_at: new Date('1990-10-10')
         },
         job_title: "Analista de Projetos",
         hr_contact: "rh@inovacaoconsultoria.com",
@@ -88,9 +98,7 @@ export default function MonitoringEditPage() {
       )
     }
     
-    const [formData, setFormData]                   = useState<iMonitoringForm>(monitoring);
-    const [cbEnterpriseValue, setCbEnterpriseValue] = useState(formData?.enterprise?.name ?? ' ')
-    const [enterprise, setEnterprise]               = useState<iEnterprise | undefined>(undefined)
+    const [formData, setFormData] = useState<iMonitoringForm>(monitoring);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -183,7 +191,7 @@ export default function MonitoringEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
+                        <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>
                     </div>
