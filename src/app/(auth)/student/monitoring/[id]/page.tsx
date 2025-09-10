@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import iMonitoring from "@/types/monitoring";
+import iMonitoring, { iMonitoringForm } from "@/types/monitoring";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { iStudent } from "@/types/student";
 import { EnterpriseCombobox } from "@/components/ui/combo-box-enterprise";
@@ -80,27 +80,30 @@ export default function MonitoringEditPage() {
     const { id } = params;
     const monitoring = monitoringData.find(monitoring => monitoring.id.toString() === id);
 
-    const [formData, setFormData]                   = useState<iMonitoring | undefined>(monitoring);
-    const [cbStudentValue, setCbStudentValue]       = useState(formData?.student.name ?? undefined)
-    const [student, setStudent]                     = useState<iStudent | undefined>(formData?.student || undefined)
-    const [cbEnterpriseValue, setCbEnterpriseValue] = useState(formData?.enterprise.name)
+    if(!monitoring){
+      return (
+        <div className="flex items-center justify-center w-full h-full">
+          Página não encontrada
+        </div>
+      )
+    }
+    
+    const [formData, setFormData]                   = useState<iMonitoringForm>(monitoring);
+    const [cbEnterpriseValue, setCbEnterpriseValue] = useState(formData?.enterprise?.name ?? ' ')
     const [enterprise, setEnterprise]               = useState<iEnterprise | undefined>(undefined)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => {
-      if (!prev) return prev;
-      if (name === "admission_date" || name === "termination_date_ieedf") {
-        // Convert string input (YYYY-MM-DD) to Date object
-        console.log({ ...prev, [name]: value })
-        return {
-          ...prev,
-          [name]: value ? new Date(value) : null,
-        };
-      }
-      console.log({ ...prev, [name]: value })
-      return { ...prev, [name]: value };
-    });
+      const { name, value } = e.target;
+      setFormData((prev) => {
+        if (!prev) return prev;
+        if (name === "admission_date" || name === "termination_date_ieedf") {
+          return {
+            ...prev,
+            [name]: value ? new Date(value) : null,
+          };
+        }
+        return { ...prev, [name]: value };
+      });
   };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -119,13 +122,22 @@ export default function MonitoringEditPage() {
                     <h1 className="text-2xl">Editar acompanhamento</h1>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
-                    <div className="flex items-start justify-center gap-2 flex-col">
+                    <div className="flex flex-col gap-2">
                         <label htmlFor="student" className="text-sm font-medium">Aluno</label>
-                        <StudentCombobox setValue={setCbStudentValue} value={cbStudentValue}  setStudent={setStudent}/>
+                        <StudentCombobox 
+                        student={formData?.student} 
+                        setStudent={
+                          (student: iStudent | undefined) => setFormData((prev) => ({ ...prev, student }))
+                          }
+                          />
                     </div>
-                    <div className="flex items-start justify-center gap-2 flex-col">
+                    <div className="flex flex-col gap-2">
                         <label htmlFor="enterprise" className="text-sm font-medium">Empresa</label>
-                        <EnterpriseCombobox setValue={setCbEnterpriseValue} value={cbEnterpriseValue} setEnterprise={setEnterprise}/>
+                        <EnterpriseCombobox 
+                        enterprise={formData?.enterprise} 
+                        setEnterprise={
+                          (enterprise: iEnterprise | undefined) => setFormData((prev) => ({ ...prev, enterprise }))
+                          }/>
                     </div>
                     <div>
                         <label htmlFor="admission_date" className="text-sm font-medium">Data de admissão</label>

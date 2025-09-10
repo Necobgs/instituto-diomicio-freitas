@@ -32,8 +32,7 @@ interface ComboboxItem {
 }
 
 interface StudentComboboxProps {
-  value: string | undefined;
-  setValue: (value: string | undefined) => void;
+  student: iStudent | undefined;
   setStudent: (student: iStudent | undefined) => void;
   placeholder?: string;
   searchPlaceholder?: string;
@@ -42,30 +41,15 @@ interface StudentComboboxProps {
 }
 
 export function StudentCombobox({
-  value,
-  setValue,
+  student,
   setStudent,
   placeholder = "Selecione o aluno...",
-  searchPlaceholder = "Procurando alunos...",
+  searchPlaceholder = "Nome do aluno...",
   notFoundMessage = "Nenhum aluno encontrado.",
   width = "200px",
 }: StudentComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [filteredStudents, setFilteredStudents] = React.useState<iStudent[]>(students);
-  const [items, setItems] = React.useState<ComboboxItem[]>(students.map((student) => ({
-    value: student.id.toString(),
-    label: student.name,
-  })));
-
-  // Sincroniza items com filteredStudents
-  React.useEffect(() => {
-    setItems(
-      filteredStudents.map((student) => ({
-        value: student.id.toString(),
-        label: student.name,
-      }))
-    );
-  }, [filteredStudents]);
 
   const handleSearch = (search: string) => {
     if (!search) {
@@ -78,14 +62,11 @@ export function StudentCombobox({
     setFilteredStudents(filtered);
   };
 
-  const handleSelect = (currentValue: string) => {
-    const selectedId = currentValue === value ? "" : currentValue;
+  const handleSelect = (currentValue: number) => {
+    const selectedId = currentValue === student?.id ? "" : currentValue;
   
-
-    const selectedStudent = students.find((s) => s.id.toString() === selectedId);
+    const selectedStudent = students.find((student) => student.id.toString() == selectedId);
     setStudent(selectedStudent);
-    setValue(selectedStudent?.name);
-
     setOpen(false);
   };
 
@@ -96,14 +77,14 @@ export function StudentCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("justify-between", `w-[${width}]`)}
+          className={cn("justify-between", `w-[${width}]`,!student ? `text-black/50` : ``)}
         >
-          {value ?? placeholder}
+          {student?.name ?? placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className={cn(`w-[${width}] p-0`)}>
-        <Command shouldFilter={false}> {/* Desativa a filtragem interna do Command */}
+        <Command shouldFilter={false}>
           <CommandInput
             placeholder={searchPlaceholder}
             className="h-9"
@@ -112,17 +93,17 @@ export function StudentCombobox({
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {filteredStudents.map((filteredStudent) => (
                 <CommandItem
-                  key={item.value}
-                  value={item.label} // Use label para evitar conflitos com a filtragem
-                  onSelect={() => handleSelect(item.value)}
+                  key={filteredStudent.id}
+                  value={filteredStudent.name} // Use label para evitar conflitos com a filtragem
+                  onSelect={() => handleSelect(filteredStudent.id)}
                 >
-                  {item.label}
+                  {filteredStudent.name}
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0"
+                      student?.id == filteredStudent.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

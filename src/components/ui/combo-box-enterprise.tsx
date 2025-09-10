@@ -41,8 +41,7 @@ interface ComboboxItem {
 }
 
 interface EnterpriseComboboxProps {
-  value: string | undefined;
-  setValue: (value: string | undefined) => void;
+  enterprise: iEnterprise | undefined;
   setEnterprise: (enterprise: iEnterprise | undefined) => void;
   placeholder?: string;
   searchPlaceholder?: string;
@@ -51,8 +50,7 @@ interface EnterpriseComboboxProps {
 }
 
 export function EnterpriseCombobox({
-  value,
-  setValue,
+  enterprise,
   setEnterprise,
   placeholder = "Selecione o aluno...",
   searchPlaceholder = "Procurando alunos...",
@@ -61,20 +59,8 @@ export function EnterpriseCombobox({
 }: EnterpriseComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [filteredEnterprises, setFilteredEnterprises] = React.useState<iEnterprise[]>(enterprises);
-  const [items, setItems] = React.useState<ComboboxItem[]>(enterprises.map((enterprise) => ({
-    value: enterprise.id.toString(),
-    label: enterprise.name,
-  })));
 
-  // Sincroniza items com filteredEnterprises
-  React.useEffect(() => {
-    setItems(
-      filteredEnterprises.map((enterprise) => ({
-        value: enterprise.id.toString(),
-        label: enterprise.name,
-      }))
-    );
-  }, [filteredEnterprises]);
+
 
   const handleSearch = (search: string) => {
     if (!search) {
@@ -87,12 +73,11 @@ export function EnterpriseCombobox({
     setFilteredEnterprises(filtered);
   };
 
-  const handleSelect = (currentValue: string) => {
-    const selectedId = currentValue === value ? "" : currentValue;
+  const handleSelect = (currentId: number) => {
+    const selectedId = currentId == enterprise?.id ? "" : currentId;
 
-    const selectedEnterprise = enterprises.find((s) => s.id.toString() === selectedId);
+    const selectedEnterprise = enterprises.find((enterprise) => enterprise.id == selectedId);
     setEnterprise(selectedEnterprise);
-    setValue(selectedEnterprise?.name);
     setOpen(false);
   };
 
@@ -103,9 +88,9 @@ export function EnterpriseCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("justify-between", `w-[${width}]`)}
+          className={cn("justify-between", `w-[${width}]`,!enterprise ? `text-black/50` : ``)}
         >
-          {value ?? placeholder}
+          {enterprise?.name ?? placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -119,17 +104,17 @@ export function EnterpriseCombobox({
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {filteredEnterprises.map((filteredEnterprise) => (
                 <CommandItem
-                  key={item.value}
-                  value={item.label} // Use label para evitar conflitos com a filtragem
-                  onSelect={() => handleSelect(item.value)}
+                  key={filteredEnterprise.id}
+                  value={filteredEnterprise.name} // Use label para evitar conflitos com a filtragem
+                  onSelect={() => handleSelect(filteredEnterprise.id)}
                 >
-                  {item.label}
+                  {filteredEnterprise.name}
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0"
+                      enterprise?.id == filteredEnterprise.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

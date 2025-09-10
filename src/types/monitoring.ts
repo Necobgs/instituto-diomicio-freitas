@@ -12,6 +12,9 @@ export default interface iMonitoring{
     termination_date_ieedf:Date | null;
 }
 
+export type iMonitoringForm = Partial<iMonitoring>;
+
+
 export const monitoringColumns: ColumnDef<iMonitoring>[] = [
   {
     accessorKey: "student.name",
