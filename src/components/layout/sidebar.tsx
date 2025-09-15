@@ -50,7 +50,7 @@ const collapsibleItems = [
   },
   {
     title: "Avaliação",
-    url: "/student/avaliation",
+    url: "/student/evaluation",
   },
 ];
 

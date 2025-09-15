@@ -35,7 +35,7 @@ export default function StudentEditPage() {
     if (!enterprise) {
         return (
             <div className="w-full h-full p-4 flex justify-center items-center text-center">
-                <p>Empresa não encontrada :(</p>
+                <p>Estudante não encontrado :(</p>
             </div>
         );
     }

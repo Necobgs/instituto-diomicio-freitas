@@ -142,6 +142,38 @@ function AlertDialogCancel({
   )
 }
 
+interface PropsDefaultAlertDialog{
+  open:boolean;
+  onOpenChange:(open: boolean) => void;
+  title:string;
+  message:string;
+  textBtn:string;
+  onClickBtn: (...args:any[])=>void;
+}
+
+
+function DefaultAlertDialog(props:PropsDefaultAlertDialog){
+  return (
+    <AlertDialog open={props.open} onOpenChange={props.onOpenChange}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {props.title}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{props.message}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={props.onClickBtn}>
+              {props.textBtn}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+  )
+}
+
+
 export {
   AlertDialog,
   AlertDialogPortal,
@@ -154,4 +186,5 @@ export {
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
+  DefaultAlertDialog
 }

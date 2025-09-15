@@ -29,15 +29,21 @@ export default function EnterprisePage(){
         
         <div className="w-full h-full p-4">
             <section className="min-h-16 flex flex-col gap-5">
-                <div className="text-left">
-                    <h1 className="text-2xl">Buscar empresa</h1>
-                </div>
-                <div className="flex items-center justify-start gap-5">
-                    <Input placeholder="Nome da empresa"></Input>
-                    <Input placeholder="CNPJ da empresa"></Input>
-                    <Button>Buscar</Button>
-                </div>    
-            </section>
+        <div className="text-left">
+          <h1 className="text-2xl">Buscar empresa</h1>
+        </div>
+        <div className="flex flex-wrap items-center justify-start gap-4">
+          <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+            <Input placeholder="Nome da empresa" />
+          </div>
+          <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+            <Input placeholder="CNPJ da empresa"/>
+          </div>
+          <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+            <Button className="w-full">Buscar</Button>
+          </div>
+        </div>
+      </section>
 
             <Separator className="mt-6"/>
             
