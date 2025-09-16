@@ -14,41 +14,61 @@ export default function StudentEditPage() {
             name:'Marcos',
             phone: "(48) 12345-6789",
             date_of_birth: new Date(1990, 11, 17),
-            cpf: '123'
+            cpf: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id: 2,
             name:'Paulo',
             phone: "(48) 12345-6789",
             date_of_birth: new Date(2006, 6, 20),
-            cpf: '123'
+            cpf: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
     ];
     
     const params = useParams();
     const router = useRouter();
     const { id } = params;
-    const enterprise = students.find(enterprise => enterprise.id.toString() === id);
 
-    const [formData, setFormData] = useState<iStudent | null>(enterprise || null);
+    const enterprise: iStudent | undefined = students.find(enterprise => enterprise.id.toString() === id);
+    
+    const defaultData: iStudent = {
+        id: 0,
+        name: "",
+        phone: "",
+        date_of_birth: null,
+        cpf: "",
+        created_at: new Date(),
+        updated_at: new Date(),
+    };
+
+    const [formData, setFormData] = useState<iStudent>(enterprise ? enterprise : defaultData);
 
     if (!enterprise) {
         return (
             <div className="w-full h-full p-4 flex justify-center items-center text-center">
-                <p>Empresa não encontrada :(</p>
+                <p>Estudante não encontrado :(</p>
             </div>
         );
     }
+    
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => prev ? { ...prev, [name]: value } : null);
+        if (name === "created_at" || name === "updated_at" || name == "date_of_birth") {
+            setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (formData) {
-            console.log('Estudante Salvo:', formData);
-            alert('Estudante salvo com sucesso! (Simulação)');
+            console.log('Estudante alterado:', formData);
+            alert('Estudante alterado com sucesso! (Simulação)');
             router.push('/student');
         }
     };
@@ -71,7 +91,7 @@ export default function StudentEditPage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="phone" className="text-sm font-medium">Email</label>
+                        <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
                         <Input
                             id="phone"
                             name="phone"
@@ -81,17 +101,17 @@ export default function StudentEditPage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="date_of_birth" className="text-sm font-medium">CPF</label>
+                        <label htmlFor="date_of_birth" className="text-sm font-medium">Data de nascimento</label>
                         <Input
                             id="date_of_birth"
                             name="date_of_birth"
-                            value={formData?.date_of_birth.toLocaleDateString("pt-BR") || ''}
+                            value={formData?.date_of_birth ? formData?.date_of_birth.toISOString().split("T")[0] : ""}
                             onChange={handleInputChange}
-                            placeholder="Data de nascimento do estudante"
+                            type="date"
                         />
                     </div>
                     <div>
-                        <label htmlFor="cpf" className="text-sm font-medium">Email</label>
+                        <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
                         <Input
                             id="cpf"
                             name="cpf"
@@ -102,6 +122,7 @@ export default function StudentEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
+                        <Button className="bg-red-500">Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
                             Cancelar
                         </Button>

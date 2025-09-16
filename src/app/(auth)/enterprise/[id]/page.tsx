@@ -14,12 +14,16 @@ export default function EnterpriseEditPage() {
             name:'Empresa 1',
             phone: "(48) 12345-6789",
             cnpj: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id: 2,
             name:'Empresa 2',
             phone: "(48) 12345-6789",
-            cnpj: '123'
+            cnpj: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
     ];
     
@@ -28,7 +32,15 @@ export default function EnterpriseEditPage() {
     const { id } = params;
     const enterprise = enterprises.find(enterprise => enterprise.id.toString() === id);
 
-    const [formData, setFormData] = useState<iEnterprise | null>(enterprise || null);
+    const defaultData: iEnterprise = {
+        id: 0,
+        name: "",
+        phone: "",
+        cnpj: "",
+        created_at: new Date(),
+        updated_at: new Date(),
+    };
+    const [formData, setFormData] = useState<iEnterprise>(enterprise ? enterprise : defaultData);
 
     if (!enterprise) {
         return (
@@ -40,7 +52,11 @@ export default function EnterpriseEditPage() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => prev ? { ...prev, [name]: value } : null);
+        if (name === "created_at" || name === "updated_at") {
+            setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -48,7 +64,7 @@ export default function EnterpriseEditPage() {
         if (formData) {
             console.log('Empresa Salva:', formData);
             alert('Empresa salva com sucesso! (Simulação)');
-            router.push('/student');
+            router.push('/enterprise');
         }
     };
 
@@ -70,7 +86,7 @@ export default function EnterpriseEditPage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="phone" className="text-sm font-medium">Email</label>
+                        <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
                         <Input
                             id="phone"
                             name="phone"
@@ -80,7 +96,7 @@ export default function EnterpriseEditPage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="cnpj" className="text-sm font-medium">CPF</label>
+                        <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
                         <Input
                             id="cnpj"
                             name="cnpj"
@@ -91,6 +107,7 @@ export default function EnterpriseEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
+                        <Button className="bg-red-500">Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                             Cancelar
                         </Button>

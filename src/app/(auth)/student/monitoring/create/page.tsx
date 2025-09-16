@@ -10,8 +10,6 @@ import { iStudent } from "@/types/student";
 import { EnterpriseCombobox } from "@/components/ui/combo-box-enterprise";
 import { iEnterprise } from "@/types/enterprise";
 
-
-
 export default function MonitoringEditPage() {
   const router = useRouter();
 
@@ -31,7 +29,7 @@ export default function MonitoringEditPage() {
     e.preventDefault();
     console.log("Estudante Salvo:", formData);
     alert("Estudante salvo com sucesso! (Simulação)");
-    router.push("/student");
+    router.push("/student/monitoring");
   };
 
   return (

@@ -4,22 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-
-export interface iUser {
-    id: number;
-    name: string;
-    email: string;
-    cpf: string;
-}
+import { iUser } from "@/types/user";
 
 export default function UserEditPage() {
     const users: iUser[] = [
-        { id: 1, name: 'Emanuel', email: 'emanuel@gmail.com', cpf: '123' },
-        { id: 2, name: 'Lucas', email: 'lucas@gmail.com', cpf: '321' },
-        { id: 3, name: 'usuario', email: 'usuario@gmail.com', cpf: '1234' },
-        { id: 4, name: 'outro usuário', email: 'outrousuario@gmail.com', cpf: '4312' },
-        { id: 5, name: 'alessandro', email: 'alessandro@gmail.com', cpf: '12345' },
-        { id: 6, name: 'margot', email: 'margot@gmail.com', cpf: '54312' }
+        { id: 1, name: 'Emanuel', email: 'emanuel@gmail.com', cpf: '123', created_at: new Date(), updated_at: new Date(), },
+        { id: 2, name: 'Lucas', email: 'lucas@gmail.com', cpf: '321', created_at: new Date(), updated_at: new Date(), },
+        { id: 3, name: 'usuario', email: 'usuario@gmail.com', cpf: '1234', created_at: new Date(), updated_at: new Date(), },
+        { id: 4, name: 'outro usuário', email: 'outrousuario@gmail.com', cpf: '4312', created_at: new Date(), updated_at: new Date(), },
+        { id: 5, name: 'alessandro', email: 'alessandro@gmail.com', cpf: '12345', created_at: new Date(), updated_at: new Date(), },
+        { id: 6, name: 'margot', email: 'margot@gmail.com', cpf: '54312', created_at: new Date(), updated_at: new Date(), }
     ];
 
     const params = useParams();
@@ -27,8 +21,16 @@ export default function UserEditPage() {
     const { id } = params;
     const user = users.find(user => user.id.toString() === id);
 
+    const defaultData = {
+        id: 0, 
+        name: "", 
+        email: "", 
+        cpf: "", 
+        created_at: new Date(),
+        updated_at: new Date(),
+    }
     // Estado para os campos do formulário
-    const [formData, setFormData] = useState<iUser | null>(user || null);
+    const [formData, setFormData] = useState<iUser>(user ? user : defaultData);
 
     if (!user) {
         return (
@@ -41,16 +43,20 @@ export default function UserEditPage() {
     // Função para atualizar o estado ao alterar os inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => prev ? { ...prev, [name]: value } : null);
+        if (name === "created_at" || name === "updated_at") {
+            setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     // Função para simular o envio do formulário
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (formData) {
-            console.log('Usuário atualizado:', formData);
-            alert('Usuário atualizado com sucesso! (Simulação)');
-            router.push('/users'); // Redireciona para a lista de usuários (ajuste o caminho conforme necessário)
+            console.log('Usuário criado:', formData);
+            alert('Usuário criado com sucesso! (Simulação)');
+            router.push('/user'); // Redireciona para a lista de usuários (ajuste o caminho conforme necessário)
         }
     };
 
@@ -94,6 +100,7 @@ export default function UserEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
+                        <Button className="bg-red-500">Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>

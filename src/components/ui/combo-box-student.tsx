@@ -21,9 +21,9 @@ import { iStudent } from "@/types/student";
 
 // 🔹 Dados mocados (temporários)
 const students: iStudent[] = [
-  { id: 1, name: "Marcos", phone: "(48) 12345-6789", date_of_birth: new Date(1990, 11, 17), cpf: "123" },
-  { id: 2, name: "Paulo", phone: "(48) 12345-6789", date_of_birth: new Date(2006, 6, 20), cpf: "456" },
-  { id: 3, name: "Maria", phone: "(11) 91234-5678", date_of_birth: new Date(2001, 2, 10), cpf: "789" },
+  { id: 1, name: "Marcos", phone: "(48) 12345-6789", date_of_birth: new Date(1990, 11, 17), cpf: "123", created_at: new Date(), updated_at: new Date(), },
+  { id: 2, name: "Paulo", phone: "(48) 12345-6789", date_of_birth: new Date(2006, 6, 20), cpf: "456", created_at: new Date(), updated_at: new Date(), },
+  { id: 3, name: "Maria", phone: "(11) 91234-5678", date_of_birth: new Date(2001, 2, 10), cpf: "789", created_at: new Date(), updated_at: new Date(), },
 ];
 
 interface ComboboxItem {

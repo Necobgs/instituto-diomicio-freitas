@@ -5,54 +5,67 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { iUser } from "@/types/user";
 import { useRouter } from "next/navigation";
 
 
 export default function UserPage(){
     
-    const users = [
+    const users: iUser[] = [
         {
             id:1,
             name:'Emanuel',
             email:'emanuel@gmail.com',
-            cpf:'123'
+            cpf:'123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id:2,
             name:'Lucas',
             email:'lucas@gmail.com',
-            cpf:'321'
+            cpf:'321',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id:3,
             name:'usuario',
             email:'usuario@gmail.com',
-            cpf:'1234'
+            cpf:'1234',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id:4,
             name:'outro usuário',
             email:'outrousuario@gmail.com',
-            cpf:'4312'
+            cpf:'4312',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id:5,
             name:'alessandro',
             email:'alessandro@gmail.com',
-            cpf:'12345'
+            cpf:'12345',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id:6,
             name:'margot',
             email:'margot@gmail.com',
-            cpf:'54312'
+            cpf:'54312',
+            created_at: new Date(),
+            updated_at: new Date(),
         }
     ]
     
     const router = useRouter()
 
     return (
-        <div className="w-full h-full p-4 flex flex-col justify-between">
+        <div className="w-full h-full p-4 flex flex-col">
             <section className="min-h-16 flex flex-col gap-5">
         <div className="text-left">
           <h1 className="text-2xl">Buscar usuários</h1>
@@ -76,7 +89,7 @@ export default function UserPage(){
 
             <Separator className="mt-6"/>
             
-            <section className="mt-4">
+            <section className="mt-4 flex-auto">
                 { users != undefined &&
                 <div>
                     Quantidade de usuários encontrados: {users.length}
@@ -95,6 +108,8 @@ export default function UserPage(){
                 hasNextPage={true}
                 hasPreviousPage={true}
                 pageActivated={3}/>
+
+            <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/user/create')}}>+</button>
         </div>
     )
 }

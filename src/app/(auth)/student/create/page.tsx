@@ -10,18 +10,31 @@ export default function StudentEditPage() {
 
     const router = useRouter();
 
-    const [formData, setFormData] = useState<iStudent | null>(null);
+    const defaultData: iStudent = {
+        id: 0,
+        name: "",
+        phone: "",
+        date_of_birth: null,
+        cpf: "",
+        created_at: new Date(),
+        updated_at: new Date(),
+    };
+    const [formData, setFormData] = useState<iStudent>(defaultData);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => prev ? { ...prev, [name]: value } : null);
+        if (name === "created_at" || name === "updated_at" || name == "date_of_birth") {
+            setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (formData) {
-            console.log('Estudante Salvo:', formData);
-            alert('Estudante salvo com sucesso! (Simulação)');
+            console.log('Estudante criado:', formData);
+            alert('Estudante criado com sucesso! (Simulação)');
             router.push('/student');
         }
     };
@@ -44,7 +57,7 @@ export default function StudentEditPage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="phone" className="text-sm font-medium">Email</label>
+                        <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
                         <Input
                             id="phone"
                             name="phone"
@@ -54,17 +67,17 @@ export default function StudentEditPage() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="date_of_birth" className="text-sm font-medium">CPF</label>
+                        <label htmlFor="date_of_birth" className="text-sm font-medium">Data de nascimento</label>
                         <Input
                             id="date_of_birth"
                             name="date_of_birth"
-                            value={formData?.cpf || ''}
+                            value={formData?.date_of_birth ? formData?.date_of_birth.toISOString().split("T")[0] : ""}
                             onChange={handleInputChange}
-                            placeholder="Data de nascimento do estudante"
+                            type="date"
                         />
                     </div>
                     <div>
-                        <label htmlFor="cpf" className="text-sm font-medium">Email</label>
+                        <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
                         <Input
                             id="cpf"
                             name="cpf"

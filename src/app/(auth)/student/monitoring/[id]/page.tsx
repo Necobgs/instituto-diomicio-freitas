@@ -119,7 +119,7 @@ export default function MonitoringEditPage() {
         if (formData) {
             console.log('Estudante Salvo:', formData);
             alert('Estudante salvo com sucesso! (Simulação)');
-            router.push('/student');
+            router.push('/student/monitoring');
         }
     };
 
@@ -191,6 +191,7 @@ export default function MonitoringEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
+                        <Button className="bg-red-500">Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>

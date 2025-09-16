@@ -1,25 +1,26 @@
-"use client";
+'use client'
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iEnterprise } from "@/types/enterprise";
+import { iUser } from "@/types/user";
 
-export default function EnterpriseCreatePage() {
-
+export default function UserCreatePage() {
     const router = useRouter();
 
-    const defaultData: iEnterprise = {
-        id: 0,
-        name: "",
-        phone: "",
-        cnpj: "",
+    const defaultData = {
+        id: 0, 
+        name: "", 
+        email: "", 
+        cpf: "", 
         created_at: new Date(),
         updated_at: new Date(),
-    };
-    const [formData, setFormData] = useState<iEnterprise>(defaultData);
+    }
+    // Estado para os campos do formulário
+    const [formData, setFormData] = useState<iUser>(defaultData);
 
+    // Função para atualizar o estado ao alterar os inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === "created_at" || name === "updated_at") {
@@ -29,12 +30,13 @@ export default function EnterpriseCreatePage() {
         }
     };
 
+    // Função para simular o envio do formulário
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (formData) {
-            console.log('Empresa Salva:', formData);
-            alert('Empresa salva com sucesso! (Simulação)');
-            router.push('/enterprise');
+            console.log('Usuário criado:', formData);
+            alert('Usuário criado com sucesso! (Simulação)');
+            router.push('/user'); // Redireciona para a lista de usuários (ajuste o caminho conforme necessário)
         }
     };
 
@@ -42,7 +44,7 @@ export default function EnterpriseCreatePage() {
         <div className="w-full h-full p-4">
             <section className="min-h-16 flex flex-col gap-5">
                 <div className="text-left">
-                    <h1 className="text-2xl">Criar Empresa</h1>
+                    <h1 className="text-2xl">Editar Usuário</h1>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                     <div>
@@ -52,32 +54,33 @@ export default function EnterpriseCreatePage() {
                             name="name"
                             value={formData?.name || ''}
                             onChange={handleInputChange}
-                            placeholder="Nome da empresa"
+                            placeholder="Nome do usuário"
                         />
                     </div>
                     <div>
-                        <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
+                        <label htmlFor="email" className="text-sm font-medium">Email</label>
                         <Input
-                            id="phone"
-                            name="phone"
-                            value={formData?.phone || ''}
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formData?.email || ''}
                             onChange={handleInputChange}
-                            placeholder="Telefone da empresa"
+                            placeholder="Email do usuário"
                         />
                     </div>
                     <div>
-                        <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
+                        <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
                         <Input
-                            id="cnpj"
-                            name="cnpj"
-                            value={formData?.cnpj || ''}
+                            id="cpf"
+                            name="cpf"
+                            value={formData?.cpf || ''}
                             onChange={handleInputChange}
-                            placeholder="CNPJ da empresa"
+                            placeholder="CPF do usuário"
                         />
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
+                        <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>
                     </div>

@@ -3,6 +3,7 @@
 import CardStudent from "@/components/page/student-page/CardStudent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 
@@ -16,20 +17,24 @@ export default function StudentPage(){
             name:'Marcos',
             phone: "(48) 12345-6789",
             date_of_birth: new Date(1990, 11, 17),
-            cpf: '123'
+            cpf: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
         {
             id: 2,
             name:'Paulo',
             phone: "(48) 12345-6789",
             date_of_birth: new Date(2006, 6, 20),
-            cpf: '123'
+            cpf: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
         },
     ];
     
     return (
         
-        <div className="w-full h-full p-4">
+        <div className="w-full h-full p-4 flex flex-col">
             <section className="min-h-16 flex flex-col gap-5">
         <div className="text-left">
           <h1 className="text-2xl">Buscar estudantes</h1>
@@ -49,7 +54,7 @@ export default function StudentPage(){
 
             <Separator className="mt-6"/>
             
-            <section className="mt-4">
+            <section className="mt-4 flex-auto">
                 { students != undefined &&
                 <div>
                     Quantidade de alunos encontrados: {students.length}
@@ -62,6 +67,14 @@ export default function StudentPage(){
                     )}
                 </div>
             </section>
+
+            <PaginationComponent
+                cbNext={()=>{console.log('Próxima página')}} 
+                cbPrevius={()=>{console.log('Página anterior')}}
+                hasNextPage={true}
+                hasPreviousPage={true}
+                pageActivated={3}
+            />
 
             <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/create')}}>+</button>
         </div>

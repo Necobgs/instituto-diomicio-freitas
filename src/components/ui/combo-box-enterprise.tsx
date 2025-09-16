@@ -25,13 +25,17 @@ const enterprises: iEnterprise[] = [
             id: 1,
             name:'Empresa 1',
             phone: "(48) 12345-6789",
-            cnpj: '123',
+            cnpj: '123', 
+            created_at: new Date(), 
+            updated_at: new Date(),
         },
         {
             id: 2,
             name:'Empresa 2',
             phone: "(48) 12345-6789",
-            cnpj: '123'
+            cnpj: '123', 
+            created_at: new Date(), 
+            updated_at: new Date(),
         },
     ];
 
