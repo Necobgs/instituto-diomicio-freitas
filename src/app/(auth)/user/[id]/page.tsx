@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iUser } from "@/types/user";
+import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function UserEditPage() {
     const users: iUser[] = [
@@ -31,6 +32,11 @@ export default function UserEditPage() {
     }
     // Estado para os campos do formulário
     const [formData, setFormData] = useState<iUser>(user ? user : defaultData);
+    const [alertTitle,setAlertTitle] = useState('');
+    const [alertDesc,setAlertDesc] = useState('');
+    const [alertOpen,setAlertOpen] = useState(false);
+    const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+
 
     if (!user) {
         return (
@@ -54,11 +60,26 @@ export default function UserEditPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (formData) {
-            console.log('Usuário criado:', formData);
-            alert('Usuário criado com sucesso! (Simulação)');
-            router.push('/user'); // Redireciona para a lista de usuários (ajuste o caminho conforme necessário)
+            console.log('Usuário alterado:', formData);
+            handleAlert('Usuário alterado com sucesso! (Simulação)');
         }
     };
+
+    const handleAlert = (message: string) => {
+        setAlertTitle('Sucesso')
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
+    }
+
+    const handleDeleteAlert = () => {
+        setAlertTitle('Confirmação')
+        setAlertDesc('Tem certeza que você deseja excluir esse registro?')
+        setAlertOpen(true);
+    }
+
+    const handleDelete = () => {
+        handleAlert('Registro excluído com sucesso! (Simulação)');
+    }
 
     return (
         <div className="w-full h-full p-4">
@@ -100,13 +121,30 @@ export default function UserEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button className="bg-red-500">Excluir</Button>
+                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDeleteAlert}>Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>
                     </div>
                 </form>
             </section>
+
+            <DefaultAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={alertOpen} 
+                textBtn="Confirmar" 
+                onClickBtn={handleDelete} 
+                onOpenChange={setAlertOpen}
+            />
+
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+                onClickBtn={() => {router.push('/user');}}
+            />
         </div>
     );
 }

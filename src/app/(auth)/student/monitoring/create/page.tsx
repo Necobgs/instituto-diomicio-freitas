@@ -9,11 +9,15 @@ import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { iStudent } from "@/types/student";
 import { EnterpriseCombobox } from "@/components/ui/combo-box-enterprise";
 import { iEnterprise } from "@/types/enterprise";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function MonitoringEditPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<iMonitoringForm>({});
+  const [alertTitle,setAlertTitle] = useState('');
+  const [alertDesc,setAlertDesc] = useState('');
+  const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,10 +31,15 @@ export default function MonitoringEditPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Estudante Salvo:", formData);
-    alert("Estudante salvo com sucesso! (Simulação)");
-    router.push("/student/monitoring");
+    console.log('Acompanhamento Criado:', formData);
+    handleAlert('Acompanhamento Criado com sucesso! (Simulação)');
   };
+
+  const handleAlert = (message: string) => {
+    setAlertTitle('Sucesso')
+    setAlertDesc(message)
+    setInfoAlertOpen(true);
+  }
 
   return (
     <div className="w-full h-full p-4">
@@ -146,6 +155,14 @@ export default function MonitoringEditPage() {
           </div>
         </form>
       </section>
+
+        <InfoAlertDialog
+          message={alertDesc} 
+          title={alertTitle} 
+          open={infoAlertOpen} 
+          onOpenChange={setInfoAlertOpen}
+          onClickBtn={() => {router.push('/student/monitoring');}}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { iEnterprise } from "@/types/enterprise";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function EnterpriseCreatePage() {
 
@@ -19,6 +20,9 @@ export default function EnterpriseCreatePage() {
         updated_at: new Date(),
     };
     const [formData, setFormData] = useState<iEnterprise>(defaultData);
+    const [alertTitle,setAlertTitle] = useState('');
+    const [alertDesc,setAlertDesc] = useState('');
+    const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -33,10 +37,16 @@ export default function EnterpriseCreatePage() {
         e.preventDefault();
         if (formData) {
             console.log('Empresa Salva:', formData);
-            alert('Empresa salva com sucesso! (Simulação)');
-            router.push('/enterprise');
+            handleAlert('Empresa salva com sucesso! (Simulação)');
         }
     };
+
+    const handleAlert = (message: string) => {
+        setAlertTitle('Sucesso')
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
+    }
+
 
     return (
         <div className="w-full h-full p-4">
@@ -83,6 +93,15 @@ export default function EnterpriseCreatePage() {
                     </div>
                 </form>
             </section>
+
+
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+                onClickBtn={() => {router.push('/enterprise');}}
+            />
         </div>
     );
 }

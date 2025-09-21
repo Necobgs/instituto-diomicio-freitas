@@ -1,6 +1,6 @@
 "use client";
 
-import { DefaultAlertDialog } from "@/components/ui/alert-dialog";
+import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaginationComponent } from "@/components/ui/pagination";
@@ -93,9 +93,10 @@ const monitoringData: iMonitoring[] = [
 
 export default function MonitoringPage() {
   const router = useRouter();
-  const [alertTitle, setAlertTitle] = useState('')
-  const [alertDesc, setAlertDesc ]  = useState('')
-  const [alertOpen,setAlertOpen ]   = useState(false)
+  const [alertTitle,setAlertTitle] = useState('');
+  const [alertDesc,setAlertDesc] = useState('');
+  const [alertOpen,setAlertOpen] = useState(false);
+  const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
   function handleAlert(id: number) {
     setAlertTitle('Confirmação')
@@ -108,7 +109,9 @@ export default function MonitoringPage() {
   }
 
   function handleDelete(id: number) {
-    console.log('Excluindo...')
+    setAlertTitle('Sucesso')
+    setAlertDesc('Registro excluído com sucesso! (Simulação)')
+    setInfoAlertOpen(true);
   }
 
   return (
@@ -171,15 +174,22 @@ export default function MonitoringPage() {
       >+
       </button>
 
-        <DefaultAlertDialog 
-            message={alertDesc} 
-            title={alertTitle} 
-            open={alertOpen} 
-            textBtn="Confirmar" 
-            onClickBtn={handleDelete} 
-            onOpenChange={setAlertOpen}
-        />
+      <DefaultAlertDialog 
+          message={alertDesc} 
+          title={alertTitle} 
+          open={alertOpen} 
+          textBtn="Confirmar" 
+          onClickBtn={handleDelete} 
+          onOpenChange={setAlertOpen}
+      />
 
+      <InfoAlertDialog 
+          message={alertDesc} 
+          title={alertTitle} 
+          open={infoAlertOpen} 
+          onOpenChange={setInfoAlertOpen}
+          onClickBtn={undefined}
+      />
     </div>
   );
 }

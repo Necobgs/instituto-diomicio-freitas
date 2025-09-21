@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { iUser } from "@/types/user";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function UserCreatePage() {
     const router = useRouter();
@@ -19,6 +20,9 @@ export default function UserCreatePage() {
     }
     // Estado para os campos do formulário
     const [formData, setFormData] = useState<iUser>(defaultData);
+    const [alertTitle,setAlertTitle] = useState('');
+    const [alertDesc,setAlertDesc] = useState('');
+    const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
     // Função para atualizar o estado ao alterar os inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +39,15 @@ export default function UserCreatePage() {
         e.preventDefault();
         if (formData) {
             console.log('Usuário criado:', formData);
-            alert('Usuário criado com sucesso! (Simulação)');
-            router.push('/user'); // Redireciona para a lista de usuários (ajuste o caminho conforme necessário)
+            handleAlert('Usuário criado com sucesso! (Simulação)');
         }
     };
+
+    const handleAlert = (message: string) => {
+        setAlertTitle('Sucesso')
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
+    }
 
     return (
         <div className="w-full h-full p-4">
@@ -86,6 +95,14 @@ export default function UserCreatePage() {
                     </div>
                 </form>
             </section>
+
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+                onClickBtn={() => {router.push('/user');}}
+            />
         </div>
     );
 }

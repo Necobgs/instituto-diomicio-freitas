@@ -151,7 +151,6 @@ interface PropsDefaultAlertDialog{
   onClickBtn: (...args:any[])=>void;
 }
 
-
 function DefaultAlertDialog(props:PropsDefaultAlertDialog){
   return (
     <AlertDialog open={props.open} onOpenChange={props.onOpenChange}>
@@ -173,6 +172,34 @@ function DefaultAlertDialog(props:PropsDefaultAlertDialog){
   )
 }
 
+interface PropsInfoAlertDialog{
+  open:boolean;
+  onOpenChange:(open: boolean) => void;
+  title:string;
+  message:string;
+  onClickBtn: undefined | ((...args:any[])=>void);
+}
+
+function InfoAlertDialog(props:PropsInfoAlertDialog) {
+  return (
+    <AlertDialog open={props.open} onOpenChange={props.onOpenChange}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {props.title}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{props.message}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            {props.onClickBtn 
+            ? <AlertDialogAction onClick={props.onClickBtn}>OK</AlertDialogAction> 
+            : <AlertDialogAction>OK</AlertDialogAction>}
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+  )
+}
+
 
 export {
   AlertDialog,
@@ -186,5 +213,6 @@ export {
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
-  DefaultAlertDialog
+  DefaultAlertDialog,
+  InfoAlertDialog
 }

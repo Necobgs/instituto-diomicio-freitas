@@ -1,5 +1,6 @@
 "use client";
 
+import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { QuestionCombobox } from "@/components/ui/combo-box-question";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
@@ -118,7 +119,10 @@ export default function EvaluationUpdatePage() {
     }
 
     const [formData, setFormData] = useState<iEvaluation>(evaluation ? evaluation : defaultEvaluation);
-
+    const [alertTitle,setAlertTitle] = useState('');
+    const [alertDesc,setAlertDesc] = useState('');
+    const [alertOpen,setAlertOpen] = useState(false);
+    const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -154,10 +158,25 @@ export default function EvaluationUpdatePage() {
         e.preventDefault();
         if (formData) {
             console.log('Avalaição alterada:', formData);
-            alert('Avaliação alterada com sucesso! (Simulação)');
-            router.push('/evaluation'); // Redireciona para a lista de usuários (ajuste o caminho conforme necessário)
+            handleAlert('Avaliação alterada com sucesso! (Simulação)');
         }
     };
+
+    const handleAlert = (message: string) => {
+        setAlertTitle('Sucesso')
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
+    }
+
+    const handleDeleteAlert = () => {
+        setAlertTitle('Confirmação')
+        setAlertDesc('Tem certeza que você deseja excluir esse registro?')
+        setAlertOpen(true);
+    }
+
+    const handleDelete = () => {
+        handleAlert('Registro excluído com sucesso! (Simulação)');
+    }
 
     return (
         <div className="w-full h-full p-4">
@@ -252,13 +271,30 @@ export default function EvaluationUpdatePage() {
                     
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button className="bg-red-500">Excluir</Button>
+                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDeleteAlert}>Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.push('/student/evaluation')}>
                             Cancelar
                         </Button>
                     </div>
                 </form>
             </section>
+
+            <DefaultAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={alertOpen} 
+                textBtn="Confirmar" 
+                onClickBtn={handleDelete} 
+                onOpenChange={setAlertOpen}
+            />
+
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+                onClickBtn={() => {router.push('/student/evaluation');}}
+            />
         </div>
     );
 }

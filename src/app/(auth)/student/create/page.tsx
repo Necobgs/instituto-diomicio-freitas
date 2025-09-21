@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { iStudent } from "@/types/student";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function StudentEditPage() {
 
@@ -20,6 +21,9 @@ export default function StudentEditPage() {
         updated_at: new Date(),
     };
     const [formData, setFormData] = useState<iStudent>(defaultData);
+    const [alertTitle,setAlertTitle] = useState('');
+    const [alertDesc,setAlertDesc] = useState('');
+    const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -34,10 +38,15 @@ export default function StudentEditPage() {
         e.preventDefault();
         if (formData) {
             console.log('Estudante criado:', formData);
-            alert('Estudante criado com sucesso! (Simulação)');
-            router.push('/student');
+            handleAlert('Estudante criado com sucesso! (Simulação)');
         }
     };
+
+    const handleAlert = (message: string) => {
+        setAlertTitle('Sucesso')
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
+    }
 
     return (
         <div className="w-full h-full p-4">
@@ -94,6 +103,14 @@ export default function StudentEditPage() {
                     </div>
                 </form>
             </section>
+
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+                onClickBtn={() => {router.push('/student');}}
+            />
         </div>
     );
 }

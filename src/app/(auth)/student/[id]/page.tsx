@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iStudent } from "@/types/student";
+import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function StudentEditPage() {
 
@@ -46,6 +47,10 @@ export default function StudentEditPage() {
     };
 
     const [formData, setFormData] = useState<iStudent>(enterprise ? enterprise : defaultData);
+    const [alertTitle,setAlertTitle] = useState('');
+    const [alertDesc,setAlertDesc] = useState('');
+    const [alertOpen,setAlertOpen] = useState(false);
+    const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
     if (!enterprise) {
         return (
@@ -68,10 +73,25 @@ export default function StudentEditPage() {
         e.preventDefault();
         if (formData) {
             console.log('Estudante alterado:', formData);
-            alert('Estudante alterado com sucesso! (Simulação)');
-            router.push('/student');
+            handleAlert('Estudante alterado com sucesso! (Simulação)');
         }
     };
+
+    const handleAlert = (message: string) => {
+        setAlertTitle('Sucesso')
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
+    }
+
+    const handleDeleteAlert = () => {
+        setAlertTitle('Confirmação')
+        setAlertDesc('Tem certeza que você deseja excluir esse registro?')
+        setAlertOpen(true);
+    }
+
+    const handleDelete = () => {
+        handleAlert('Registro excluído com sucesso! (Simulação)');
+    }
 
     return (
         <div className="w-full h-full p-4">
@@ -122,13 +142,30 @@ export default function StudentEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button className="bg-red-500">Excluir</Button>
+                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDeleteAlert}>Excluir</Button>
                         <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
                             Cancelar
                         </Button>
                     </div>
                 </form>
             </section>
+
+            <DefaultAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={alertOpen} 
+                textBtn="Confirmar" 
+                onClickBtn={handleDelete} 
+                onOpenChange={setAlertOpen}
+            />
+
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+                onClickBtn={() => {router.push('/student');}}
+            />
         </div>
     );
 }
