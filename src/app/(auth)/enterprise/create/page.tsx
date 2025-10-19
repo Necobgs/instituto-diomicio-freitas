@@ -4,25 +4,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iEnterprise } from "@/types/enterprise";
+import { iEnterpriseForm } from "@/types/enterprise";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { useAppDispatch } from "@/store/hooks";
+import { addEnterprise } from "@/store/features/enterpriseSlice";
 
 export default function EnterpriseCreatePage() {
 
     const router = useRouter();
 
-    const defaultData: iEnterprise = {
-        id: 0,
+    const defaultData: iEnterpriseForm = {
         name: "",
         phone: "",
         cnpj: "",
         created_at: new Date(),
         updated_at: new Date(),
     };
-    const [formData, setFormData] = useState<iEnterprise>(defaultData);
+    const [formData, setFormData] = useState<iEnterpriseForm>(defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -33,20 +35,22 @@ export default function EnterpriseCreatePage() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
-            console.log('Empresa Salva:', formData);
-            handleAlert('Empresa salva com sucesso! (Simulação)');
+
+        try {
+            await dispatch(addEnterprise(formData)).unwrap();
+            handleAlert('Sucesso','Empresa cadastrada com sucesso!');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao cadastrar categoria');
         }
     };
 
-    const handleAlert = (message: string) => {
-        setAlertTitle('Sucesso')
+    const handleAlert = (title: string, message: string) => {
+        setAlertTitle(title)
         setAlertDesc(message)
         setInfoAlertOpen(true);
     }
-
 
     return (
         <div className="w-full h-full p-4">
@@ -93,7 +97,7 @@ export default function EnterpriseCreatePage() {
                     </div>
                 </form>
             </section>
-
+            
 
             <InfoAlertDialog
                 message={alertDesc} 

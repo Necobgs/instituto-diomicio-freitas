@@ -6,33 +6,17 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iEnterprise } from "@/types/enterprise";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { useSelector } from "react-redux";
+import { editEnterprise, removeEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 export default function EnterpriseEditPage() {
-
-    const enterprises: iEnterprise[] = [
-        {
-            id: 1,
-            name:'Empresa 1',
-            phone: "(48) 12345-6789",
-            cnpj: '123',
-            created_at: new Date(),
-            updated_at: new Date(),
-        },
-        {
-            id: 2,
-            name:'Empresa 2',
-            phone: "(48) 12345-6789",
-            cnpj: '123',
-            created_at: new Date(),
-            updated_at: new Date(),
-        },
-    ];
     
     const params = useParams();
     const router = useRouter();
     const { id } = params;
+    const enterprises = useSelector(selectEnterprises);
     const enterprise = enterprises.find(enterprise => enterprise.id.toString() === id);
-
     const defaultData: iEnterprise = {
         id: 0,
         name: "",
@@ -46,6 +30,7 @@ export default function EnterpriseEditPage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
     if (!enterprise) {
         return (
@@ -64,19 +49,16 @@ export default function EnterpriseEditPage() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
-            console.log('Empresa Salva:', formData);
-            handleAlert('Empresa salva com sucesso! (Simulação)');
+
+        try {
+            await dispatch(editEnterprise(formData)).unwrap();
+            handleAlert('Sucesso','Empresa alterada com sucesso!');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao alterar categoria');
         }
     };
-
-    const handleAlert = (message: string) => {
-        setAlertTitle('Sucesso')
-        setAlertDesc(message)
-        setInfoAlertOpen(true);
-    }
 
     const handleDeleteAlert = () => {
         setAlertTitle('Confirmação')
@@ -84,8 +66,19 @@ export default function EnterpriseEditPage() {
         setAlertOpen(true);
     }
 
-    const handleDelete = () => {
-        handleAlert('Registro excluído com sucesso! (Simulação)');
+    const handleDelete = async() => {
+        try {
+            await dispatch(removeEnterprise(formData)).unwrap();
+            router.push('/enterprise');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao excluir categoria');
+        }
+    }
+
+    const handleAlert = (title: string, message: string) => {
+        setAlertTitle(title)
+        setAlertDesc(message)
+        setInfoAlertOpen(true);
     }
 
     return (

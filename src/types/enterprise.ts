@@ -5,3 +5,5 @@ export interface iEnterprise extends iRoot{
     phone:string;
     cnpj:string;
 }
+
+export type iEnterpriseForm = Omit<iEnterprise, "id">;
