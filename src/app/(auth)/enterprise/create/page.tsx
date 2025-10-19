@@ -17,6 +17,7 @@ export default function EnterpriseCreatePage() {
         name: "",
         phone: "",
         cnpj: "",
+        enabled: true,
         created_at: new Date(),
         updated_at: new Date(),
     };

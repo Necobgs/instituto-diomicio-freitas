@@ -1,4 +1,85 @@
 {
   "enterprise": [
+    {
+      "name": "Empresa 1",
+      "phone": "48991177923",
+      "cnpj": "12.123.123/0001-12",
+      "enabled": true,
+      "created_at": "2025-10-19T16:33:42.716Z",
+      "updated_at": "2025-10-19T17:07:49.568Z",
+      "id": 1
+    },
+    {
+      "name": "Empresa 2",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": false,
+      "created_at": "2025-10-19T16:34:59.938Z",
+      "updated_at": "2025-10-19T17:27:13.174Z",
+      "id": 2
+    },
+    {
+      "name": "Empresa 3",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": false,
+      "created_at": "2025-10-19T16:46:40.236Z",
+      "updated_at": "2025-10-19T17:30:11.356Z",
+      "id": 3
+    },
+    {
+      "name": "Empresa 4",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": true,
+      "created_at": "2025-10-19T16:46:58.682Z",
+      "updated_at": "2025-10-19T17:07:59.403Z",
+      "id": 4
+    },
+    {
+      "name": "Empresa 5",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": true,
+      "created_at": "2025-10-19T16:47:16.780Z",
+      "updated_at": "2025-10-19T16:48:01.825Z",
+      "id": 5
+    },
+    {
+      "name": "Empresa 6",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": true,
+      "created_at": "2025-10-19T16:47:37.426Z",
+      "updated_at": "2025-10-19T16:48:07.665Z",
+      "id": 6
+    },
+    {
+      "name": "Empresa 7",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": true,
+      "created_at": "2025-10-19T16:48:10.854Z",
+      "updated_at": "2025-10-19T16:48:10.854Z",
+      "id": 7
+    },
+    {
+      "name": "Empresa 8",
+      "phone": "48991177923",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-19T16:48:30.147Z",
+      "updated_at": "2025-10-19T17:27:16.119Z",
+      "id": 8
+    },
+    {
+      "name": "Empresa 9",
+      "phone": "48991177923",
+      "cnpj": "12.345.678/0001-91",
+      "enabled": true,
+      "created_at": "2025-10-19T16:48:44.206Z",
+      "updated_at": "2025-10-19T16:48:44.206Z",
+      "id": 9
+    }
   ]
 }

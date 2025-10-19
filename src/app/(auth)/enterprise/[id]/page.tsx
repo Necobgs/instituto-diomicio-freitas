@@ -22,13 +22,13 @@ export default function EnterpriseEditPage() {
         name: "",
         phone: "",
         cnpj: "",
+        enabled: true,
         created_at: new Date(),
         updated_at: new Date(),
     };
     const [formData, setFormData] = useState<iEnterprise>(enterprise ? enterprise : defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
-    const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -53,27 +53,23 @@ export default function EnterpriseEditPage() {
         e.preventDefault();
 
         try {
-            await dispatch(editEnterprise(formData)).unwrap();
+            await dispatch(editEnterprise({...formData, updated_at: new Date()})).unwrap();
             handleAlert('Sucesso','Empresa alterada com sucesso!');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao alterar categoria');
+            handleAlert('Erro',error?.message || 'Erro ao alterar empresa');
         }
     };
 
-    const handleDeleteAlert = () => {
-        setAlertTitle('Confirmação')
-        setAlertDesc('Tem certeza que você deseja excluir esse registro?')
-        setAlertOpen(true);
-    }
+    const handleDisableOrEnable = async(e: React.FormEvent) => {
+        e.preventDefault();
 
-    const handleDelete = async() => {
         try {
-            await dispatch(removeEnterprise(formData)).unwrap();
+            await dispatch(editEnterprise({...enterprise, enabled: !enterprise?.enabled, updated_at: new Date()})).unwrap();
             router.push('/enterprise');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao excluir categoria');
+            handleAlert('Erro',error?.message || 'Erro ao alterar empresa');
         }
-    }
+    };
 
     const handleAlert = (title: string, message: string) => {
         setAlertTitle(title)
@@ -120,22 +116,13 @@ export default function EnterpriseEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDeleteAlert}>Excluir</Button>
+                        <Button type="button" className={enterprise?.enabled ? "bg-red-500 hover:bg-red-400" : "bg-green-700 hover:bg-green-600"} onClick={handleDisableOrEnable}>{enterprise?.enabled ? "Desabilitar" : "Habilitar"}</Button>
                         <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                             Cancelar
                         </Button>
                     </div>
                 </form>
             </section>
-
-            <DefaultAlertDialog
-                message={alertDesc} 
-                title={alertTitle} 
-                open={alertOpen} 
-                textBtn="Confirmar" 
-                onClickBtn={handleDelete} 
-                onOpenChange={setAlertOpen}
-            />
 
             <InfoAlertDialog
                 message={alertDesc} 

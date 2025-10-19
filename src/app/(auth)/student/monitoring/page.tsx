@@ -28,6 +28,7 @@ const monitoringData: iMonitoring[] = [
       name: "Tech Solutions Ltda",
       phone: "(11) 3232-1010",
       cnpj: "12.345.678/0001-99",
+      enabled: true,
       created_at: new Date(),
       updated_at: new Date()
     },
@@ -54,6 +55,7 @@ const monitoringData: iMonitoring[] = [
       name: "Design Criativo S/A",
       phone: "(21) 4567-8901",
       cnpj: "98.765.432/0001-88",
+      enabled: true,
       created_at: new Date(),
       updated_at: new Date(),
     },
@@ -80,6 +82,7 @@ const monitoringData: iMonitoring[] = [
       name: "Inovação Consultoria",
       phone: "(31) 3344-5566",
       cnpj: "45.678.912/0001-77",
+      enabled: true,
       created_at: new Date(),
       updated_at: new Date(),
     },
