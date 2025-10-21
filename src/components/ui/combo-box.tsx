@@ -29,9 +29,6 @@ interface ComboboxProps {
   items: ComboboxItem[]; // List of items to display
   value: string; // Selected value
   setValue: (value: string) => void; // Function to update selected value
-  open: boolean; // Popover open state
-  setOpen: (open: boolean) => void; // Function to update open state
-  onSearch: (search: string) => void; // Search handler
   placeholder?: string; // Optional placeholder for the button
   searchPlaceholder?: string; // Optional placeholder for the search input
   notFoundMessage?: string; // Optional message for no results
@@ -42,14 +39,31 @@ export function Combobox({
   items,
   value,
   setValue,
-  open,
-  setOpen,
-  onSearch,
   placeholder = "Select item...",
   searchPlaceholder = "Search items...",
   notFoundMessage = "No item found.",
   width = "200px",
 }: ComboboxProps) {
+
+  const [open, setOpen] = React.useState(false);
+  const [filteredItems, setFilteredItems] = React.useState(items);
+  
+  const handleSearch = (search: string) => {
+    setFilteredItems(() => {
+      let newItems: ComboboxItem[] = items;
+
+      if (search) {
+        newItems = items.filter((vobj) =>
+          vobj.label.toLowerCase().includes(search.toLowerCase())
+        );
+      }
+
+      console.log(newItems)
+
+      return newItems;
+    });
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -70,17 +84,17 @@ export function Combobox({
           <CommandInput
             placeholder={searchPlaceholder}
             className="h-9"
-            onValueChange={onSearch} // Call search handler on input change
+            onValueChange={handleSearch} // Call search handler on input change
           />
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {filteredItems.map((item) => (
                 <CommandItem
                   key={item.value}
-                  value={item.value}
+                  value={item.label}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue); // Toggle selection
+                    setValue(item.value); // Toggle selection
                     setOpen(false); // Close popover on select
                   }}
                 >

@@ -1,4 +1,6 @@
 {
+  "users": [
+  ],
   "enterprise": [
     {
       "name": "Empresa 1",
@@ -58,9 +60,9 @@
       "name": "Empresa 7",
       "phone": "48991177923",
       "cnpj": "12.345.678/0001-91",
-      "enabled": true,
+      "enabled": false,
       "created_at": "2025-10-19T16:48:10.854Z",
-      "updated_at": "2025-10-19T16:48:10.854Z",
+      "updated_at": "2025-10-20T22:47:03.954Z",
       "id": 7
     },
     {
@@ -80,6 +82,15 @@
       "created_at": "2025-10-19T16:48:44.206Z",
       "updated_at": "2025-10-19T16:48:44.206Z",
       "id": 9
+    },
+    {
+      "name": "Empresa 10",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 10
     }
   ]
 }

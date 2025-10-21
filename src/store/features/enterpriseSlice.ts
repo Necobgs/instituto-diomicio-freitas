@@ -1,16 +1,21 @@
 
 import enterpriseService from "@/services/enterpriseService";
-import { iEnterprise, iEnterpriseForm } from "@/types/enterprise";
+import { iEnterprise, iEnterpriseForm, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface EnterpriseState {
     enterprises: iEnterprise[];
     error: string | null;
     loading: boolean;
+    total: number;
 }
 
-export const initEnterprises = createAsyncThunk('enterprise/fetch', async () => {
-    return await enterpriseService.getEnterprises();
+export const initEnterprises = createAsyncThunk('enterprise/fetch', async ({ page = 1, limit = 8, name, cnpj, enabled }: iParamsEnterprise = {})  => {
+    return await enterpriseService.getEnterprises({page, limit, name, cnpj, enabled});
+});
+
+export const getEnterpriseById = createAsyncThunk("enterprise/getById", async (id: number) => {
+    return await enterpriseService.getEnterpriseById(id);
 });
 
 export const addEnterprise = createAsyncThunk('enterprise/add', async (payload: iEnterpriseForm) => {
@@ -31,6 +36,7 @@ const initialState: EnterpriseState = {
     enterprises: [],
     error: null,
     loading: false,
+    total: 0,
 };
 
 const enterpriseSlice = createSlice({
@@ -49,8 +55,9 @@ const enterpriseSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(initEnterprises.fulfilled, (state, action: PayloadAction<iEnterprise[]>) => {
-                state.enterprises = action.payload;
+            .addCase(initEnterprises.fulfilled, (state, action: PayloadAction<iPaginationEnterprise>) => {
+                state.enterprises = action.payload.data;
+                state.total = action.payload.total;
                 state.loading = false;
                 state.error = null;
             })
@@ -58,6 +65,7 @@ const enterpriseSlice = createSlice({
                 state.error = "Erro ao carregar lista";
                 state.loading = false;
                 state.enterprises = [];
+                state.total = 0;
             })
             .addCase(addEnterprise.fulfilled, (state, action: PayloadAction<iEnterprise>) => {
                 state.enterprises.push(action.payload);
@@ -92,6 +100,7 @@ const enterpriseSlice = createSlice({
 export const selectEnterprises = (state: { enterprise: EnterpriseState }) => state.enterprise.enterprises;
 export const selectEnterpriseError = (state: { enterprise: EnterpriseState }) => state.enterprise.error;
 export const selectEnterpriseLoading = (state: { enterprise: EnterpriseState }) => state.enterprise.loading;
+export const selectEnterpriseTotal = (state: { enterprise: EnterpriseState }) => state.enterprise.total;
 
 export const { removeAllEnterprises } = enterpriseSlice.actions;
 export const enterpriseReducer = enterpriseSlice.reducer;

@@ -7,4 +7,17 @@ export interface iEnterprise extends iRoot{
     enabled:boolean;
 }
 
+export interface iPaginationEnterprise {
+  data: iEnterprise[];
+  total: number;
+}
+
+export interface iParamsEnterprise {
+    page?: number;
+    limit?: number;
+    name?: string;
+    cnpj?: string;
+    enabled?: string;
+}
+
 export type iEnterpriseForm = Omit<iEnterprise, "id">;
