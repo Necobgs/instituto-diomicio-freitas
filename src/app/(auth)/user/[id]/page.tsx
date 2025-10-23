@@ -5,28 +5,27 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iUser } from "@/types/user";
-import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { useSelector } from "react-redux";
+import { editUser, selectUsers } from "@/store/features/userSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 export default function UserEditPage() {
-    const users: iUser[] = [
-        { id: 1, name: 'Emanuel', email: 'emanuel@gmail.com', cpf: '123', created_at: new Date(), updated_at: new Date(), },
-        { id: 2, name: 'Lucas', email: 'lucas@gmail.com', cpf: '321', created_at: new Date(), updated_at: new Date(), },
-        { id: 3, name: 'usuario', email: 'usuario@gmail.com', cpf: '1234', created_at: new Date(), updated_at: new Date(), },
-        { id: 4, name: 'outro usuário', email: 'outrousuario@gmail.com', cpf: '4312', created_at: new Date(), updated_at: new Date(), },
-        { id: 5, name: 'alessandro', email: 'alessandro@gmail.com', cpf: '12345', created_at: new Date(), updated_at: new Date(), },
-        { id: 6, name: 'margot', email: 'margot@gmail.com', cpf: '54312', created_at: new Date(), updated_at: new Date(), }
-    ];
 
     const params = useParams();
     const router = useRouter();
     const { id } = params;
+    const users = useSelector(selectUsers);
     const user = users.find(user => user.id.toString() === id);
+    const dispatch = useAppDispatch();
 
     const defaultData = {
         id: 0, 
         name: "", 
         email: "", 
-        cpf: "", 
+        cpf: "",
+        password: "",
+        enabled: true, 
         created_at: new Date(),
         updated_at: new Date(),
     }
@@ -34,9 +33,7 @@ export default function UserEditPage() {
     const [formData, setFormData] = useState<iUser>(user ? user : defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
-    const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
-
 
     if (!user) {
         return (
@@ -56,29 +53,32 @@ export default function UserEditPage() {
         }
     };
 
-    // Função para simular o envio do formulário
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
-            console.log('Usuário alterado:', formData);
-            handleAlert('Usuário alterado com sucesso! (Simulação)');
+
+        try {
+            await dispatch(editUser({...formData, updated_at: new Date()})).unwrap();
+            handleAlert('Sucesso','Usuário alterado com sucesso!');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao alterar usuário');
         }
     };
 
-    const handleAlert = (message: string) => {
-        setAlertTitle('Sucesso')
+    const handleDisableOrEnable = async(e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await dispatch(editUser({...user, enabled: !user?.enabled, updated_at: new Date()})).unwrap();
+            router.push('/user');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao alterar empresa');
+        }
+    };
+
+    const handleAlert = (title: string, message: string) => {
+        setAlertTitle(title)
         setAlertDesc(message)
         setInfoAlertOpen(true);
-    }
-
-    const handleDeleteAlert = () => {
-        setAlertTitle('Confirmação')
-        setAlertDesc('Tem certeza que você deseja excluir esse registro?')
-        setAlertOpen(true);
-    }
-
-    const handleDelete = () => {
-        handleAlert('Registro excluído com sucesso! (Simulação)');
     }
 
     return (
@@ -121,22 +121,13 @@ export default function UserEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDeleteAlert}>Excluir</Button>
+                        <Button type="button" className={user?.enabled ? "bg-red-500 hover:bg-red-400" : "bg-green-700 hover:bg-green-600"} onClick={handleDisableOrEnable}>{user?.enabled ? "Desabilitar" : "Habilitar"}</Button>
                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>
                     </div>
                 </form>
             </section>
-
-            <DefaultAlertDialog
-                message={alertDesc} 
-                title={alertTitle} 
-                open={alertOpen} 
-                textBtn="Confirmar" 
-                onClickBtn={handleDelete} 
-                onOpenChange={setAlertOpen}
-            />
 
             <InfoAlertDialog
                 message={alertDesc} 

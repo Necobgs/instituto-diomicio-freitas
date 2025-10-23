@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iEnterprise } from "@/types/enterprise";
-import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
-import { editEnterprise, removeEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
+import { editEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 export default function EnterpriseEditPage() {

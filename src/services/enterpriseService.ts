@@ -20,6 +20,7 @@ const getEnterprises = async ({ page = 1, limit = 8, name, cnpj, enabled }: iPar
   if (enabled) query += `&enabled=${encodeURIComponent(enabled)}`;
 
   const response = await api.get(`${endpoint}?${query}`);
+
   const total = response.headers["x-total-count"]
     ? parseInt(response.headers["x-total-count"])
     : 0;

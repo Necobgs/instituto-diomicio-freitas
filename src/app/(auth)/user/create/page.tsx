@@ -4,25 +4,29 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iUser } from "@/types/user";
+import { iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { useAppDispatch } from "@/store/hooks";
+import { addUser } from "@/store/features/userSlice";
 
 export default function UserCreatePage() {
     const router = useRouter();
 
     const defaultData = {
-        id: 0, 
         name: "", 
-        email: "", 
+        email: "",
+        password: "",
         cpf: "", 
+        enabled: true,
         created_at: new Date(),
         updated_at: new Date(),
     }
     // Estado para os campos do formulário
-    const [formData, setFormData] = useState<iUser>(defaultData);
+    const [formData, setFormData] = useState<iUserForm>(defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
     // Função para atualizar o estado ao alterar os inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,16 +39,19 @@ export default function UserCreatePage() {
     };
 
     // Função para simular o envio do formulário
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
-            console.log('Usuário criado:', formData);
-            handleAlert('Usuário criado com sucesso! (Simulação)');
+
+        try {
+            await dispatch(addUser(formData)).unwrap();
+            handleAlert('Sucesso','Usuário cadastrado com sucesso!');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao cadastrar usuário');
         }
     };
 
-    const handleAlert = (message: string) => {
-        setAlertTitle('Sucesso')
+    const handleAlert = (title: string, message: string) => {
+        setAlertTitle(title)
         setAlertDesc(message)
         setInfoAlertOpen(true);
     }
@@ -85,6 +92,17 @@ export default function UserCreatePage() {
                             value={formData?.cpf || ''}
                             onChange={handleInputChange}
                             placeholder="CPF do usuário"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="text-sm font-medium">Senha</label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            value={formData?.password || ''}
+                            onChange={handleInputChange}
+                            placeholder="Senha do usuário"
                         />
                     </div>
                     <div className="flex gap-3">

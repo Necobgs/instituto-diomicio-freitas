@@ -1,5 +1,35 @@
 {
-  "users": [
+  "user": [
+    {
+      "id": 1,
+      "name": "Lucas Rosa da Conceição",
+      "email": "lucas@gmail.com",
+      "password": "1234@Teste",
+      "cpf": "111.111.111-11",
+      "enabled": true,
+      "created_at": "2025-10-22T23:57:01.896Z",
+      "updated_at": "2025-10-22T23:57:01.896Z"
+    },
+    {
+      "id": 2,
+      "name": "Emanuel Borges",
+      "email": "emanuel@gmail.com",
+      "password": "1234",
+      "cpf": "222.222.222-22",
+      "enabled": true,
+      "created_at": "2025-10-23T10:27:07.256Z",
+      "updated_at": "2025-10-23T10:27:07.256Z"
+    },
+    {
+      "name": "Marcos",
+      "email": "marcos@gmail.com",
+      "password": "5555",
+      "cpf": "888.888.888-88",
+      "enabled": false,
+      "created_at": "2025-10-23T10:31:41.344Z",
+      "updated_at": "2025-10-23T10:42:35.100Z",
+      "id": 3
+    }
   ],
   "enterprise": [
     {
@@ -91,6 +121,69 @@
       "created_at": "2025-10-20T22:47:11.208Z",
       "updated_at": "2025-10-20T22:47:11.208Z",
       "id": 10
+    },
+    {
+      "name": "Empresa 11",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 11
+    },
+    {
+      "name": "Empresa 12",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 12
+    },
+    {
+      "name": "Empresa 13",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 13
+    },
+    {
+      "name": "Empresa 14",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 14
+    },
+    {
+      "name": "Empresa 15",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": false,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-21T23:19:47.158Z",
+      "id": 15
+    },
+    {
+      "name": "Empresa 16",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 16
+    },
+    {
+      "name": "Empresa 17",
+      "phone": "(48) 12345-6789",
+      "cnpj": "XX.XXX.XXX/0001-XX",
+      "enabled": true,
+      "created_at": "2025-10-20T22:47:11.208Z",
+      "updated_at": "2025-10-20T22:47:11.208Z",
+      "id": 17
     }
   ]
 }

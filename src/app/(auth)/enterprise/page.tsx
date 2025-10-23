@@ -47,7 +47,6 @@ export default function EnterprisePage() {
         }
     }
 
-    // Buscar empresas do servidor
     useEffect(() => {
         dispatch(initEnterprises({...formData, page: currentPage, limit: itemsPerPage }));
     }, [dispatch, currentPage]);
@@ -85,12 +84,12 @@ export default function EnterprisePage() {
                             </div>
                             <div>
                                 <Combobox
-                                    items={[{ value: "", label: "Todos" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                                    items={[{ value: "", label: "Todas as situações" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
                                     value={formData?.enabled}
                                     setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
-                                    placeholder="Todos"
-                                    searchPlaceholder="Buscar status..."
-                                    notFoundMessage="Nenhum status encontrado."
+                                    placeholder="Todas as situações"
+                                    searchPlaceholder="Buscar situação..."
+                                    notFoundMessage="Nenhuma situação encontrada"
                                 />
                             </div>
                             <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
@@ -109,7 +108,7 @@ export default function EnterprisePage() {
                             : ""
                         }
 
-                        <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] overflow-auto mb-2">
+                        <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
                             {enterprises.map(entreprise =>
                                 <CardEnterprise {...entreprise} key={entreprise.id} />
                             )}

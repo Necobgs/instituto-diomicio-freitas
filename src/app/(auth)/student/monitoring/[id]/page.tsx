@@ -31,6 +31,7 @@ export default function MonitoringEditPage() {
           name: "Tech Solutions Ltda",
           phone: "(11) 3232-1010",
           cnpj: "12.345.678/0001-99",
+          enabled: true,
           created_at:new Date('2025-10-10'),
           
         },
@@ -55,6 +56,7 @@ export default function MonitoringEditPage() {
           name: "Design Criativo S/A",
           phone: "(21) 4567-8901",
           cnpj: "98.765.432/0001-88",
+          enabled: true,
           created_at:new Date('2025-10-10'),
         },
         job_title: "Designer Gráfico",
@@ -78,6 +80,7 @@ export default function MonitoringEditPage() {
           name: "Inovação Consultoria",
           phone: "(31) 3344-5566",
           cnpj: "45.678.912/0001-77",
+          enabled: true,
           created_at: new Date('1990-10-10')
         },
         job_title: "Analista de Projetos",
