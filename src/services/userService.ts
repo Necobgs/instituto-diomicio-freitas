@@ -1,11 +1,19 @@
-import { iUser, iUserForm, iPaginationUser, iParamsUser } from "@/types/user";
+import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iRegisterForm } from "@/types/user";
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: 'http://localhost:3001/'
+    baseURL: `http://localhost:3001/`
 });
 
-const endpoint = 'user';
+const endpoint = 'users';
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
 const getUsers = async ({ page = 1, limit = 8, name, cpf, email, enabled }: iParamsUser = {}): Promise<iPaginationUser> => {
   let query = `_page=${page}&_limit=${limit}`;
@@ -40,7 +48,8 @@ const addUser = async (newUser: iUserForm): Promise<iUser> => {
 }
 
 const editUser = async (dataUser: iUser): Promise<iUser> => {
-    const response = await api.put(`${endpoint}/${dataUser.id}`, dataUser);
+    const { password, ...userWithoutPassword } = dataUser;
+    const response = await api.patch(`${endpoint}/${dataUser.id}`, userWithoutPassword);
     return response.data as iUser;
 }
 
@@ -49,10 +58,35 @@ const removeUser = async (user: iUser): Promise<iUser> => {
     return response.data as iUser;
 }
 
+const login = async (credentials: iLoginCredentials): Promise<{ token: string; user: iUser }> => {
+    const response = await api.post('/login', credentials);
+    const { accessToken, user } = response.data;
+    localStorage.setItem('token', accessToken);
+    return { token: accessToken, user };
+};
+
+const register = async (newUser: iUserForm): Promise<iUser> => {
+    const response = await api.post('/register', newUser);
+    return response.data;
+};
+
+const logout = () => {
+    localStorage.removeItem('token');
+};
+
+const getMe = async (): Promise<iUser> => {
+    const response = await api.get('/me');
+    return response.data;
+};
+
 export default {
     getUsers,
     addUser,
     editUser,
     removeUser,
-    getUserById
+    getUserById,
+    register,
+    login,
+    logout,
+    getMe
 };

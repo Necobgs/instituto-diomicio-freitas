@@ -5,36 +5,18 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { iStudent } from "@/types/student";
-import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { useSelector } from "react-redux";
+import { editStudent, selectStudents } from "@/store/features/studentSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 export default function StudentEditPage() {
-
-    const students: iStudent[] = [
-        {
-            id:1,
-            name:'Marcos',
-            phone: "(48) 12345-6789",
-            date_of_birth: new Date(1990, 11, 17),
-            cpf: '123',
-            created_at: new Date(),
-            updated_at: new Date(),
-        },
-        {
-            id: 2,
-            name:'Paulo',
-            phone: "(48) 12345-6789",
-            date_of_birth: new Date(2006, 6, 20),
-            cpf: '123',
-            created_at: new Date(),
-            updated_at: new Date(),
-        },
-    ];
     
     const params = useParams();
     const router = useRouter();
     const { id } = params;
-
-    const enterprise: iStudent | undefined = students.find(enterprise => enterprise.id.toString() === id);
+    const students = useSelector(selectStudents);
+    const student: iStudent | undefined = students.find(student => student.id.toString() === id);
     
     const defaultData: iStudent = {
         id: 0,
@@ -42,17 +24,18 @@ export default function StudentEditPage() {
         phone: "",
         date_of_birth: null,
         cpf: "",
+        enabled: true,
         created_at: new Date(),
         updated_at: new Date(),
     };
 
-    const [formData, setFormData] = useState<iStudent>(enterprise ? enterprise : defaultData);
+    const [formData, setFormData] = useState<iStudent>(student ? student : defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
-    const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
-    if (!enterprise) {
+    if (!student) {
         return (
             <div className="w-full h-full p-4 flex justify-center items-center text-center">
                 <p>Estudante não encontrado :(</p>
@@ -69,28 +52,32 @@ export default function StudentEditPage() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
-            console.log('Estudante alterado:', formData);
-            handleAlert('Estudante alterado com sucesso! (Simulação)');
+
+        try {
+            await dispatch(editStudent({...formData, updated_at: new Date()})).unwrap();
+            handleAlert('Sucesso','Estudante alterado com sucesso!');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao alterar estudante');
         }
     };
 
-    const handleAlert = (message: string) => {
-        setAlertTitle('Sucesso')
+    const handleDisableOrEnable = async(e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await dispatch(editStudent({...student, enabled: !student?.enabled, updated_at: new Date()})).unwrap();
+            router.push('/student');
+        } catch (error: any) {
+            handleAlert('Erro',error?.message || 'Erro ao alterar estudante');
+        }
+    };
+
+    const handleAlert = (title: string, message: string) => {
+        setAlertTitle(title)
         setAlertDesc(message)
         setInfoAlertOpen(true);
-    }
-
-    const handleDeleteAlert = () => {
-        setAlertTitle('Confirmação')
-        setAlertDesc('Tem certeza que você deseja excluir esse registro?')
-        setAlertOpen(true);
-    }
-
-    const handleDelete = () => {
-        handleAlert('Registro excluído com sucesso! (Simulação)');
     }
 
     return (
@@ -125,7 +112,7 @@ export default function StudentEditPage() {
                         <Input
                             id="date_of_birth"
                             name="date_of_birth"
-                            value={formData?.date_of_birth ? formData?.date_of_birth.toISOString().split("T")[0] : ""}
+                            value={formData?.date_of_birth ? new Date(formData?.date_of_birth).toISOString().split("T")[0] : ""}
                             onChange={handleInputChange}
                             type="date"
                         />
@@ -142,22 +129,13 @@ export default function StudentEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDeleteAlert}>Excluir</Button>
+                        <Button type="button" className={student?.enabled ? "bg-red-500 hover:bg-red-400" : "bg-green-700 hover:bg-green-600"} onClick={handleDisableOrEnable}>{student?.enabled ? "Desabilitar" : "Habilitar"}</Button>
                         <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
                             Cancelar
                         </Button>
                     </div>
                 </form>
             </section>
-
-            <DefaultAlertDialog
-                message={alertDesc} 
-                title={alertTitle} 
-                open={alertOpen} 
-                textBtn="Confirmar" 
-                onClickBtn={handleDelete} 
-                onOpenChange={setAlertOpen}
-            />
 
             <InfoAlertDialog
                 message={alertDesc} 

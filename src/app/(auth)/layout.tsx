@@ -1,11 +1,32 @@
+'use client'
+
 import AppSidebar from "@/components/layout/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useSelector } from "react-redux";
+import { redirect } from 'next/navigation';
+import { fetchMe, selectCurrentUser, selectIsAuthenticated } from "@/store/features/userSlice";
+import { useEffect } from "react";
+import { useAppDispatch } from "@/store/hooks";
 
 export default function RootAuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+/*   useEffect(() => {
+    dispatch(fetchMe());
+  }, [dispatch]) */
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      redirect("/login");
+    }
+  },[isAuthenticated]) 
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen min-w-screen">

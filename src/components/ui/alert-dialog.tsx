@@ -177,7 +177,7 @@ interface PropsInfoAlertDialog{
   onOpenChange:(open: boolean) => void;
   title:string;
   message:string;
-  onClickBtn: undefined | ((...args:any[])=>void);
+  onClickBtn?: undefined | ((...args:any[])=>void);
 }
 
 function InfoAlertDialog(props:PropsInfoAlertDialog) {

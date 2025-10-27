@@ -31,7 +31,6 @@ export const removeEnterprise = createAsyncThunk('enterprise/remove', async (pay
     return response;
 });
 
-
 const initialState: EnterpriseState = {
     enterprises: [],
     error: null,
@@ -42,13 +41,7 @@ const initialState: EnterpriseState = {
 const enterpriseSlice = createSlice({
     name: "enterprise",
     initialState,
-    reducers: {
-        removeAllEnterprises(state) {
-            state.enterprises = [];
-            state.error = null;
-            state.loading = false;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(initEnterprises.pending, (state) => {
@@ -62,7 +55,7 @@ const enterpriseSlice = createSlice({
                 state.error = null;
             })
             .addCase(initEnterprises.rejected, (state) => {
-                state.error = "Erro ao carregar lista";
+                state.error = "Erro ao carregar lista de empresas";
                 state.loading = false;
                 state.enterprises = [];
                 state.total = 0;
@@ -72,7 +65,7 @@ const enterpriseSlice = createSlice({
                 state.error = null;
             })
             .addCase(addEnterprise.rejected, (state) => {
-                state.error = "Erro ao adicionar fornecedor";
+                state.error = "Erro ao adicionar empresa";
             })
             .addCase(removeEnterprise.pending, (state) => {
                 state.loading = true;
@@ -91,7 +84,7 @@ const enterpriseSlice = createSlice({
                 state.error = null;
             })
             .addCase(editEnterprise.rejected, (state) => {
-                state.error = "Erro ao editar fornecedor";
+                state.error = "Erro ao editar empresa";
             });
     },
 });
@@ -102,5 +95,4 @@ export const selectEnterpriseError = (state: { enterprise: EnterpriseState }) =>
 export const selectEnterpriseLoading = (state: { enterprise: EnterpriseState }) => state.enterprise.loading;
 export const selectEnterpriseTotal = (state: { enterprise: EnterpriseState }) => state.enterprise.total;
 
-export const { removeAllEnterprises } = enterpriseSlice.actions;
 export const enterpriseReducer = enterpriseSlice.reducer;

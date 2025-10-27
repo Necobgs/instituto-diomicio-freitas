@@ -1,40 +1,42 @@
 {
-  "user": [
+  "student": [
     {
-      "id": 1,
-      "name": "Lucas Rosa da Conceição",
-      "email": "lucas@gmail.com",
-      "password": "1234@Teste",
-      "cpf": "111.111.111-11",
-      "enabled": true,
-      "created_at": "2025-10-22T23:57:01.896Z",
-      "updated_at": "2025-10-22T23:57:01.896Z"
-    },
-    {
-      "id": 2,
-      "name": "Emanuel Borges",
-      "email": "emanuel@gmail.com",
-      "password": "1234",
+      "name": "Estudante 1",
+      "phone": "48991111123",
+      "date_of_birth": "2003-10-15T00:00:00.000Z",
       "cpf": "222.222.222-22",
       "enabled": true,
-      "created_at": "2025-10-23T10:27:07.256Z",
-      "updated_at": "2025-10-23T10:27:07.256Z"
+      "created_at": "2025-10-24T00:24:40.490Z",
+      "updated_at": "2025-10-24T10:19:58.992Z",
+      "id": 1
     },
     {
-      "name": "Marcos",
-      "email": "marcos@gmail.com",
-      "password": "5555",
-      "cpf": "888.888.888-88",
+      "name": "Estudante 2",
+      "phone": "48991122222",
+      "date_of_birth": "2002-10-23T00:00:00.000Z",
+      "cpf": "333.333.333-33",
       "enabled": false,
-      "created_at": "2025-10-23T10:31:41.344Z",
-      "updated_at": "2025-10-23T10:42:35.100Z",
-      "id": 3
+      "created_at": "2025-10-24T00:33:50.806Z",
+      "updated_at": "2025-10-24T10:20:32.477Z",
+      "id": 2
+    }
+  ],
+  "users": [
+    {
+      "email": "lucas@gmail.com",
+      "password": "$2a$10$OdIhU04RtfZ2j32S0xmH3uTDxeMrQksKJOVG4Rcrjwg3OV2goOUDm",
+      "name": "Lucas Rosa da Conceição",
+      "cpf": "222.222.222-22",
+      "enabled": true,
+      "created_at": "2025-10-27T01:50:10.392Z",
+      "updated_at": "2025-10-27T02:15:05.908Z",
+      "id": 1
     }
   ],
   "enterprise": [
     {
       "name": "Empresa 1",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.123.123/0001-12",
       "enabled": true,
       "created_at": "2025-10-19T16:33:42.716Z",
@@ -43,16 +45,16 @@
     },
     {
       "name": "Empresa 2",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": false,
       "created_at": "2025-10-19T16:34:59.938Z",
-      "updated_at": "2025-10-19T17:27:13.174Z",
+      "updated_at": "2025-10-27T01:53:54.842Z",
       "id": 2
     },
     {
       "name": "Empresa 3",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": false,
       "created_at": "2025-10-19T16:46:40.236Z",
@@ -61,7 +63,7 @@
     },
     {
       "name": "Empresa 4",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": true,
       "created_at": "2025-10-19T16:46:58.682Z",
@@ -70,7 +72,7 @@
     },
     {
       "name": "Empresa 5",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": true,
       "created_at": "2025-10-19T16:47:16.780Z",
@@ -79,7 +81,7 @@
     },
     {
       "name": "Empresa 6",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": true,
       "created_at": "2025-10-19T16:47:37.426Z",
@@ -88,7 +90,7 @@
     },
     {
       "name": "Empresa 7",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": false,
       "created_at": "2025-10-19T16:48:10.854Z",
@@ -97,7 +99,7 @@
     },
     {
       "name": "Empresa 8",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "XX.XXX.XXX/0001-XX",
       "enabled": true,
       "created_at": "2025-10-19T16:48:30.147Z",
@@ -106,7 +108,7 @@
     },
     {
       "name": "Empresa 9",
-      "phone": "48991177923",
+      "phone": "(48) 99333-3333",
       "cnpj": "12.345.678/0001-91",
       "enabled": true,
       "created_at": "2025-10-19T16:48:44.206Z",
@@ -184,6 +186,15 @@
       "created_at": "2025-10-20T22:47:11.208Z",
       "updated_at": "2025-10-20T22:47:11.208Z",
       "id": 17
+    },
+    {
+      "name": "Empresa 300",
+      "phone": "45454",
+      "cnpj": "46545",
+      "enabled": true,
+      "created_at": "2025-10-26T22:35:32.304Z",
+      "updated_at": "2025-10-26T22:35:32.304Z",
+      "id": 18
     }
   ]
 }

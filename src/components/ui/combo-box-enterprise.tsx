@@ -66,8 +66,6 @@ export function EnterpriseCombobox({
   const [open, setOpen] = React.useState(false);
   const [filteredEnterprises, setFilteredEnterprises] = React.useState<iEnterprise[]>(enterprises);
 
-
-
   const handleSearch = (search: string) => {
     if (!search) {
       setFilteredEnterprises(enterprises);

@@ -17,7 +17,9 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import Link from "next/link"; // Importe o Link para navegação
-import { title } from "process";
+import { useAppDispatch } from "@/store/hooks";
+import { logoutUser } from "@/store/features/userSlice";
+import { useRouter } from "next/navigation";
 
 // Dados dos itens do menu principal
 const items = [
@@ -55,6 +57,15 @@ const collapsibleItems = [
 ];
 
 export default function AppSidebar() {
+
+  const dispacth = useAppDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispacth(logoutUser());
+    router.push("/login");
+  } 
+
   return (
     <Sidebar>
       <SidebarContent className="flex flex-col h-full">
@@ -108,10 +119,10 @@ export default function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/logout" className="text-red-500 hover:text-red-600">
+                  <div onClick={handleLogout} className="text-red-500 hover:text-red-600">
                     <LogOut className="h-5 w-5" />
                     <span>Sair</span>
-                  </Link>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

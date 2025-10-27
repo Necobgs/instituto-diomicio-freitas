@@ -71,7 +71,7 @@ export default function UserEditPage() {
             await dispatch(editUser({...user, enabled: !user?.enabled, updated_at: new Date()})).unwrap();
             router.push('/user');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao alterar empresa');
+            handleAlert('Erro',error?.message || 'Erro ao alterar usuário');
         }
     };
 

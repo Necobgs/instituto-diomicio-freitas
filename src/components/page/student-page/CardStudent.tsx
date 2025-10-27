@@ -16,14 +16,17 @@ export default function CardStudent(student:iStudent) {
 
     const router = useRouter();
 
+    console.log(student)
+
     return (
-        <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer" onClick={() => {router.push(`/student/${student.id}`)}}>
+        <Card className="w-full hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`/student/${student.id}`)}}>
+            <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${student.enabled ? 'bg-green-700' : 'bg-red-500'}`}></div>
             <CardHeader>
                 <CardTitle>{student.name}</CardTitle>
             </CardHeader>
             <CardContent>
                 <CardDescription>
-                {student.date_of_birth.toLocaleDateString("pt-BR")}
+                {student.date_of_birth ? new Date(student.date_of_birth).toLocaleDateString("pt-BR", {timeZone: "UTC"}) : ""}
                 </CardDescription>
             </CardContent>
             <CardFooter className="flex-col gap-2">

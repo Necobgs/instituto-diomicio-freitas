@@ -35,7 +35,6 @@ export default function EnterprisePage() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        setCurrentPage(1); // resetar página ao mudar filtro
     };
 
     const handleSearch = () => {

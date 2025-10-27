@@ -7,7 +7,7 @@ import { useState } from "react";
 import { iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { addUser } from "@/store/features/userSlice";
+import { registerUser } from "@/store/features/userSlice";
 
 export default function UserCreatePage() {
     const router = useRouter();
@@ -22,10 +22,11 @@ export default function UserCreatePage() {
         updated_at: new Date(),
     }
     // Estado para os campos do formulário
-    const [formData, setFormData] = useState<iUserForm>(defaultData);
+    const [formData,setFormData] = useState<iUserForm>(defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [isError,setIsError] = useState(false);
     const dispatch = useAppDispatch();
 
     // Função para atualizar o estado ao alterar os inputs
@@ -43,17 +44,18 @@ export default function UserCreatePage() {
         e.preventDefault();
 
         try {
-            await dispatch(addUser(formData)).unwrap();
-            handleAlert('Sucesso','Usuário cadastrado com sucesso!');
+            await dispatch(registerUser(formData)).unwrap();
+            handleAlert(false,'Usuário cadastrado com sucesso!');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao cadastrar usuário');
+            handleAlert(true,error?.message || 'Erro ao cadastrar usuário');
         }
     };
 
-    const handleAlert = (title: string, message: string) => {
-        setAlertTitle(title)
+    const handleAlert = (error: boolean, message: string) => {
+        setAlertTitle(error ? "Erro" : "Sucesso");
         setAlertDesc(message)
         setInfoAlertOpen(true);
+        setIsError(error);
     }
 
     return (
@@ -119,7 +121,7 @@ export default function UserCreatePage() {
                 title={alertTitle} 
                 open={infoAlertOpen} 
                 onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {router.push('/user');}}
+                onClickBtn={() => {isError ? "" : router.push('/user');}}
             />
         </div>
     );

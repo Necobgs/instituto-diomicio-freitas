@@ -37,7 +37,6 @@ export default function UserPage(){
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        setCurrentPage(1); // resetar página ao mudar filtro
     };
 
     const handleSearch = () => {
@@ -66,46 +65,46 @@ export default function UserPage(){
                     <h1 className="text-2xl">Buscar usuários</h1>
                 </div>
                 <div className="flex flex-wrap items-center justify-start gap-4">
-                <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                    <Input                          
-                        id="name"
-                        name="name"
-                        value={formData?.name || ''}
-                        onChange={handleInputChange}
-                        placeholder="Nome da usuário"
-                    />
-                </div>
-                <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                    <Input 
-                        id="cpf"
-                        name="cpf"
-                        value={formData?.cpf || ''}
-                        onChange={handleInputChange}
-                        placeholder="CPF do usuário"
-                    />
-                </div>
-                <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                    <Input 
-                        id="email"
-                        name="email"
-                        value={formData?.email || ''}
-                        onChange={handleInputChange}
-                        placeholder="Email do usuário" 
-                    />
-                </div>
-                <div>
-                    <Combobox
-                        items={[{ value: "", label: "Todas as situações" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
-                        value={formData?.enabled}
-                        setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
-                        placeholder="Todas as situações"
-                        searchPlaceholder="Buscar situação..."
-                        notFoundMessage="Nenhuma situação encontrada"
-                    />
-                </div>
-                <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                    <Button className="w-full" onClick={handleSearch}>Buscar</Button>
-                </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Input                          
+                            id="name"
+                            name="name"
+                            value={formData?.name || ''}
+                            onChange={handleInputChange}
+                            placeholder="Nome da usuário"
+                        />
+                    </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Input 
+                            id="cpf"
+                            name="cpf"
+                            value={formData?.cpf || ''}
+                            onChange={handleInputChange}
+                            placeholder="CPF do usuário"
+                        />
+                    </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Input 
+                            id="email"
+                            name="email"
+                            value={formData?.email || ''}
+                            onChange={handleInputChange}
+                            placeholder="Email do usuário" 
+                        />
+                    </div>
+                    <div>
+                        <Combobox
+                            items={[{ value: "", label: "Todas as situações" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                            value={formData?.enabled}
+                            setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
+                            placeholder="Todas as situações"
+                            searchPlaceholder="Buscar situação..."
+                            notFoundMessage="Nenhuma situação encontrada"
+                        />
+                    </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Button className="w-full" onClick={handleSearch}>Buscar</Button>
+                    </div>
                 </div>
             </section>
 

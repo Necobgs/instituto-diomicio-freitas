@@ -23,3 +23,12 @@ export interface iParamsUser {
 }
 
 export type iUserForm = Omit<iUser, "id">;
+
+export interface iLoginCredentials {
+    email: string;
+    password: string;
+}
+
+export interface iRegisterForm extends iUserForm {
+    password: string;
+}

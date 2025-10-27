@@ -1,12 +1,15 @@
 {
   "name": "instituto-diomicio-freitas",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "overrides": {
+    "path-to-regexp": "0.1.7"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -21,10 +24,12 @@
     "@reduxjs/toolkit": "^2.9.0",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.12.2",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "json-server": "^1.0.0-beta.3",
+    "express": "^4.21.2",
+    "json-server": "^0.17.4",
     "json-server-auth": "^2.1.0",
     "lucide-react": "^0.540.0",
     "next": "15.4.7",

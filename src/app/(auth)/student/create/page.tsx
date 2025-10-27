@@ -4,26 +4,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iStudent } from "@/types/student";
+import { iStudentForm } from "@/types/student";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { useAppDispatch } from "@/store/hooks";
+import { addStudent } from "@/store/features/studentSlice";
 
 export default function StudentEditPage() {
 
     const router = useRouter();
 
-    const defaultData: iStudent = {
-        id: 0,
+    const defaultData: iStudentForm = {
         name: "",
         phone: "",
         date_of_birth: null,
         cpf: "",
+        enabled: true,
         created_at: new Date(),
         updated_at: new Date(),
     };
-    const [formData, setFormData] = useState<iStudent>(defaultData);
+    const [formData, setFormData] = useState<iStudentForm>(defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -34,18 +38,22 @@ export default function StudentEditPage() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
-            console.log('Estudante criado:', formData);
-            handleAlert('Estudante criado com sucesso! (Simulação)');
+
+        try {
+            await dispatch(addStudent(formData)).unwrap();
+            handleAlert(false,'Estudante cadastrado com sucesso!');
+        } catch (error: any) {
+            handleAlert(true,error?.message || 'Erro ao cadastrar estudante');
         }
     };
 
-    const handleAlert = (message: string) => {
-        setAlertTitle('Sucesso')
+    const handleAlert = (error: boolean, message: string) => {
+        setAlertTitle(error ? "Erro" : "Sucesso");
         setAlertDesc(message)
         setInfoAlertOpen(true);
+        setIsError(error);
     }
 
     return (
@@ -109,7 +117,7 @@ export default function StudentEditPage() {
                 title={alertTitle} 
                 open={infoAlertOpen} 
                 onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {router.push('/student');}}
+                onClickBtn={() => {isError ? "" : router.push('/student');}}
             />
         </div>
     );

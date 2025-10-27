@@ -5,4 +5,20 @@ export interface iStudent extends iRoot{
     phone:string;
     date_of_birth:Date | null,
     cpf:string;
+    enabled:boolean;
 }
+
+export interface iPaginationStudent {
+  data: iStudent[];
+  total: number;
+}
+
+export interface iParamsStudent {
+    page?: number;
+    limit?: number;
+    name?: string;
+    cpf?: string;
+    enabled?: string;
+}
+
+export type iStudentForm = Omit<iStudent, "id">;

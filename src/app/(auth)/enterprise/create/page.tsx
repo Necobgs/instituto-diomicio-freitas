@@ -43,7 +43,7 @@ export default function EnterpriseCreatePage() {
             await dispatch(addEnterprise(formData)).unwrap();
             handleAlert('Sucesso','Empresa cadastrada com sucesso!');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao cadastrar categoria');
+            handleAlert('Erro',error?.message || 'Erro ao cadastrar empresa');
         }
     };
 

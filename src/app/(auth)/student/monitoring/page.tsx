@@ -2,11 +2,15 @@
 
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { EnterpriseCombobox } from "@/components/ui/combo-box-enterprise";
+import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { Input } from "@/components/ui/input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/table";
+import { iEnterprise } from "@/types/enterprise";
 import iMonitoring, { monitoringColumns } from "@/types/monitoring";
+import { iStudent } from "@/types/student";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -101,6 +105,30 @@ export default function MonitoringPage() {
   const [alertOpen,setAlertOpen] = useState(false);
   const [infoAlertOpen,setInfoAlertOpen] = useState(false);
 
+  interface iFilters {
+      student: iStudent | undefined;
+      admission_date: "";
+      enterprise: iEnterprise | undefined;
+      job_title: "";
+      hr_contact: "";
+      termination_date_ieedf: ""
+  }
+
+  const defaultData: iFilters = {
+      student: undefined,
+      admission_date: "",
+      enterprise: undefined,
+      job_title: "",
+      hr_contact: "",
+      termination_date_ieedf: ""
+  };
+  const [formData, setFormData] = useState(defaultData);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   function handleAlert(id: number) {
     setAlertTitle('Confirmação')
     setAlertDesc('Tem certeza que você deseja excluir esse registro?')
@@ -124,23 +152,57 @@ export default function MonitoringPage() {
           <h1 className="text-2xl">Buscar usuários alunos ao trabalho</h1>
         </div>
         <div className="flex flex-wrap items-center justify-start gap-4">
-          <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-            <Input placeholder="Nome do aluno" />
+          <div>
+            <StudentCombobox
+              student={formData.student}
+              setStudent={(student: iStudent | undefined) =>
+                setFormData((prev) => ({ ...prev, student }))
+              }
+            />
+          </div>
+          <div>
+            <EnterpriseCombobox 
+              enterprise={formData?.enterprise} 
+              setEnterprise={(enterprise: iEnterprise | undefined) => 
+                setFormData((prev) => ({ ...prev, enterprise }))
+              }
+            />
           </div>
           <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-            <Input placeholder="Data Admissão" type="date" />
+            <Input 
+              id="job_title"
+              name="job_title"
+              value={formData?.job_title || ''}
+              onChange={handleInputChange}
+              placeholder="Função" 
+            />
           </div>
           <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-            <Input placeholder="Empresa" />
+            <Input 
+              id="job_title"
+              name="job_title"
+              value={formData?.job_title || ''}
+              onChange={handleInputChange}
+              placeholder="Contato RH"
+            />
           </div>
           <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-            <Input placeholder="Função" />
+            <Input 
+              id="admission_date"
+              name="admission_date"
+              value={formData?.admission_date || ''}
+              onChange={handleInputChange}
+              placeholder="Data Admissão" 
+              type="date" 
+            />
           </div>
           <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-            <Input placeholder="Contato RH" />
-          </div>
-          <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-            <Input placeholder="Provável data desligamento IEEDF" type="date" />
+            <Input
+              id="hr_contact"
+              name="hr_contact"
+              value={formData?.hr_contact || ''}
+              onChange={handleInputChange}
+              placeholder="Provável data desligamento IEEDF" type="date" />
           </div>
           <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
             <Button className="w-full">Buscar</Button>
