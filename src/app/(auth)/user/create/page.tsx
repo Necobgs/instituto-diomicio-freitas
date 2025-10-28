@@ -8,6 +8,7 @@ import { iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
 import { registerUser } from "@/store/features/userSlice";
+import MaskedInput from "@/components/ui/masked-input";
 
 export default function UserCreatePage() {
     const router = useRouter();
@@ -27,21 +28,54 @@ export default function UserCreatePage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError,setIsError] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const dispatch = useAppDispatch();
 
-    // Função para atualizar o estado ao alterar os inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "created_at" || name === "updated_at") {
+        if (name === "created_at" || name === "updated_at" || name == "date_of_birth") {
             setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
         }
+        if (errors[name as keyof iUserForm]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
     };
 
-    // Função para simular o envio do formulário
+    const handleMaskedInputChange = (name: string, value: string) => {
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if (errors[name as keyof iUserForm]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
+    }
+
+    const validateForm = (): boolean => {
+        const newErrors: Record<string, string> = {};
+        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.email.trim()) newErrors.email = "Email é obrigatório";
+        if (!formData.cpf.trim()) newErrors.cpf = "CPF é obrigatório";
+        else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
+        if (!formData.password.trim()) newErrors.password = "Senha é obrigatória";
+        else if (formData.password.trim().length < 6) newErrors.password = "Senha deve ter ao menos 6 caracteres";
+        else if (formData.password.trim().length > 20) newErrors.password = "Senha deve ter no máximo 20 caracteres";
+        else if (!/[A-Z]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos uma letra maiúscula";
+        else if (!/[a-z]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos uma letra minúscula";
+        else if (!/[0-9]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos um número";
+        else if (!/[!@#$%^&*]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos um caractere especial (!@#$%^&*)";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return; 
+        }
 
         try {
             await dispatch(registerUser(formData)).unwrap();
@@ -73,6 +107,7 @@ export default function UserCreatePage() {
                             value={formData?.name || ''}
                             onChange={handleInputChange}
                             placeholder="Nome do usuário"
+                            error={errors.name}
                         />
                     </div>
                     <div>
@@ -84,16 +119,17 @@ export default function UserCreatePage() {
                             value={formData?.email || ''}
                             onChange={handleInputChange}
                             placeholder="Email do usuário"
+                            error={errors.email}
                         />
                     </div>
                     <div>
                         <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
-                        <Input
-                            id="cpf"
-                            name="cpf"
+                        <MaskedInput
                             value={formData?.cpf || ''}
-                            onChange={handleInputChange}
                             placeholder="CPF do usuário"
+                            mask="000.000.000-00"
+                            onChange={(val) => handleMaskedInputChange("cpf",val)}
+                            error={errors.cpf}
                         />
                     </div>
                     <div>
@@ -105,6 +141,7 @@ export default function UserCreatePage() {
                             value={formData?.password || ''}
                             onChange={handleInputChange}
                             placeholder="Senha do usuário"
+                            error={errors.password}
                         />
                     </div>
                     <div className="flex gap-3">

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { initEnterprises, selectEnterpriseError, selectEnterpriseLoading, selectEnterprises, selectEnterpriseTotal } from "@/store/features/enterpriseSlice";
+import MaskedInput from "@/components/ui/masked-input";
 
 export default function EnterprisePage() {
 
@@ -73,12 +74,13 @@ export default function EnterprisePage() {
                                 />
                             </div>
                             <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                                <Input
-                                    id="cnpj"
-                                    name="cnpj"
+                                <MaskedInput
                                     value={formData?.cnpj || ''}
-                                    onChange={handleInputChange}
                                     placeholder="CNPJ da empresa"
+                                    mask="00.000.000/0000-00"
+                                    onChange={(val) =>
+                                        setFormData((prev) => ({ ...prev, cnpj: val }))
+                                    }
                                 />
                             </div>
                             <div>

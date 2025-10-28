@@ -18,18 +18,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { iStudent } from "@/types/student";
-
-// 🔹 Dados mocados (temporários)
-const students: iStudent[] = [
-  { id: 1, name: "Marcos", phone: "(48) 12345-6789", date_of_birth: new Date(1990, 11, 17), cpf: "123", created_at: new Date(), updated_at: new Date(), },
-  { id: 2, name: "Paulo", phone: "(48) 12345-6789", date_of_birth: new Date(2006, 6, 20), cpf: "456", created_at: new Date(), updated_at: new Date(), },
-  { id: 3, name: "Maria", phone: "(11) 91234-5678", date_of_birth: new Date(2001, 2, 10), cpf: "789", created_at: new Date(), updated_at: new Date(), },
-];
-
-interface ComboboxItem {
-  value: string;
-  label: string;
-}
+import { useSelector } from "react-redux";
+import { initStudents, selectStudents } from "@/store/features/studentSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 interface StudentComboboxProps {
   student: iStudent | undefined;
@@ -43,23 +34,17 @@ interface StudentComboboxProps {
 export function StudentCombobox({
   student,
   setStudent,
-  placeholder = "Selecione o aluno...",
-  searchPlaceholder = "Nome do aluno...",
-  notFoundMessage = "Nenhum aluno encontrado.",
+  placeholder = "Selecione o estudante...",
+  searchPlaceholder = "Nome do estudante...",
+  notFoundMessage = "Nenhum estudante encontrado.",
   width = "200px",
 }: StudentComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [filteredStudents, setFilteredStudents] = React.useState<iStudent[]>(students);
+  const students = useSelector(selectStudents);
+  const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    if (!search) {
-      setFilteredStudents(students);
-      return;
-    }
-    const filtered = students.filter((student) =>
-      student.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredStudents(filtered);
+    dispatch(initStudents({ page:1, limit:200, name:search, enabled:'true' }));
   };
 
   const handleSelect = (currentValue: number) => {
@@ -68,7 +53,12 @@ export function StudentCombobox({
     const selectedStudent = students.find((student) => student.id.toString() == selectedId);
     setStudent(selectedStudent);
     setOpen(false);
+    dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
   };
+
+  React.useEffect(() => {
+      dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+  }, [dispatch]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -93,17 +83,17 @@ export function StudentCombobox({
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>
             <CommandGroup>
-              {filteredStudents.map((filteredStudent) => (
+              {students.map((s) => (
                 <CommandItem
-                  key={filteredStudent.id}
-                  value={filteredStudent.name} // Use label para evitar conflitos com a filtragem
-                  onSelect={() => handleSelect(filteredStudent.id)}
+                  key={s.id}
+                  value={s.name} // Use label para evitar conflitos com a filtragem
+                  onSelect={() => handleSelect(s.id)}
                 >
-                  {filteredStudent.name}
+                  {s.name}
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      student?.id == filteredStudent.id ? "opacity-100" : "opacity-0"
+                      student?.id == s.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

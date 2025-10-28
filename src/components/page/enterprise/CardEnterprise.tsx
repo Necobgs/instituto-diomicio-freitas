@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { formatCnpj, formatPhone } from "@/lib/format";
 import { iEnterprise } from "@/types/enterprise"
 import { useRouter } from "next/navigation"
 
@@ -24,11 +25,11 @@ export default function CardEnterprise(enterprise:iEnterprise) {
       </CardHeader>
       <CardContent>
         <CardDescription>
-          {enterprise.phone}
+          {formatPhone(enterprise.phone)}
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Label>{enterprise.cnpj}</Label>
+        <Label>{formatCnpj(enterprise.cnpj)}</Label>
       </CardFooter>
     </Card>
   )

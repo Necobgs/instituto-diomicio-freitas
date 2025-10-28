@@ -70,8 +70,8 @@ export const fetchMe = createAsyncThunk('user/me', async (_, { rejectWithValue }
 const initialState: UserState = {
     users: [],
     currentUser: null,
-    token: localStorage.getItem('token') || null,
-    isAuthenticated: !!localStorage.getItem('token'),
+    token: localStorage?.getItem('token') || null,
+    isAuthenticated: !!localStorage?.getItem('token'),
     error: null,
     loading: false,
     total: 0,

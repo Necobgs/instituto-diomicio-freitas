@@ -9,6 +9,7 @@ import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
 import { editEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
 import { useAppDispatch } from "@/store/hooks";
+import MaskedInput from "@/components/ui/masked-input";
 
 export default function EnterpriseEditPage() {
     
@@ -30,6 +31,7 @@ export default function EnterpriseEditPage() {
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [isError,setIsError] = useState(false);
     const dispatch = useAppDispatch();
 
     if (!enterprise) {
@@ -54,9 +56,9 @@ export default function EnterpriseEditPage() {
 
         try {
             await dispatch(editEnterprise({...formData, updated_at: new Date()})).unwrap();
-            handleAlert('Sucesso','Empresa alterada com sucesso!');
+            handleAlert(false,'Empresa alterada com sucesso!');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao alterar empresa');
+            handleAlert(true,error?.message || 'Erro ao alterar empresa');
         }
     };
 
@@ -67,14 +69,15 @@ export default function EnterpriseEditPage() {
             await dispatch(editEnterprise({...enterprise, enabled: !enterprise?.enabled, updated_at: new Date()})).unwrap();
             router.push('/enterprise');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao alterar empresa');
+            handleAlert(true,error?.message || 'Erro ao alterar empresa');
         }
     };
 
-    const handleAlert = (title: string, message: string) => {
-        setAlertTitle(title)
+    const handleAlert = (error: boolean, message: string) => {
+        setAlertTitle(error ? "Erro" : "Sucesso");
         setAlertDesc(message)
         setInfoAlertOpen(true);
+        setIsError(error);
     }
 
     return (
@@ -96,22 +99,24 @@ export default function EnterpriseEditPage() {
                     </div>
                     <div>
                         <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
-                        <Input
-                            id="phone"
-                            name="phone"
+                        <MaskedInput
                             value={formData?.phone || ''}
-                            onChange={handleInputChange}
                             placeholder="Telefone da empresa"
+                            mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
+                            onChange={(val) =>
+                                setFormData((prev) => ({ ...prev, phone: val }))
+                            }
                         />
                     </div>
                     <div>
                         <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
-                        <Input
-                            id="cnpj"
-                            name="cnpj"
+                        <MaskedInput
                             value={formData?.cnpj || ''}
-                            onChange={handleInputChange}
                             placeholder="CNPJ da empresa"
+                            mask="00.000.000/0000-00"
+                            onChange={(val) =>
+                                setFormData((prev) => ({ ...prev, cnpj: val }))
+                            }
                         />
                     </div>
                     <div className="flex gap-3">
@@ -129,7 +134,7 @@ export default function EnterpriseEditPage() {
                 title={alertTitle} 
                 open={infoAlertOpen} 
                 onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {router.push('/enterprise');}}
+                onClickBtn={() => {isError ? "" : router.push('/user');}}
             />
         </div>
     );

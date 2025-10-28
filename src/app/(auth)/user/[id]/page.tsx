@@ -9,6 +9,7 @@ import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
 import { editUser, selectUsers } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
+import MaskedInput from "@/components/ui/masked-input";
 
 export default function UserEditPage() {
 
@@ -17,6 +18,7 @@ export default function UserEditPage() {
     const { id } = params;
     const users = useSelector(selectUsers);
     const user = users.find(user => user.id.toString() === id);
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const dispatch = useAppDispatch();
 
     const defaultData = {
@@ -29,11 +31,12 @@ export default function UserEditPage() {
         created_at: new Date(),
         updated_at: new Date(),
     }
-    // Estado para os campos do formulário
+
     const [formData, setFormData] = useState<iUser>(user ? user : defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [isError,setIsError] = useState(false);
 
     if (!user) {
         return (
@@ -43,24 +46,50 @@ export default function UserEditPage() {
         );
     }
 
-    // Função para atualizar o estado ao alterar os inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "created_at" || name === "updated_at") {
+        if (name === "created_at" || name === "updated_at" || name == "date_of_birth") {
             setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
         }
+        if (errors[name as keyof iUser]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    const handleMaskedInputChange = (name: string, value: string) => {
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if (errors[name as keyof iUser]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
+    }
+
+    const validateForm = (): boolean => {
+        const newErrors: Record<string, string> = {};
+        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.email.trim()) newErrors.email = "Email é obrigatório";
+        if (!formData.cpf.trim()) newErrors.cpf = "CPF é obrigatório";
+        else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!validateForm()) {
+            return; 
+        }
+
         try {
             await dispatch(editUser({...formData, updated_at: new Date()})).unwrap();
-            handleAlert('Sucesso','Usuário alterado com sucesso!');
+            handleAlert(false,'Usuário alterado com sucesso!');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao alterar usuário');
+            handleAlert(true,error?.message || 'Erro ao alterar usuário');
         }
     };
 
@@ -71,15 +100,17 @@ export default function UserEditPage() {
             await dispatch(editUser({...user, enabled: !user?.enabled, updated_at: new Date()})).unwrap();
             router.push('/user');
         } catch (error: any) {
-            handleAlert('Erro',error?.message || 'Erro ao alterar usuário');
+            handleAlert(true,error?.message || 'Erro ao alterar usuário');
         }
     };
 
-    const handleAlert = (title: string, message: string) => {
-        setAlertTitle(title)
+    const handleAlert = (error: boolean, message: string) => {
+        setAlertTitle(error ? "Erro" : "Sucesso");
         setAlertDesc(message)
         setInfoAlertOpen(true);
+        setIsError(error);
     }
+
 
     return (
         <div className="w-full h-full p-4">
@@ -96,6 +127,7 @@ export default function UserEditPage() {
                             value={formData?.name || ''}
                             onChange={handleInputChange}
                             placeholder="Nome do usuário"
+                            error={errors.name} 
                         />
                     </div>
                     <div>
@@ -107,16 +139,17 @@ export default function UserEditPage() {
                             value={formData?.email || ''}
                             onChange={handleInputChange}
                             placeholder="Email do usuário"
+                            error={errors.email}
                         />
                     </div>
                     <div>
                         <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
-                        <Input
-                            id="cpf"
-                            name="cpf"
+                        <MaskedInput
                             value={formData?.cpf || ''}
-                            onChange={handleInputChange}
                             placeholder="CPF do usuário"
+                            mask="000.000.000-00"
+                            onChange={(val) => handleMaskedInputChange("cpf",val)}
+                            error={errors.cpf}
                         />
                     </div>
                     <div className="flex gap-3">
@@ -134,7 +167,7 @@ export default function UserEditPage() {
                 title={alertTitle} 
                 open={infoAlertOpen} 
                 onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {router.push('/user');}}
+                onClickBtn={() => {isError ? "" : router.push('/user');}}
             />
         </div>
     );

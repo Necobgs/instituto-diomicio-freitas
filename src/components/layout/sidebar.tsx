@@ -43,7 +43,7 @@ const items = [
 // Dados do submenu colapsável
 const collapsibleItems = [
   {
-    title: "Visualizar alunos",
+    title: "Visualizar estudantes",
     url: "/student",
   },
   {
@@ -90,7 +90,7 @@ export default function AppSidebar() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
                       <Users className="h-5 w-5" />
-                      <span>Alunos</span>
+                      <span>Estudantes</span>
                       <ChevronDown className="ml-auto h-5 w-5 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combo-box";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
+import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { initStudents, selectStudentError, selectStudentLoading, selectStudents, selectStudentTotal } from "@/store/features/studentSlice";
@@ -34,6 +35,10 @@ export default function StudentPage(){
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleMaskedInputChange = (name: string, value: string) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
@@ -73,12 +78,11 @@ export default function StudentPage(){
                 />
             </div>
             <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                <Input 
-                    id="cpf"
-                    name="cpf"
+                <MaskedInput 
                     value={formData?.cpf || ''}
-                    onChange={handleInputChange}
                     placeholder="CPF do estudante"
+                    mask="000.000.000-00"
+                    onChange={(val) => handleMaskedInputChange("cpf",val)}
                 />
             </div>
             <div>
@@ -107,7 +111,7 @@ export default function StudentPage(){
                 : ""
                 }
                 
-                <div className="mt-5 grid gap-5 grid-cols-4">
+                <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
                     {students.map(student=>
                         <CardStudent {...student} key={student.id}/>
                     )}

@@ -9,14 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { formatCpf } from "@/lib/format";
 import { iStudent } from "@/types/student"
 import { useRouter } from "next/navigation";
 
 export default function CardStudent(student:iStudent) {
 
     const router = useRouter();
-
-    console.log(student)
 
     return (
         <Card className="w-full hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`/student/${student.id}`)}}>
@@ -30,7 +29,7 @@ export default function CardStudent(student:iStudent) {
                 </CardDescription>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Label>{student.cpf}</Label>
+                <Label>{formatCpf(student.cpf)}</Label>
             </CardFooter>
         </Card>
     )

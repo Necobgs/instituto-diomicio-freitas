@@ -18,33 +18,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { iEnterprise } from "@/types/enterprise";
-
-
-const enterprises: iEnterprise[] = [
-        {
-            id: 1,
-            name:'Empresa 1',
-            phone: "(48) 12345-6789",
-            cnpj: '123', 
-            enabled: true,
-            created_at: new Date(), 
-            updated_at: new Date(),
-        },
-        {
-            id: 2,
-            name:'Empresa 2',
-            phone: "(48) 12345-6789",
-            cnpj: '123', 
-            enabled: true,
-            created_at: new Date(), 
-            updated_at: new Date(),
-        },
-    ];
-
-interface ComboboxItem {
-  value: string;
-  label: string;
-}
+import { initEnterprises, selectEnterprises } from "@/store/features/enterpriseSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { useSelector } from "react-redux";
 
 interface EnterpriseComboboxProps {
   enterprise: iEnterprise | undefined;
@@ -58,23 +34,17 @@ interface EnterpriseComboboxProps {
 export function EnterpriseCombobox({
   enterprise,
   setEnterprise,
-  placeholder = "Selecione o aluno...",
-  searchPlaceholder = "Procurando alunos...",
-  notFoundMessage = "Nenhum aluno encontrado.",
+  placeholder = "Selecione a empresa...",
+  searchPlaceholder = "Procurando empresas...",
+  notFoundMessage = "Nenhuma empresa encontrada.",
   width = "200px",
 }: EnterpriseComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [filteredEnterprises, setFilteredEnterprises] = React.useState<iEnterprise[]>(enterprises);
+  const enterprises = useSelector(selectEnterprises);
+  const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    if (!search) {
-      setFilteredEnterprises(enterprises);
-      return;
-    }
-    const filtered = enterprises.filter((enterprise) =>
-      enterprise.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredEnterprises(filtered);
+    dispatch(initEnterprises({ page:1, limit:200, name: search, enabled:'true' }))
   };
 
   const handleSelect = (currentId: number) => {
@@ -83,7 +53,12 @@ export function EnterpriseCombobox({
     const selectedEnterprise = enterprises.find((enterprise) => enterprise.id == selectedId);
     setEnterprise(selectedEnterprise);
     setOpen(false);
+    dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
   };
+
+  React.useEffect(() => {
+      dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+  }, [dispatch]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -108,17 +83,17 @@ export function EnterpriseCombobox({
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>
             <CommandGroup>
-              {filteredEnterprises.map((filteredEnterprise) => (
+              {enterprises.map((e) => (
                 <CommandItem
-                  key={filteredEnterprise.id}
-                  value={filteredEnterprise.name} // Use label para evitar conflitos com a filtragem
-                  onSelect={() => handleSelect(filteredEnterprise.id)}
+                  key={e.id}
+                  value={e.name} // Use label para evitar conflitos com a filtragem
+                  onSelect={() => handleSelect(e.id)}
                 >
-                  {filteredEnterprise.name}
+                  {e.name}
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      enterprise?.id == filteredEnterprise.id ? "opacity-100" : "opacity-0"
+                      enterprise?.id == e.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

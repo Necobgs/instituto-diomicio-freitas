@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { formatCpf } from "@/lib/format"
 import { iUser } from "@/types/user"
 import React, { MouseEventHandler } from "react"
 
@@ -28,7 +29,7 @@ export default function CardUser({user, onClick} : iProps) {
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Label>{user.cpf}</Label>
+        <Label>{formatCpf(user.cpf)}</Label>
       </CardFooter>
     </Card>
   )
