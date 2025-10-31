@@ -47,9 +47,9 @@ export default function LoginPage() {
       setInfoAlertOpen(true);
   }
 
-  useEffect(() => {
+  /* useEffect(() => {
     dispatch(fetchMe());
-  }, [dispatch]);
+  }, [dispatch]); */
 
   useEffect(() => {
     if (isAuthenticated) {

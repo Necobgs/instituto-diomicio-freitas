@@ -117,7 +117,7 @@ export default function UserPage(){
             <section className="mt-4 flex-auto">
                 { users != undefined || error
                 ?<div>
-                    {error ? error : `Quantidade de usuários encontrados: ${users.length}`}
+                    {error ? error : `Quantidade de usuários encontrados: ${totalItems}`}
                 </div>
                 :""
                 }

@@ -69,10 +69,10 @@ export default function UserEditPage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
-        if (!formData.email.trim()) newErrors.email = "Email é obrigatório";
-        if (!formData.cpf.trim()) newErrors.cpf = "CPF é obrigatório";
-        else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
+        if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.email?.trim()) newErrors.email = "Email é obrigatório";
+        if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
+        else if (formData.cpf?.trim().length < 11) newErrors.cpf = "CPF inválido";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;

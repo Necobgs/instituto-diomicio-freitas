@@ -29,6 +29,7 @@ interface StudentComboboxProps {
   searchPlaceholder?: string;
   notFoundMessage?: string;
   width?: string;
+  error?: string;
 }
 
 export function StudentCombobox({
@@ -38,6 +39,7 @@ export function StudentCombobox({
   searchPlaceholder = "Nome do estudante...",
   notFoundMessage = "Nenhum estudante encontrado.",
   width = "200px",
+  error = "",
 }: StudentComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const students = useSelector(selectStudents);
@@ -61,47 +63,50 @@ export function StudentCombobox({
   }, [dispatch]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn("justify-between", `w-[${width}]`,!student ? `text-black/50` : ``)}
-        >
-          {student?.name ?? placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className={cn(`w-[${width}] p-0`)}>
-        <Command shouldFilter={false}>
-          <CommandInput
-            placeholder={searchPlaceholder}
-            className="h-9"
-            onValueChange={handleSearch}
-          />
-          <CommandList>
-            <CommandEmpty>{notFoundMessage}</CommandEmpty>
-            <CommandGroup>
-              {students.map((s) => (
-                <CommandItem
-                  key={s.id}
-                  value={s.name} // Use label para evitar conflitos com a filtragem
-                  onSelect={() => handleSelect(s.id)}
-                >
-                  {s.name}
-                  <Check
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      student?.id == s.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <div className="flex flex-col gap-0.5">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn("justify-between", `w-[${width}]`,!student ? `text-black/50` : ``, error ? "border-red-600" : "")}
+          >
+            {student?.name ?? placeholder}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className={cn(`w-[${width}] p-0`)}>
+          <Command shouldFilter={false}>
+            <CommandInput
+              placeholder={searchPlaceholder}
+              className="h-9"
+              onValueChange={handleSearch}
+            />
+            <CommandList>
+              <CommandEmpty>{notFoundMessage}</CommandEmpty>
+              <CommandGroup>
+                {students.map((s) => (
+                  <CommandItem
+                    key={s.id}
+                    value={s.name} // Use label para evitar conflitos com a filtragem
+                    onSelect={() => handleSelect(s.id)}
+                  >
+                    {s.name}
+                    <Check
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        student?.id == s.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {error && <p className="text-destructive text-sm mt-1">{error}</p>}
+    </div>
   );
 }

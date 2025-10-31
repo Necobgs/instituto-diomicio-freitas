@@ -38,6 +38,10 @@ export default function EnterprisePage() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleMaskedInputChange = (name: string, value: string) => {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
     const handleSearch = () => {
         if (currentPage === 1)  {
             dispatch(initEnterprises({...formData, page: currentPage, limit: itemsPerPage }));
@@ -78,9 +82,7 @@ export default function EnterprisePage() {
                                     value={formData?.cnpj || ''}
                                     placeholder="CNPJ da empresa"
                                     mask="00.000.000/0000-00"
-                                    onChange={(val) =>
-                                        setFormData((prev) => ({ ...prev, cnpj: val }))
-                                    }
+                                    onChange={(val) => handleMaskedInputChange("cnpj",val)}
                                 />
                             </div>
                             <div>

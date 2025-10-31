@@ -54,12 +54,12 @@ export default function StudentEditPage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
-        if (!formData.phone.trim()) newErrors.phone = "Telefone é obrigatório";
-        else if (formData.phone.trim().length < 10) newErrors.phone = "Telefone inválido";
-        if (!formData.date_of_birth) newErrors.date_of_birth = "Data de nascimento é obrigatória";
-        if (!formData.cpf.trim()) newErrors.cpf = "CPF é obrigatório";
-        else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
+        if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.phone?.trim()) newErrors.phone = "Telefone é obrigatório";
+        else if (formData.phone?.trim().length < 10) newErrors.phone = "Telefone inválido";
+        if (!formData?.date_of_birth) newErrors.date_of_birth = "Data de nascimento é obrigatória";
+        if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
+        else if (formData.cpf?.trim().length < 11) newErrors.cpf = "CPF inválido";
 
 
         setErrors(newErrors);

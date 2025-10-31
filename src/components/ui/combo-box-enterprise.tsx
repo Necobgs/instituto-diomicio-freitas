@@ -29,6 +29,7 @@ interface EnterpriseComboboxProps {
   searchPlaceholder?: string;
   notFoundMessage?: string;
   width?: string;
+  error?: string;
 }
 
 export function EnterpriseCombobox({
@@ -38,6 +39,7 @@ export function EnterpriseCombobox({
   searchPlaceholder = "Procurando empresas...",
   notFoundMessage = "Nenhuma empresa encontrada.",
   width = "200px",
+  error = "",
 }: EnterpriseComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const enterprises = useSelector(selectEnterprises);
@@ -61,47 +63,50 @@ export function EnterpriseCombobox({
   }, [dispatch]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn("justify-between", `w-[${width}]`,!enterprise ? `text-black/50` : ``)}
-        >
-          {enterprise?.name ?? placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className={cn(`w-[${width}] p-0`)}>
-        <Command shouldFilter={false}> {/* Desativa a filtragem interna do Command */}
-          <CommandInput
-            placeholder={searchPlaceholder}
-            className="h-9"
-            onValueChange={handleSearch}
-          />
-          <CommandList>
-            <CommandEmpty>{notFoundMessage}</CommandEmpty>
-            <CommandGroup>
-              {enterprises.map((e) => (
-                <CommandItem
-                  key={e.id}
-                  value={e.name} // Use label para evitar conflitos com a filtragem
-                  onSelect={() => handleSelect(e.id)}
-                >
-                  {e.name}
-                  <Check
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      enterprise?.id == e.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <div className="flex flex-col gap-0.5">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn("justify-between", `w-[${width}]`,!enterprise ? `text-black/50` : ``, error ? "border-red-600" : "")}
+          >
+            {enterprise?.name ?? placeholder}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className={cn(`w-[${width}] p-0`)}>
+          <Command shouldFilter={false}> {/* Desativa a filtragem interna do Command */}
+            <CommandInput
+              placeholder={searchPlaceholder}
+              className="h-9"
+              onValueChange={handleSearch}
+            />
+            <CommandList>
+              <CommandEmpty>{notFoundMessage}</CommandEmpty>
+              <CommandGroup>
+                {enterprises.map((e) => (
+                  <CommandItem
+                    key={e.id}
+                    value={e.name} // Use label para evitar conflitos com a filtragem
+                    onSelect={() => handleSelect(e.id)}
+                  >
+                    {e.name}
+                    <Check
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        enterprise?.id == e.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {error && <p className="text-destructive text-sm mt-1">{error}</p>}
+    </div>
   );
 }

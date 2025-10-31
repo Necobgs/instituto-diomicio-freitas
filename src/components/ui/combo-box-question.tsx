@@ -52,6 +52,7 @@ interface ComboboxProps {
   searchPlaceholder?: string; // Optional placeholder for the search input
   notFoundMessage?: string; // Optional message for no results
   width?: string; // Optional width for the button and popover
+  error?: string; // Optional error message
 }
 
 export function QuestionCombobox({
@@ -62,6 +63,7 @@ export function QuestionCombobox({
   searchPlaceholder = "Buscar opção...",
   notFoundMessage = "Opção não encontrada.",
   width = "200px",
+  error = "",
 }: ComboboxProps) {
 
   const [open, setOpen] = React.useState(false);
@@ -87,49 +89,52 @@ export function QuestionCombobox({
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn("justify-between", `w-[${width}]`)}
-        >
-          {value  
-            ? items.find((item) => item.value === value)?.label
-            : placeholder
-          }
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className={cn(`w-[${width}] p-0`)}>
-        <Command>
-          <CommandInput
-            placeholder={searchPlaceholder}
-            className="h-9"
-            onValueChange={handleSearch} // Call search handler on input change
-          />
-          <CommandList>
-            <CommandEmpty>{notFoundMessage}</CommandEmpty>
-            <CommandGroup>
-              {items.map((item) => (
-                <CommandItem
-                  key={item.value}
-                  value={item.label}
-                  onSelect={() => handleSelect(item.value)}>
-                  {item.label}
-                  <Check
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <div className="flex flex-col gap-0.5">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn("justify-between", `w-[${width}]`, error ? "border-red-600" : "")}
+          >
+            {value  
+              ? items.find((item) => item.value === value)?.label
+              : placeholder
+            }
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className={cn(`w-[${width}] p-0`)}>
+          <Command>
+            <CommandInput
+              placeholder={searchPlaceholder}
+              className="h-9"
+              onValueChange={handleSearch} // Call search handler on input change
+            />
+            <CommandList>
+              <CommandEmpty>{notFoundMessage}</CommandEmpty>
+              <CommandGroup>
+                {items.map((item) => (
+                  <CommandItem
+                    key={item.value}
+                    value={item.label}
+                    onSelect={() => handleSelect(item.value)}>
+                    {item.label}
+                    <Check
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        value === item.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {error && <p className="text-destructive text-sm mt-1">{error}</p>}
+    </div>
   );
 }

@@ -64,7 +64,7 @@ const evaluations: iEvaluation[] = [
 ];
 
 
-export default function AvaliationPage(){
+export default function EvaluationPage(){
 
     const router = useRouter();
 

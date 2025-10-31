@@ -20,4 +20,4 @@ export interface iParamsEnterprise {
     enabled?: string;
 }
 
-export type iEnterpriseForm = Omit<iEnterprise, "id">;
+export type iEnterpriseForm = Partial<iEnterprise>;

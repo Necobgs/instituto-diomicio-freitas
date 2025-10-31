@@ -22,7 +22,7 @@ export interface iParamsUser {
     enabled?: string;
 }
 
-export type iUserForm = Omit<iUser, "id">;
+export type iUserForm = Partial<iUser>;
 
 export interface iLoginCredentials {
     email: string;

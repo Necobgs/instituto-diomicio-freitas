@@ -21,4 +21,4 @@ export interface iParamsStudent {
     enabled?: string;
 }
 
-export type iStudentForm = Omit<iStudent, "id">;
+export type iStudentForm = Partial<iStudent>;

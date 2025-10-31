@@ -10,14 +10,33 @@ import { iStudent } from "@/types/student";
 import { EnterpriseCombobox } from "@/components/ui/combo-box-enterprise";
 import { iEnterprise } from "@/types/enterprise";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import MaskedInput from "@/components/ui/masked-input";
+import { addMonitoring } from "@/store/features/monitoringSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function MonitoringEditPage() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<iMonitoringForm>({});
+  const defaultData: iMonitoringForm = {
+      student: undefined,
+      admission_date: null,
+      enterprise: undefined,
+      job_title: "",
+      hr_contact: "",
+      hr_resposible: "",
+      termination_date_ieedf: null,
+      observations: "",
+      created_at: new Date(),
+      updated_at: new Date(),
+  };
+  const [formData, setFormData] = useState<iMonitoringForm>(defaultData);
   const [alertTitle,setAlertTitle] = useState('');
   const [alertDesc,setAlertDesc] = useState('');
   const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+  const [isError,setIsError] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,18 +46,51 @@ export default function MonitoringEditPage() {
       [name]:
         name.includes("date") && value ? new Date(value) : value, // conversão automática
     }));
+
+    if (errors[name as keyof iMonitoringForm]) {
+        setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Acompanhamento Criado:', formData);
-    handleAlert('Acompanhamento Criado com sucesso! (Simulação)');
+  const handleMakedInputChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name as keyof iMonitoringForm]) {
+        setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.student) newErrors.student = "Estudante é obrigatório";
+    if (!formData.enterprise) newErrors.enterprise = "Empresa é obrigatória";
+    if (!formData.job_title) newErrors.job_title = "Função é obrigatória";
+    if (formData.hr_contact?.trim() && formData.hr_contact?.trim().length < 10) newErrors.hr_contact = "Contato do RH inválido";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleAlert = (message: string) => {
-    setAlertTitle('Sucesso')
-    setAlertDesc(message)
-    setInfoAlertOpen(true);
+  const handleSubmit = async(e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (!validateForm()) {
+          return; 
+      }
+
+      try {
+          await dispatch(addMonitoring(formData)).unwrap();
+          handleAlert(false,'Acompanhamento cadastrado com sucesso!');
+      } catch (error: any) {
+          handleAlert(true,error?.message || 'Erro ao cadastrar acompanhamento');
+      }
+  };
+
+  const handleAlert = (error: boolean, message: string) => {
+      setAlertTitle(error ? "Erro" : "Sucesso");
+      setAlertDesc(message)
+      setInfoAlertOpen(true);
+      setIsError(error);
   }
 
   return (
@@ -50,33 +102,72 @@ export default function MonitoringEditPage() {
           onSubmit={handleSubmit}
           className="flex flex-col gap-5 max-w-md"
         >
-          {/* Aluno */}
           <div className="flex flex-col gap-2">
             <label htmlFor="student" className="text-sm font-medium">
-              Aluno
+              Estudante
             </label>
             <StudentCombobox
               student={formData.student}
-              setStudent={(student: iStudent | undefined) =>
-                setFormData((prev) => ({ ...prev, student }))
-              }
+              setStudent={(student: iStudent | undefined) => {
+                setFormData((prev) => ({ ...prev, student }));
+                setErrors((prev) => ({ ...prev, student: '' }));
+              }}
+              error={errors.student}
             />
           </div>
-
-          {/* Empresa */}
           <div className="flex flex-col gap-2">
             <label htmlFor="enterprise" className="text-sm font-medium">
               Empresa
             </label>
-                <EnterpriseCombobox 
-                    enterprise={formData?.enterprise} 
-                    setEnterprise={
-                        (enterprise: iEnterprise | undefined) => setFormData((prev) => ({ ...prev, enterprise }))
-                        }
-                />
+            <EnterpriseCombobox 
+              enterprise={formData?.enterprise} 
+              setEnterprise={
+                (enterprise: iEnterprise | undefined) => {
+                  setFormData((prev) => ({ ...prev, enterprise })); 
+                  setErrors((prev) => ({ ...prev, enterprise: '' }));
+              }
+              }
+              error={errors.enterprise}
+            />
           </div>
-
-          {/* Datas */}
+          <div>
+            <label htmlFor="job_title" className="text-sm font-medium">
+              Função
+            </label>
+            <Input
+              id="job_title"
+              name="job_title"
+              value={formData.job_title || ""}
+              onChange={handleInputChange}
+              placeholder="Função"
+              error={errors.job_title}
+            />
+          </div>
+          <div>
+            <label htmlFor="hr_contact" className="text-sm font-medium">
+              Responsável do RH
+            </label>
+            <Input
+              id="hr_resposible"
+              name="hr_resposible"
+              value={formData.hr_resposible || ""}
+              onChange={handleInputChange}
+              placeholder="Responsável do RH"
+              error={errors.hr_resposible}
+            />
+          </div>
+          <div>
+            <label htmlFor="hr_contact" className="text-sm font-medium">
+              Contato do RH
+            </label>
+            <MaskedInput
+              value={formData.hr_contact || ""}
+              placeholder="Contato do RH"
+              mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
+              onChange={(val) => handleMakedInputChange("hr_contact", val)}
+              error={errors.hr_contact}
+            />
+          </div>
           <div>
             <label htmlFor="admission_date" className="text-sm font-medium">
               Data de admissão
@@ -91,15 +182,15 @@ export default function MonitoringEditPage() {
                   : ""
               }
               onChange={handleInputChange}
+              error={errors.admission_date}
             />
           </div>
-
           <div>
             <label
               htmlFor="termination_date_ieedf"
               className="text-sm font-medium"
             >
-              Data de desligamento
+             Provável data desligamento IEEDF
             </label>
             <Input
               id="termination_date_ieedf"
@@ -111,38 +202,21 @@ export default function MonitoringEditPage() {
                   : ""
               }
               onChange={handleInputChange}
+              error={errors.termination_date_ieedf}
             />
           </div>
-
-          {/* Contato RH */}
           <div>
             <label htmlFor="hr_contact" className="text-sm font-medium">
-              Contato do RH
+              Observações
             </label>
-            <Input
-              id="hr_contact"
-              name="hr_contact"
-              value={formData.hr_contact || ""}
-              onChange={handleInputChange}
-              placeholder="Contato do RH"
+            <Textarea
+              id="observations"
+              name="observations"
+              value={formData.observations || ""}
+              onChange={(e) => {setFormData((prev) => ({ ...prev, observations: e.target.value }))}}
+              error={errors.observations}
             />
           </div>
-
-          {/* Cargo */}
-          <div>
-            <label htmlFor="job_title" className="text-sm font-medium">
-              Cargo
-            </label>
-            <Input
-              id="job_title"
-              name="job_title"
-              value={formData.job_title || ""}
-              onChange={handleInputChange}
-              placeholder="Cargo"
-            />
-          </div>
-
-          {/* Botões */}
           <div className="flex gap-3">
             <Button type="submit">Salvar</Button>
             <Button
@@ -156,12 +230,12 @@ export default function MonitoringEditPage() {
         </form>
       </section>
 
-        <InfoAlertDialog
+      <InfoAlertDialog
           message={alertDesc} 
           title={alertTitle} 
           open={infoAlertOpen} 
           onOpenChange={setInfoAlertOpen}
-          onClickBtn={() => {router.push('/student/monitoring');}}
+          onClickBtn={() => {isError ? "" : router.push('/student/monitoring');}}
       />
     </div>
   );

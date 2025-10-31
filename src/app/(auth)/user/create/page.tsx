@@ -54,11 +54,11 @@ export default function UserCreatePage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
-        if (!formData.email.trim()) newErrors.email = "Email é obrigatório";
-        if (!formData.cpf.trim()) newErrors.cpf = "CPF é obrigatório";
+        if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.email?.trim()) newErrors.email = "Email é obrigatório";
+        if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
         else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
-        if (!formData.password.trim()) newErrors.password = "Senha é obrigatória";
+        if (!formData.password?.trim()) newErrors.password = "Senha é obrigatória";
         else if (formData.password.trim().length < 6) newErrors.password = "Senha deve ter ao menos 6 caracteres";
         else if (formData.password.trim().length > 20) newErrors.password = "Senha deve ter no máximo 20 caracteres";
         else if (!/[A-Z]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos uma letra maiúscula";

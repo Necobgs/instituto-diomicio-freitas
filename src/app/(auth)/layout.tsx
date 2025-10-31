@@ -21,17 +21,17 @@ export default function RootAuthLayout({
     dispatch(fetchMe());
   }, [dispatch]) */
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!isAuthenticated) {
       redirect("/login");
     }
-  },[isAuthenticated]) 
+  },[isAuthenticated])  */
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen min-w-screen">
         <AppSidebar />
-        <main className="flex-1 flex flex-col w-full">
+        <main className="flex-1 flex flex-col w-full min-w-0">
           <nav className="h-16 p-4 bg-red-400 flex items-center justify-start">
             <SidebarTrigger className="text-emerald-950 bg-red-100" />
           </nav>

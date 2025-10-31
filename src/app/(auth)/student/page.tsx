@@ -60,74 +60,75 @@ export default function StudentPage(){
     
     return (
         <>
-        {loading
-        ?<Loading/>
-        :<div className="w-full h-full p-4 flex flex-col">
-            <section className="min-h-16 flex flex-col gap-5">
-        <div className="text-left">
-          <h1 className="text-2xl">Buscar estudantes</h1>
-        </div>
-        <div className="flex flex-wrap items-center justify-start gap-4">
-            <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                <Input                          
-                    id="name"
-                    name="name"
-                    value={formData?.name || ''}
-                    onChange={handleInputChange}
-                    placeholder="Nome da estudante"
-                />
-            </div>
-            <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                <MaskedInput 
-                    value={formData?.cpf || ''}
-                    placeholder="CPF do estudante"
-                    mask="000.000.000-00"
-                    onChange={(val) => handleMaskedInputChange("cpf",val)}
-                />
-            </div>
-            <div>
-                <Combobox
-                    items={[{ value: "", label: "Todas as situações" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
-                    value={formData?.enabled}
-                    setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
-                    placeholder="Todas as situações"
-                    searchPlaceholder="Buscar situação..."
-                    notFoundMessage="Nenhuma situação encontrada"
-                />
-            </div>
-            <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                <Button className="w-full" onClick={handleSearch}>Buscar</Button>
-            </div>
-        </div>
-      </section>
-
-            <Separator className="mt-6"/>
-            
-            <section className="mt-4 flex-auto">
-                { students != undefined || error
-                ?<div>
-                    {error ? error: `Quantidade de estudantes encontrados: ${students.length}`}
+            {loading
+            ?<Loading/>
+            :<div className="w-full h-full p-4 flex flex-col">
+                    <section className="min-h-16 flex flex-col gap-5">
+                <div className="text-left">
+                <h1 className="text-2xl">Buscar estudantes</h1>
                 </div>
-                : ""
-                }
-                
-                <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
-                    {students.map(student=>
-                        <CardStudent {...student} key={student.id}/>
-                    )}
+                <div className="flex flex-wrap items-center justify-start gap-4">
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Input                          
+                            id="name"
+                            name="name"
+                            value={formData?.name || ''}
+                            onChange={handleInputChange}
+                            placeholder="Nome da estudante"
+                        />
+                    </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <MaskedInput 
+                            value={formData?.cpf || ''}
+                            placeholder="CPF do estudante"
+                            mask="000.000.000-00"
+                            onChange={(val) => handleMaskedInputChange("cpf",val)}
+                        />
+                    </div>
+                    <div>
+                        <Combobox
+                            items={[{ value: "", label: "Todas as situações" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                            value={formData?.enabled}
+                            setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
+                            placeholder="Todas as situações"
+                            searchPlaceholder="Buscar situação..."
+                            notFoundMessage="Nenhuma situação encontrada"
+                        />
+                    </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Button className="w-full" onClick={handleSearch}>Buscar</Button>
+                    </div>
                 </div>
             </section>
 
-            <PaginationComponent
-                cbNext={() => hasNextPage && setCurrentPage(prev => prev + 1)}
-                cbPrevius={() => hasPreviousPage && setCurrentPage(prev => prev - 1)}
-                hasNextPage={hasNextPage}
-                hasPreviousPage={hasPreviousPage}
-                pageActivated={currentPage}
-            />
+                    <Separator className="mt-6"/>
+                    
+                    <section className="mt-4 flex-auto">
+                        { students != undefined || error
+                        ?<div>
+                            {error ? error: `Quantidade de estudantes encontrados: ${totalItems}`}
+                        </div>
+                        : ""
+                        }
+                        
+                        <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
+                            {students.map(student=>
+                                <CardStudent {...student} key={student.id}/>
+                            )}
+                        </div>
+                    </section>
 
-            <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/create')}}>+</button>
-        </div>}
+                    <PaginationComponent
+                        cbNext={() => hasNextPage && setCurrentPage(prev => prev + 1)}
+                        cbPrevius={() => hasPreviousPage && setCurrentPage(prev => prev - 1)}
+                        hasNextPage={hasNextPage}
+                        hasPreviousPage={hasPreviousPage}
+                        pageActivated={currentPage}
+                    />
+
+                    <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/create')}}>+</button>
+                </div>
+            }
         </>
     )
 }

@@ -32,7 +32,7 @@ export default function EnterpriseCreatePage() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "created_at" || name === "updated_at" || name == "date_of_birth") {
+        if (name === "created_at" || name === "updated_at") {
             setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
@@ -53,11 +53,11 @@ export default function EnterpriseCreatePage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
-        if (!formData.phone.trim()) newErrors.phone = "Telefone é obrigatório";
-        else if (formData.phone.trim().length < 10) newErrors.phone = "Telefone inválido";
-        if (!formData.cnpj.trim()) newErrors.cnpj = "CNPJ é obrigatório";
-        else if (formData.cnpj.trim().length < 14) newErrors.cnpj = "CNPJ inválido";
+        if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.phone?.trim()) newErrors.phone = "Telefone é obrigatório";
+        else if (formData.phone?.trim().length < 10) newErrors.phone = "Telefone inválido";
+        if (!formData.cnpj?.trim()) newErrors.cnpj = "CNPJ é obrigatório";
+        else if (formData.cnpj?.trim().length < 14) newErrors.cnpj = "CNPJ inválido";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -137,7 +137,7 @@ export default function EnterpriseCreatePage() {
                 title={alertTitle} 
                 open={infoAlertOpen} 
                 onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {isError ? "" : router.push('/user');}}
+                onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
             />
         </div>
     );
