@@ -10,13 +10,10 @@ const endpoint = 'student';
 const getStudents = async ({ page = 1, limit = 8, name, cpf, enabled }: iParamsStudent = {}): Promise<iPaginationStudent> => {
   let query = `_page=${page}&_limit=${limit}`;
 
-  // Nome - includes
   if (name) query += `&name_like=${encodeURIComponent(name)}`;
 
-  // CNPJ - startsWith (usa regex ^)
   if (cpf) query += `&cpf_like=${encodeURIComponent(`^${cpf}`)}`;
 
-  // Status
   if (enabled) query += `&enabled=${encodeURIComponent(enabled)}`;
 
   const response = await api.get(`${endpoint}?${query}`);

@@ -60,11 +60,16 @@ export function Combobox({
         );
       }
 
-      console.log(newItems)
-
       return newItems;
     });
   };
+
+  const handleSelect = (currentValue: string) => {
+    const newValue = currentValue === value ? "" : currentValue;
+
+    setValue(newValue);
+    setOpen(false);
+  }
 
   return (
     <div className="flex flex-col gap-0.5">
@@ -74,7 +79,7 @@ export function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("justify-between", `w-[${width}]`, error ? "border-red-600" : "")}
+            className={cn("justify-between", `w-[${width}]`, !value ? `text-black/50` : `` , error ? "border-red-600" : "")}
           >
             {value
               ? items.find((item) => item.value === value)?.label
@@ -92,14 +97,11 @@ export function Combobox({
             <CommandList>
               <CommandEmpty>{notFoundMessage}</CommandEmpty>
               <CommandGroup>
-                {filteredItems.map((item) => (
+                {filteredItems.map((item,index) => (
                   <CommandItem
-                    key={item.value}
+                    key={index}
                     value={item.label}
-                    onSelect={(currentValue) => {
-                      setValue(item.value); // Toggle selection
-                      setOpen(false); // Close popover on select
-                    }}
+                    onSelect={() => handleSelect(item.value)}
                   >
                     {item.label}
                     <Check

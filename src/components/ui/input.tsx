@@ -10,7 +10,7 @@ function Input({ className, type, error, ...props }: React.ComponentProps<"input
   const [visiblePassword, setVisiblePassword] = React.useState(false); 
 
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col gap-0.5 w-full">
       <div className="flex flex-row gap-2 items-center relative">
         <input
           type={type === "password" ? `${visiblePassword ? "text" : "password"}`: type}

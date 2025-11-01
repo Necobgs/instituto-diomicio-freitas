@@ -1,6 +1,6 @@
 import { iStudent } from "./student";
 
-export default interface iEvaluation{
+export interface iEvaluation{
     id: number,
     student: iStudent | undefined;
     entry_date: Date | null;
@@ -8,5 +8,20 @@ export default interface iEvaluation{
     teacher_name: string;
     interview_note: number,
     note: number,
-    questions: {id: number, value: string}[];
+}
+
+export type iEvaluationForm = Partial<iEvaluation>;
+
+export interface iPaginationEvaluation {
+  data: iEvaluation[];
+  total: number;
+}
+
+export interface iParamsEvaluation{
+    page?: number;
+    limit?: number;
+    student?: iStudent;
+    entry_date?: string;
+    date?: string;
+    teacher_name?: string;
 }

@@ -87,10 +87,10 @@ export default function EnterprisePage() {
                             </div>
                             <div>
                                 <Combobox
-                                    items={[{ value: "", label: "Todas as situações" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                                    items={[{ value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
                                     value={formData?.enabled}
                                     setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
-                                    placeholder="Todas as situações"
+                                    placeholder="Selecione a situação..."
                                     searchPlaceholder="Buscar situação..."
                                     notFoundMessage="Nenhuma situação encontrada"
                                 />

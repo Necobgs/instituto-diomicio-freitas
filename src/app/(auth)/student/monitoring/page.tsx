@@ -228,8 +228,7 @@ export default function MonitoringPage() {
             onOpenChange={setInfoAlertOpen}
             onClickBtn={undefined}
         />
-      </div>
-      }
+      </div>}
     </>
   );
 }

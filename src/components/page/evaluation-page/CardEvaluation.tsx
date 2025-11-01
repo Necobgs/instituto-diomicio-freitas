@@ -9,10 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import ievaluation from "@/types/evaluation";
+import { formatDate } from "@/lib/format";
+import { iEvaluation } from "@/types/evaluation";
 import { useRouter } from "next/navigation"
 
-export default function Cardevaluation(evaluation:ievaluation) {
+export default function CardEvaluation(evaluation:iEvaluation) {
 
   const router = useRouter();
 
@@ -23,8 +24,8 @@ export default function Cardevaluation(evaluation:ievaluation) {
       </CardHeader>
       <CardContent>
         <CardDescription>
-          Data da entrada: {evaluation?.entry_date ? evaluation?.entry_date.toLocaleDateString("pt-BR") : ""} <br/>
-          Data da avaliação: {evaluation?.date ? evaluation?.date.toLocaleDateString("pt-BR") : ""}
+          Data da entrada: {evaluation?.entry_date ? formatDate(evaluation?.entry_date) : ""} <br/>
+          Data da avaliação: {evaluation?.date ? formatDate(evaluation?.date) : ""}
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
