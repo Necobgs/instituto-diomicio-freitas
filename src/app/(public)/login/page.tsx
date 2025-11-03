@@ -4,7 +4,7 @@ import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
-import { loginUser, selectIsAuthenticated, fetchMe } from "@/store/features/userSlice";
+import { loginUser, selectIsAuthenticated, fetchMe, validateTokenUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -47,9 +47,19 @@ export default function LoginPage() {
       setInfoAlertOpen(true);
   }
 
-  /* useEffect(() => {
-    dispatch(fetchMe());
-  }, [dispatch]); */
+  useEffect(() => {
+    const validateAuth = async () => {
+      try {
+        await dispatch(validateTokenUser()).unwrap();
+        router.push('/');
+      } catch (error: any) {
+      }
+    }
+
+    if (localStorage.getItem('token')) {
+      validateAuth();
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -57,41 +67,42 @@ export default function LoginPage() {
     }
   }, [router, isAuthenticated]);
 
-  if (isAuthenticated) {
-    return <Loading/>;
-  }
-
   return (
-    <div className="min-h-8/12 bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
-        <div className="flex justify-center items-center m-5">
-          <User />
-        </div>
-        <Input                                     
-          id="email"
-          name="email"
-          value={formData?.email || ''}
-          onChange={handleInputChange} 
-          placeholder="Email" 
-          className="w-80"
-        />
-        <Input 
-          id="password"
-          name="password"
-          value={formData?.password || ''}
-          onChange={handleInputChange} 
-          placeholder="Senha" 
-          className="w-80"
-          type="password"
-        />
-        <a href="/recovery-password" className="ml-1">Esqueci a minha senha</a>
-        <Button className="w-80 mt-auto" onClick={handleSubmit}>Entrar</Button>
+    <>
+      {isAuthenticated
+        ?<Loading/>
+        :<div className="min-h-8/12 bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
+            <div className="flex justify-center items-center m-5">
+              <User />
+            </div>
+            <Input                                     
+              id="email"
+              name="email"
+              value={formData?.email || ''}
+              onChange={handleInputChange} 
+              placeholder="Email" 
+              className="w-80"
+            />
+            <Input 
+              id="password"
+              name="password"
+              value={formData?.password || ''}
+              onChange={handleInputChange} 
+              placeholder="Senha" 
+              className="w-80"
+              type="password"
+            />
+            <a href="/recovery-password" className="ml-1">Esqueci a minha senha</a>
+            <Button className="w-80 mt-auto" onClick={handleSubmit}>Entrar</Button>
 
-        <InfoAlertDialog
-            message={alertDesc} 
-            title={alertTitle} 
-            open={infoAlertOpen} 
-            onOpenChange={setInfoAlertOpen}
-        />
-      </div>
+            <InfoAlertDialog
+                message={alertDesc} 
+                title={alertTitle} 
+                open={infoAlertOpen} 
+                onOpenChange={setInfoAlertOpen}
+            />
+          </div>
+        }
+      </>
   );
 }

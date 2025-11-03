@@ -19,6 +19,10 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { addNotification, verifyHasUnreadNotifications } from "@/store/features/notificationSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { formatDateForInput } from "@/lib/format";
 
 export default function EvaluationCreatePage() {
 
@@ -43,6 +47,7 @@ export default function EvaluationCreatePage() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
+    const currentUser = useSelector(selectCurrentUser);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -197,6 +202,26 @@ export default function EvaluationCreatePage() {
 
         if (errorResponse) return;
 
+        const notification = {
+            text: `${currentUser?.name} adicionou uma avaliação para o estudante ${formData.student?.name}, que obteve nota ${formData.note}.`, 
+            read: false, 
+            date: new Date(), 
+            created_at: new Date(), 
+            updated_at: new Date(),
+        }
+
+        try {
+            await dispatch(addNotification(notification)).unwrap();
+            await dispatch(verifyHasUnreadNotifications());
+            
+        } catch (error: any) {
+            handleAlert(true,error?.message || 'Erro ao cadastrar notificação da avaliação');
+            errorResponse = true;
+            setLoading(false);
+        }
+
+        if (errorResponse) return;
+
         setLoading(false);
 
         handleAlert(false,'Avaliação cadastrada com sucesso!');
@@ -238,7 +263,7 @@ export default function EvaluationCreatePage() {
                                         id="entry_date"
                                         name="entry_date"
                                         type="date"
-                                        value={formData?.entry_date ? formData?.entry_date.toISOString().split("T")[0] : ""}
+                                        value={formatDateForInput(formData?.entry_date)}
                                         onChange={handleInputChange}
                                         error={errors.entry_date} 
                                     />
@@ -251,7 +276,7 @@ export default function EvaluationCreatePage() {
                                         id="date"
                                         name="date"
                                         type="date"
-                                        value={formData?.date ? formData?.date.toISOString().split("T")[0] : ""}
+                                        value={formatDateForInput(formData?.date)}
                                         onChange={handleInputChange} 
                                         error={errors.date}
                                     />

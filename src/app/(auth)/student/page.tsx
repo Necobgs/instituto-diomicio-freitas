@@ -26,6 +26,7 @@ export default function StudentPage(){
     const defaultData = {
         name: "",
         cpf: "",
+        phone: "",
         enabled: ""
     };
     const [formData, setFormData] = useState(defaultData);
@@ -83,6 +84,14 @@ export default function StudentPage(){
                                 placeholder="CPF do estudante"
                                 mask="000.000.000-00"
                                 onChange={(val) => handleMaskedInputChange("cpf",val)}
+                            />
+                        </div>
+                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                            <MaskedInput 
+                                value={formData?.phone || ''}
+                                placeholder="Telefone do estudante"
+                                mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
+                                onChange={(val) => handleMaskedInputChange("phone",val)}
                             />
                         </div>
                         <div>

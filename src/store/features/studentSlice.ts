@@ -10,8 +10,8 @@ interface StudentState {
     total: number;
 }
 
-export const initStudents = createAsyncThunk('student/fetch', async ({ page = 1, limit = 8, name, cpf, enabled }: iParamsStudent = {})  => {
-    return await studentService.getStudents({page, limit, name, cpf, enabled});
+export const initStudents = createAsyncThunk('student/fetch', async ({ page = 1, limit = 8, name, cpf, phone , enabled }: iParamsStudent = {})  => {
+    return await studentService.getStudents({page, limit, name, cpf, phone, enabled});
 });
 
 export const getStudentById = createAsyncThunk("student/getById", async (id: number) => {

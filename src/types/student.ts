@@ -18,6 +18,7 @@ export interface iParamsStudent {
     limit?: number;
     name?: string;
     cpf?: string;
+    phone?: string;
     enabled?: string;
 }
 

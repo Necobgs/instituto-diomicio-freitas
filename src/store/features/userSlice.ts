@@ -34,6 +34,16 @@ export const removeUser = createAsyncThunk('user/remove', async (payload: iUser)
     return response;
 });
 
+export const validateTokenUser = createAsyncThunk('user/validateToken', async (_, { rejectWithValue }) => {
+    try {
+        const response = await userService.validateToken();
+        return response;
+    } catch (error: any) {
+        localStorage.removeItem('token');
+        return rejectWithValue(error.response?.data?.message || 'Erro ao validar token');
+    }
+});
+
 export const loginUser = createAsyncThunk('user/login', async (credentials: iLoginCredentials, { rejectWithValue }) => {
     try {
         const response = await userService.login(credentials);
@@ -125,12 +135,26 @@ const userSlice = createSlice({
                 state.loading = false;
             })
             .addCase(editUser.fulfilled, (state, action: PayloadAction<iUser>) => {
-                console.log("editUser", action.payload)
                 state.users = state.users.map((t) => (t.id === action.payload.id ? action.payload : t));
                 state.error = null;
             })
             .addCase(editUser.rejected, (state, action) => {
                 state.error = action.payload as string;
+            })
+            .addCase(validateTokenUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(validateTokenUser.fulfilled, (state, action: PayloadAction<iUser>) => {
+                state.token = localStorage.getItem('token');
+                state.currentUser = action.payload;
+                state.isAuthenticated = true;
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(validateTokenUser.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
             })
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;

@@ -106,7 +106,7 @@ export default function MonitoringPage() {
       : <div className="w-full h-full p-4 flex flex-col">
         <section className="min-h-16 flex flex-col gap-5">
           <div className="text-left">
-            <h1 className="text-2xl">Buscar Acompanhamentos</h1>
+            <h1 className="text-2xl">Buscar acompanhamentos</h1>
           </div>
           <div className="flex flex-wrap items-center justify-start gap-4">
             <div>

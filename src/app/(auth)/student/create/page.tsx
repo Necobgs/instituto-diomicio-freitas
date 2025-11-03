@@ -9,6 +9,7 @@ import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
 import { addStudent } from "@/store/features/studentSlice";
 import MaskedInput from "@/components/ui/masked-input";
+import { formatDateForInput } from "@/lib/format";
 
 export default function StudentEditPage() {
 
@@ -121,7 +122,7 @@ export default function StudentEditPage() {
                         <Input
                             id="date_of_birth"
                             name="date_of_birth"
-                            value={formData?.date_of_birth ? formData?.date_of_birth.toISOString().split("T")[0] : ""}
+                            value={formatDateForInput(formData?.date_of_birth)}
                             onChange={handleInputChange}
                             type="date"
                             error={errors.date_of_birth}

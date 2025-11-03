@@ -7,12 +7,14 @@ const api = axios.create({
 
 const endpoint = 'student';
 
-const getStudents = async ({ page = 1, limit = 8, name, cpf, enabled }: iParamsStudent = {}): Promise<iPaginationStudent> => {
+const getStudents = async ({ page = 1, limit = 8, name, cpf, phone , enabled }: iParamsStudent = {}): Promise<iPaginationStudent> => {
   let query = `_page=${page}&_limit=${limit}`;
 
   if (name) query += `&name_like=${encodeURIComponent(name)}`;
 
   if (cpf) query += `&cpf_like=${encodeURIComponent(`^${cpf}`)}`;
+
+  if (phone) query += `&phone_like=${encodeURIComponent(`^${phone}`)}`;
 
   if (enabled) query += `&enabled=${encodeURIComponent(enabled)}`;
 
@@ -49,9 +51,9 @@ const removeStudent = async (student: iStudent): Promise<iStudent> => {
 }
 
 export default {
-    getStudents,
-    addStudent,
-    editStudent,
-    removeStudent,
-    getStudentById
+  getStudents,
+  addStudent,
+  editStudent,
+  removeStudent,
+  getStudentById
 };

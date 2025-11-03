@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { formatCpf } from "@/lib/format";
+import { formatCpf, formatDate, formatPhone } from "@/lib/format";
 import { iStudent } from "@/types/student"
 import { useRouter } from "next/navigation";
 
@@ -25,10 +25,11 @@ export default function CardStudent(student:iStudent) {
             </CardHeader>
             <CardContent>
                 <CardDescription>
-                {student.date_of_birth ? new Date(student.date_of_birth).toLocaleDateString("pt-BR", {timeZone: "UTC"}) : ""}
+                    {formatDate(student.date_of_birth)}
                 </CardDescription>
             </CardContent>
             <CardFooter className="flex-col gap-2">
+                <Label>{formatPhone(student.phone)}</Label>
                 <Label>{formatCpf(student.cpf)}</Label>
             </CardFooter>
         </Card>

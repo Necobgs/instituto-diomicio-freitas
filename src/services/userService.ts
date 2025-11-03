@@ -58,6 +58,29 @@ const removeUser = async (user: iUser): Promise<iUser> => {
     return response.data as iUser;
 }
 
+const validateToken = async(): Promise<iUser> => {
+
+    const token = localStorage.getItem('token');
+    let arrayToken = token?.split('.');
+
+    if (arrayToken?.[1]) {
+        const payload = JSON.parse(atob(arrayToken[1]));
+        const exp = payload.exp;
+        const currentTime = Math.floor(Date.now() / 1000);
+        console.log("chegou")
+        if (exp < currentTime) {
+            console.log("token expirado")
+            throw new Error('Token expirado');
+        }
+
+        const response = await api.get(`${endpoint}/${payload.sub}`);
+        console.log("response.data", response.data);
+        return response.data as iUser;
+    }
+    
+    throw new Error('Token não encontrado');
+};
+
 const login = async (credentials: iLoginCredentials): Promise<{ token: string; user: iUser }> => {
     const response = await api.post('/login', credentials);
     const { accessToken, user } = response.data;
@@ -86,6 +109,7 @@ export default {
     removeUser,
     getUserById,
     register,
+    validateToken,
     login,
     logout,
     getMe

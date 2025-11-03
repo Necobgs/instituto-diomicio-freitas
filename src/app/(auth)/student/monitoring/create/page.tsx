@@ -14,6 +14,10 @@ import MaskedInput from "@/components/ui/masked-input";
 import { addMonitoring } from "@/store/features/monitoringSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { Textarea } from "@/components/ui/textarea";
+import { addNotification, verifyHasUnreadNotifications } from "@/store/features/notificationSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { formatDateForInput } from "@/lib/format";
 
 export default function MonitoringEditPage() {
   const router = useRouter();
@@ -36,6 +40,7 @@ export default function MonitoringEditPage() {
   const [infoAlertOpen,setInfoAlertOpen] = useState(false);
   const [isError,setIsError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +89,22 @@ export default function MonitoringEditPage() {
       } catch (error: any) {
           handleAlert(true,error?.message || 'Erro ao cadastrar acompanhamento');
       }
+
+      const notification = {
+        text: `${currentUser?.name} adicionou um acompanhamento para o estudante ${formData.student?.name}.`, 
+        read: false, 
+        date: new Date(), 
+        created_at: new Date(), 
+        updated_at: new Date(),
+      }
+
+      try {
+          await dispatch(addNotification(notification)).unwrap();
+          await dispatch(verifyHasUnreadNotifications());
+      } catch (error: any) {
+          handleAlert(true,error?.message || 'Erro ao cadastrar notificação do acompanhamento');
+      }
+
   };
 
   const handleAlert = (error: boolean, message: string) => {
@@ -176,11 +197,7 @@ export default function MonitoringEditPage() {
               id="admission_date"
               name="admission_date"
               type="date"
-              value={
-                formData.admission_date
-                  ? formData.admission_date.toISOString().split("T")[0]
-                  : ""
-              }
+              value={formatDateForInput(formData.admission_date)}
               onChange={handleInputChange}
               error={errors.admission_date}
             />
@@ -196,11 +213,7 @@ export default function MonitoringEditPage() {
               id="termination_date_ieedf"
               name="termination_date_ieedf"
               type="date"
-              value={
-                formData.termination_date_ieedf
-                  ? formData.termination_date_ieedf.toISOString().split("T")[0]
-                  : ""
-              }
+              value={formatDateForInput(formData.termination_date_ieedf)}
               onChange={handleInputChange}
               error={errors.termination_date_ieedf}
             />

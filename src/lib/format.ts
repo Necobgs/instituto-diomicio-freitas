@@ -18,8 +18,6 @@ export const formatPhone = (phone: string) => {
 export const formatDate = (date: Date | string | null) => {
     if (!date) return "";
 
-    console.log('formatDate received:', date);
-
     let dateStr: string;
     if (date instanceof Date) {
         dateStr = date.toISOString().split('T')[0];
@@ -41,8 +39,10 @@ export const formatDateForInput = (date: Date | string | null | undefined): stri
     if (typeof date === 'string') {
         date = new Date(date);
     }
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+
+    if (isNaN(date.getTime())) {
+        return '';
+    }
+
+    return date.toISOString().split('T')[0];
 };

@@ -15,6 +15,7 @@ import { editMonitoring, selectMonitorings } from "@/store/features/monitoringSl
 import { useSelector } from "react-redux";
 import MaskedInput from "@/components/ui/masked-input";
 import { Textarea } from "@/components/ui/textarea";
+import { formatDateForInput } from "@/lib/format";
 
 export default function MonitoringEditPage() {
     const params = useParams();
@@ -194,11 +195,7 @@ export default function MonitoringEditPage() {
                     id="admission_date"
                     name="admission_date"
                     type="date"
-                    value={
-                      formData.admission_date
-                        ? formData.admission_date.toISOString().split("T")[0]
-                        : ""
-                    }
+                    value={formatDateForInput(formData.admission_date)}
                     onChange={handleInputChange}
                     error={errors.admission_date}
                   />
@@ -214,11 +211,7 @@ export default function MonitoringEditPage() {
                     id="termination_date_ieedf"
                     name="termination_date_ieedf"
                     type="date"
-                    value={
-                      formData.termination_date_ieedf
-                        ? formData.termination_date_ieedf.toISOString().split("T")[0]
-                        : ""
-                    }
+                    value={formatDateForInput(formData.termination_date_ieedf)}
                     onChange={handleInputChange}
                     error={errors.termination_date_ieedf}
                   />

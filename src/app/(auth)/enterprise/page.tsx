@@ -65,7 +65,7 @@ export default function EnterprisePage() {
                 : <div className="w-full h-full p-4 flex flex-col">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Buscar empresa</h1>
+                            <h1 className="text-2xl">Buscar empresas</h1>
                         </div>
                         <div className="flex flex-wrap items-center justify-start gap-4">
                             <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
@@ -112,8 +112,8 @@ export default function EnterprisePage() {
                         }
 
                         <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
-                            {enterprises.map(entreprise =>
-                                <CardEnterprise {...entreprise} key={entreprise.id} />
+                            {enterprises.map(enterprise =>
+                                <CardEnterprise {...enterprise} key={enterprise.id} />
                             )}
                         </div>
                     </section>
