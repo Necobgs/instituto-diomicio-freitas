@@ -47,6 +47,22 @@
       "created_at": "2025-11-03T22:21:28.231Z",
       "updated_at": "2025-11-03T22:21:28.231Z",
       "id": 6
+    },
+    {
+      "text": "undefined adicionou um acompanhamento para o estudante Pedro Tavares.",
+      "read": true,
+      "date": "2025-11-03T22:51:13.989Z",
+      "created_at": "2025-11-03T22:51:13.989Z",
+      "updated_at": "2025-11-03T22:51:13.989Z",
+      "id": 7
+    },
+    {
+      "text": "undefined adicionou uma avaliação para o estudante Estudante 3, que obteve nota 9.",
+      "read": true,
+      "date": "2025-11-03T22:54:28.774Z",
+      "created_at": "2025-11-03T22:54:28.774Z",
+      "updated_at": "2025-11-03T22:54:28.774Z",
+      "id": 8
     }
   ],
   "question": [
@@ -1600,24 +1616,24 @@
     },
     {
       "student": {
-        "name": "Estudante 5",
-        "phone": "48899556555",
-        "date_of_birth": "2025-10-21T00:00:00.000Z",
-        "cpf": "11212222222",
+        "name": "Estudante 3",
+        "phone": "12345996789",
+        "date_of_birth": "2005-11-10T00:00:00.000Z",
+        "cpf": "11111111111",
         "enabled": true,
-        "created_at": "2025-10-28T00:35:22.182Z",
-        "updated_at": "2025-10-28T00:35:22.182Z",
-        "id": 5
+        "created_at": "2025-10-27T10:46:02.522Z",
+        "updated_at": "2025-11-03T00:35:01.776Z",
+        "id": 3
       },
-      "admission_date": "2025-11-20T00:00:00.000Z",
+      "admission_date": "2025-10-28T00:00:00.000Z",
       "enterprise": {
-        "name": "Empresa 4",
-        "phone": "48993333333",
-        "cnpj": "12345678000191",
+        "name": "Empresa 10",
+        "phone": "48123456789",
+        "cnpj": "12345678910112",
         "enabled": true,
-        "created_at": "2025-10-19T16:46:58.682Z",
-        "updated_at": "2025-10-19T17:07:59.403Z",
-        "id": 4
+        "created_at": "2025-10-20T22:47:11.208Z",
+        "updated_at": "2025-10-20T22:47:11.208Z",
+        "id": 10
       },
       "job_title": "Desenvolvedor Frontend",
       "hr_contact": "88888888888",
@@ -1630,32 +1646,32 @@
     },
     {
       "student": {
-        "name": "Estudante 3",
-        "phone": "12345996789",
-        "date_of_birth": "2005-11-10T00:00:00.000Z",
-        "cpf": "11111111111",
+        "name": "Pedro Tavares",
+        "phone": "45555555555",
+        "date_of_birth": "2025-11-04T00:00:00.000Z",
+        "cpf": "77777777777",
         "enabled": true,
-        "created_at": "2025-10-27T10:46:02.522Z",
-        "updated_at": "2025-11-03T00:35:01.776Z",
-        "id": 3
+        "created_at": "2025-11-03T22:46:17.128Z",
+        "updated_at": "2025-11-03T22:46:57.319Z",
+        "id": 6
       },
-      "admission_date": "2025-11-26T00:00:00.000Z",
+      "admission_date": "2025-11-04T00:00:00.000Z",
       "enterprise": {
-        "name": "Empresa 8",
+        "name": "Empresa 2",
         "phone": "48993333333",
-        "cnpj": "12345678910112",
+        "cnpj": "12345678000191",
         "enabled": true,
-        "created_at": "2025-10-19T16:48:30.147Z",
-        "updated_at": "2025-10-19T17:27:16.119Z",
-        "id": 8
+        "created_at": "2025-10-19T16:34:59.938Z",
+        "updated_at": "2025-11-03T22:44:14.305Z",
+        "id": 2
       },
-      "job_title": "Tester de Software",
-      "hr_contact": "99999999999",
+      "job_title": "Designer Gráfico",
+      "hr_contact": "8888888888",
       "hr_resposible": "Carlos Silva",
-      "termination_date_ieedf": "2025-11-27T00:00:00.000Z",
-      "observations": "",
-      "created_at": "2025-11-03T01:31:24.546Z",
-      "updated_at": "2025-11-03T01:31:24.546Z",
+      "termination_date_ieedf": "2025-11-20T00:00:00.000Z",
+      "observations": "Pedro foi contratado",
+      "created_at": "2025-11-03T22:50:17.863Z",
+      "updated_at": "2025-11-03T22:50:17.863Z",
       "id": 3
     }
   ],
@@ -1709,6 +1725,16 @@
       "created_at": "2025-10-28T00:35:22.182Z",
       "updated_at": "2025-10-28T00:35:22.182Z",
       "id": 5
+    },
+    {
+      "name": "Pedro Tavares",
+      "phone": "45555555555",
+      "date_of_birth": "2025-11-04T00:00:00.000Z",
+      "cpf": "77777777777",
+      "enabled": true,
+      "created_at": "2025-11-03T22:46:17.128Z",
+      "updated_at": "2025-11-03T22:46:57.319Z",
+      "id": 6
     }
   ],
   "users": [
@@ -1741,6 +1767,16 @@
       "created_at": "2025-11-01T11:47:17.477Z",
       "updated_at": "2025-11-01T11:47:17.477Z",
       "id": 3
+    },
+    {
+      "email": "teste@gmail.com",
+      "password": "$2a$10$0fjf6fFJICL2mkq1KXqcm.vGVMk8i1oy3t1lVmRD42OXq8vLqqBnq",
+      "name": "Teste",
+      "cpf": "11111111111",
+      "enabled": false,
+      "created_at": "2025-11-03T22:42:42.328Z",
+      "updated_at": "2025-11-03T22:43:48.262Z",
+      "id": 4
     }
   ],
   "enterprise": [
@@ -1757,9 +1793,9 @@
       "name": "Empresa 2",
       "phone": "48993333333",
       "cnpj": "12345678000191",
-      "enabled": false,
+      "enabled": true,
       "created_at": "2025-10-19T16:34:59.938Z",
-      "updated_at": "2025-10-27T23:40:00.226Z",
+      "updated_at": "2025-11-03T22:44:14.305Z",
       "id": 2
     },
     {
@@ -1914,6 +1950,15 @@
       "created_at": "2025-10-31T15:43:57.153Z",
       "updated_at": "2025-10-31T15:43:57.153Z",
       "id": 19
+    },
+    {
+      "name": "Empresa 500",
+      "phone": "4444444444",
+      "cnpj": "44444444444444",
+      "enabled": true,
+      "created_at": "2025-11-03T22:44:15.987Z",
+      "updated_at": "2025-11-03T22:44:15.987Z",
+      "id": 20
     }
   ]
 }
