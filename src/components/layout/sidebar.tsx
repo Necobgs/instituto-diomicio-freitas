@@ -33,7 +33,7 @@ const items = [
   },
   {
     title: "Notificações",
-    url: "/notification?read=false",
+    url: "/notification",
     icon: Bell,
   },
   {

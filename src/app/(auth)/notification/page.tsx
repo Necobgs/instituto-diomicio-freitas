@@ -7,7 +7,6 @@ import Loading from "@/components/ui/loading";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { useAppDispatch } from "@/store/hooks";
-import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { editNotification, initNotifications, selectNotificationError, selectNotificationLoading, selectNotifications, selectNotificationTotal, verifyHasUnreadNotifications } from "@/store/features/notificationSlice";
@@ -16,7 +15,6 @@ import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function NotificationPage() {
 
-    const router = useRouter();
     const dispatch = useAppDispatch();
     const notifications = useSelector(selectNotifications);
     const totalItems = useSelector(selectNotificationTotal);
@@ -25,10 +23,9 @@ export default function NotificationPage() {
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
-    const searchParams = useSearchParams();
 
     const defaultData: {read: string} = {
-        read: searchParams.get("read") ? searchParams.get("read")! : ""
+        read: "false"
     };
     const [formData, setFormData] = useState(defaultData);
 
