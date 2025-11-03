@@ -346,9 +346,10 @@ export default function EvaluationCreatePage() {
                                 <div className="max-w-md">
                                     <StudentCombobox
                                         student={formData?.student}
-                                        setStudent={(student: iStudent | undefined) =>
-                                            setFormData((prev) => ({ ...prev, student }))
-                                        }
+                                        setStudent={(student: iStudent | undefined) => {
+                                            setFormData((prev) => ({ ...prev, student }));
+                                            setErrors((prev) => ({ ...prev, student: '' }));
+                                        }}
                                         error={errors.student}
                                     />
                                 </div>
