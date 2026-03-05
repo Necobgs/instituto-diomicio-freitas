@@ -63,6 +63,30 @@
       "created_at": "2025-11-03T22:54:28.774Z",
       "updated_at": "2025-11-03T22:54:28.774Z",
       "id": 8
+    },
+    {
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 1, que obteve nota 0.",
+      "read": true,
+      "date": "2025-11-04T00:18:44.912Z",
+      "created_at": "2025-11-04T00:18:44.912Z",
+      "updated_at": "2025-11-04T00:18:44.912Z",
+      "id": 9
+    },
+    {
+      "text": "undefined adicionou um acompanhamento para o estudante Pedro Tavares.",
+      "read": true,
+      "date": "2025-11-04T00:31:12.043Z",
+      "created_at": "2025-11-04T00:31:12.043Z",
+      "updated_at": "2025-11-04T00:31:12.043Z",
+      "id": 10
+    },
+    {
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 4, que obteve nota 0.",
+      "read": false,
+      "date": "2025-11-11T01:30:37.717Z",
+      "created_at": "2025-11-11T01:30:37.717Z",
+      "updated_at": "2025-11-11T01:30:37.717Z",
+      "id": 11
     }
   ],
   "question": [
@@ -1525,6 +1549,996 @@
       "created_at": "2025-11-03T22:21:28.203Z",
       "updated_at": "2025-11-03T22:30:40.140Z",
       "id": 146
+    },
+    {
+      "type": "frequency",
+      "title": "Socializa com o grupo",
+      "value": "",
+      "order": 1,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.863Z",
+      "updated_at": "2025-11-04T00:19:02.916Z",
+      "id": 147
+    },
+    {
+      "type": "frequency",
+      "title": "Tem iniciativa",
+      "value": "",
+      "order": 7,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.871Z",
+      "updated_at": "2025-11-04T00:19:02.919Z",
+      "id": 148
+    },
+    {
+      "type": "frequency",
+      "title": "Sonolência durante as atividades em sala de aula",
+      "value": "",
+      "order": 8,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.872Z",
+      "updated_at": "2025-11-04T00:19:02.920Z",
+      "id": 149
+    },
+    {
+      "type": "frequency",
+      "title": "Alterações intensas de humor",
+      "value": "",
+      "order": 9,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.873Z",
+      "updated_at": "2025-11-04T00:19:02.921Z",
+      "id": 150
+    },
+    {
+      "type": "frequency",
+      "title": "Indica oscilação repentina de humor",
+      "value": "",
+      "order": 10,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.875Z",
+      "updated_at": "2025-11-04T00:19:02.922Z",
+      "id": 151
+    },
+    {
+      "type": "frequency",
+      "title": "Irrita-se com facilidade",
+      "value": "2",
+      "order": 11,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.876Z",
+      "updated_at": "2025-11-04T00:19:02.923Z",
+      "id": 152
+    },
+    {
+      "type": "frequency",
+      "title": "Isola-se do grupo",
+      "value": "",
+      "order": 2,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.863Z",
+      "updated_at": "2025-11-04T00:19:02.917Z",
+      "id": 153
+    },
+    {
+      "type": "frequency",
+      "title": "Ansiedade",
+      "value": "3",
+      "order": 12,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.877Z",
+      "updated_at": "2025-11-04T00:19:02.924Z",
+      "id": 154
+    },
+    {
+      "type": "frequency",
+      "title": "Escuta quando seus colegas falam",
+      "value": "",
+      "order": 13,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.878Z",
+      "updated_at": "2025-11-04T00:19:02.925Z",
+      "id": 155
+    },
+    {
+      "type": "frequency",
+      "title": "Escuta e segue orientação dos professores",
+      "value": "",
+      "order": 14,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.879Z",
+      "updated_at": "2025-11-04T00:19:02.926Z",
+      "id": 156
+    },
+    {
+      "type": "frequency",
+      "title": "Mantem-se em sala de aula",
+      "value": "",
+      "order": 15,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.880Z",
+      "updated_at": "2025-11-04T00:19:02.927Z",
+      "id": 157
+    },
+    {
+      "type": "frequency",
+      "title": "Possui tolerância a frustração",
+      "value": "",
+      "order": 3,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.864Z",
+      "updated_at": "2025-11-04T00:19:02.917Z",
+      "id": 158
+    },
+    {
+      "type": "frequency",
+      "title": "Desloca-se muito na sala",
+      "value": "",
+      "order": 16,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.881Z",
+      "updated_at": "2025-11-04T00:19:02.927Z",
+      "id": 159
+    },
+    {
+      "type": "frequency",
+      "title": "Fala demasiadamente",
+      "value": "",
+      "order": 17,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.883Z",
+      "updated_at": "2025-11-04T00:19:02.928Z",
+      "id": 160
+    },
+    {
+      "type": "frequency",
+      "title": "É pontual",
+      "value": "",
+      "order": 18,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.884Z",
+      "updated_at": "2025-11-04T00:19:02.929Z",
+      "id": 161
+    },
+    {
+      "type": "frequency",
+      "title": "É assíduo",
+      "value": "",
+      "order": 19,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.885Z",
+      "updated_at": "2025-11-04T00:19:02.930Z",
+      "id": 162
+    },
+    {
+      "type": "frequency",
+      "title": "Demonstra desejo de trabalhar",
+      "value": "",
+      "order": 20,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.886Z",
+      "updated_at": "2025-11-04T00:19:02.931Z",
+      "id": 163
+    },
+    {
+      "type": "frequency",
+      "title": "Atende as regras",
+      "value": "1",
+      "order": 21,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.887Z",
+      "updated_at": "2025-11-04T00:19:02.932Z",
+      "id": 164
+    },
+    {
+      "type": "frequency",
+      "title": "Apropria-se indevidamente daquilo que não é seu",
+      "value": "",
+      "order": 22,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.888Z",
+      "updated_at": "2025-11-04T00:19:02.932Z",
+      "id": 165
+    },
+    {
+      "type": "frequency",
+      "title": "Indica hábito de banho diário",
+      "value": "",
+      "order": 23,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.889Z",
+      "updated_at": "2025-11-04T00:19:02.933Z",
+      "id": 166
+    },
+    {
+      "type": "frequency",
+      "title": "Respeita colega e professores",
+      "value": "",
+      "order": 4,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.867Z",
+      "updated_at": "2025-11-04T00:19:02.917Z",
+      "id": 167
+    },
+    {
+      "type": "frequency",
+      "title": "Indica habito de escovação e qualidade na escovação",
+      "value": "",
+      "order": 24,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.890Z",
+      "updated_at": "2025-11-04T00:19:02.934Z",
+      "id": 168
+    },
+    {
+      "type": "frequency",
+      "title": "Indica cuidado com a aparência e limpeza do uniforme",
+      "value": "",
+      "order": 25,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.891Z",
+      "updated_at": "2025-11-04T00:19:02.935Z",
+      "id": 169
+    },
+    {
+      "type": "frequency",
+      "title": "Faz relatos fantasiosos",
+      "value": "",
+      "order": 5,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.868Z",
+      "updated_at": "2025-11-04T00:19:02.918Z",
+      "id": 170
+    },
+    {
+      "type": "frequency",
+      "title": "Indica autonomia quanto a estes hábitos (23, 24, 25)",
+      "value": "",
+      "order": 26,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.892Z",
+      "updated_at": "2025-11-04T00:19:02.935Z",
+      "id": 171
+    },
+    {
+      "type": "frequency",
+      "title": "Indica falta do uso de medicação com oscilações de comportamento",
+      "value": "",
+      "order": 27,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.893Z",
+      "updated_at": "2025-11-04T00:19:02.936Z",
+      "id": 172
+    },
+    {
+      "type": "frequency",
+      "title": "Concentra-se nas atividades",
+      "value": "",
+      "order": 6,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.869Z",
+      "updated_at": "2025-11-04T00:19:02.918Z",
+      "id": 173
+    },
+    {
+      "type": "frequency",
+      "title": "Tem meio articulado de conseguir receitas e aquisições das medicações",
+      "value": "",
+      "order": 28,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.893Z",
+      "updated_at": "2025-11-04T00:19:02.937Z",
+      "id": 174
+    },
+    {
+      "type": "frequency",
+      "title": "Traz seus materiais organizados",
+      "value": "",
+      "order": 29,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.894Z",
+      "updated_at": "2025-11-04T00:19:02.937Z",
+      "id": 175
+    },
+    {
+      "type": "frequency",
+      "title": "Usa transporte coletivo",
+      "value": "",
+      "order": 30,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.895Z",
+      "updated_at": "2025-11-04T00:19:02.938Z",
+      "id": 176
+    },
+    {
+      "type": "frequency",
+      "title": "Tem iniciativa diante das atividades propostas",
+      "value": "",
+      "order": 31,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.896Z",
+      "updated_at": "2025-11-04T00:19:02.939Z",
+      "id": 177
+    },
+    {
+      "type": "frequency",
+      "title": "Localiza-se no espaço da Instituição",
+      "value": "",
+      "order": 32,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.897Z",
+      "updated_at": "2025-11-04T00:19:02.939Z",
+      "id": 178
+    },
+    {
+      "type": "frequency",
+      "title": "Situa-se nas trocas de sala e atividades",
+      "value": "",
+      "order": 33,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.898Z",
+      "updated_at": "2025-11-04T00:19:02.940Z",
+      "id": 179
+    },
+    {
+      "type": "frequency",
+      "title": "Interage par a par",
+      "value": "",
+      "order": 34,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.899Z",
+      "updated_at": "2025-11-04T00:19:02.941Z",
+      "id": 180
+    },
+    {
+      "type": "frequency",
+      "title": "Interage em grupo",
+      "value": "",
+      "order": 35,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.899Z",
+      "updated_at": "2025-11-04T00:19:02.941Z",
+      "id": 181
+    },
+    {
+      "type": "frequency",
+      "title": "Cria conflitos e intrigas",
+      "value": "",
+      "order": 36,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.900Z",
+      "updated_at": "2025-11-04T00:19:02.942Z",
+      "id": 182
+    },
+    {
+      "type": "frequency",
+      "title": "Promove a harmonia",
+      "value": "",
+      "order": 37,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.901Z",
+      "updated_at": "2025-11-04T00:19:02.942Z",
+      "id": 183
+    },
+    {
+      "type": "frequency",
+      "title": "Faz intrigas entre colegas x professores",
+      "value": "",
+      "order": 38,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.901Z",
+      "updated_at": "2025-11-04T00:19:02.943Z",
+      "id": 184
+    },
+    {
+      "type": "frequency",
+      "title": "Demonstra interesse em participar das atividades extraclasses",
+      "value": "",
+      "order": 39,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.902Z",
+      "updated_at": "2025-11-04T00:19:02.943Z",
+      "id": 185
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe que existe interação/participação da família em apoio ao usuário na Instituição",
+      "value": "",
+      "order": 40,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.903Z",
+      "updated_at": "2025-11-04T00:19:02.944Z",
+      "id": 186
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe superproteção por parte da família quanto a autonomia do usuário",
+      "value": "",
+      "order": 41,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.904Z",
+      "updated_at": "2025-11-04T00:19:02.945Z",
+      "id": 187
+    },
+    {
+      "type": "frequency",
+      "title": "Usuário traz relatos negativos da família (de forma geral)",
+      "value": "",
+      "order": 42,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.905Z",
+      "updated_at": "2025-11-04T00:19:02.946Z",
+      "id": 188
+    },
+    {
+      "type": "frequency",
+      "title": "Usuário traz relatos positivos da família (de forma geral)",
+      "value": "",
+      "order": 43,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.906Z",
+      "updated_at": "2025-11-04T00:19:02.947Z",
+      "id": 189
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe incentivo quanto a busca de autonomia para o usuário por parte da família",
+      "value": "",
+      "order": 44,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.906Z",
+      "updated_at": "2025-11-04T00:19:02.947Z",
+      "id": 190
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe incentivo quanto a inserção do usuário no mercado de trabalho por parte da família",
+      "value": "",
+      "order": 45,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.907Z",
+      "updated_at": "2025-11-04T00:19:02.948Z",
+      "id": 191
+    },
+    {
+      "type": "frequency",
+      "title": "Traz os documentos enviados pela Instituição assinado",
+      "value": "",
+      "order": 46,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.909Z",
+      "updated_at": "2025-11-04T00:19:02.949Z",
+      "id": 192
+    },
+    {
+      "type": "textarea",
+      "title": "Em sua opinião o usuário tem perfil para esta instituição? Por quê?",
+      "value": "",
+      "order": 47,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.909Z",
+      "updated_at": "2025-11-04T00:19:02.950Z",
+      "id": 193
+    },
+    {
+      "type": "textarea",
+      "title": "Em que situações demonstra irritações?",
+      "value": "",
+      "order": 48,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.910Z",
+      "updated_at": "2025-11-04T00:19:02.950Z",
+      "id": 194
+    },
+    {
+      "type": "textarea",
+      "title": "Observações",
+      "value": "",
+      "order": 49,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.911Z",
+      "updated_at": "2025-11-04T00:19:02.951Z",
+      "id": 195
+    },
+    {
+      "type": "quality",
+      "title": "Qualidade",
+      "value": "",
+      "order": 50,
+      "id_evaluation": 4,
+      "created_at": "2025-11-04T00:18:44.911Z",
+      "updated_at": "2025-11-04T00:19:02.952Z",
+      "id": 196
+    },
+    {
+      "type": "frequency",
+      "title": "Atende as regras",
+      "value": "",
+      "order": 1,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.687Z",
+      "updated_at": "2025-11-11T01:30:37.687Z",
+      "id": 197
+    },
+    {
+      "type": "frequency",
+      "title": "Concentra-se nas atividades",
+      "value": "",
+      "order": 7,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.691Z",
+      "updated_at": "2025-11-11T01:30:37.691Z",
+      "id": 198
+    },
+    {
+      "type": "frequency",
+      "title": "Tem iniciativa",
+      "value": "",
+      "order": 8,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.692Z",
+      "updated_at": "2025-11-11T01:30:37.692Z",
+      "id": 199
+    },
+    {
+      "type": "frequency",
+      "title": "Sonolência durante as atividades em sala de aula",
+      "value": "",
+      "order": 9,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.693Z",
+      "updated_at": "2025-11-11T01:30:37.693Z",
+      "id": 200
+    },
+    {
+      "type": "frequency",
+      "title": "Socializa com o grupo",
+      "value": "",
+      "order": 2,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.688Z",
+      "updated_at": "2025-11-11T01:30:37.688Z",
+      "id": 201
+    },
+    {
+      "type": "frequency",
+      "title": "Alterações intensas de humor",
+      "value": "",
+      "order": 10,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.694Z",
+      "updated_at": "2025-11-11T01:30:37.694Z",
+      "id": 202
+    },
+    {
+      "type": "frequency",
+      "title": "Indica oscilação repentina de humor",
+      "value": "",
+      "order": 11,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.694Z",
+      "updated_at": "2025-11-11T01:30:37.694Z",
+      "id": 203
+    },
+    {
+      "type": "frequency",
+      "title": "Irrita-se com facilidade",
+      "value": "",
+      "order": 12,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.695Z",
+      "updated_at": "2025-11-11T01:30:37.695Z",
+      "id": 204
+    },
+    {
+      "type": "frequency",
+      "title": "Ansiedade",
+      "value": "",
+      "order": 13,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.696Z",
+      "updated_at": "2025-11-11T01:30:37.696Z",
+      "id": 205
+    },
+    {
+      "type": "frequency",
+      "title": "Escuta quando seus colegas falam",
+      "value": "",
+      "order": 14,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.696Z",
+      "updated_at": "2025-11-11T01:30:37.696Z",
+      "id": 206
+    },
+    {
+      "type": "frequency",
+      "title": "Escuta e segue orientação dos professores",
+      "value": "",
+      "order": 15,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.697Z",
+      "updated_at": "2025-11-11T01:30:37.697Z",
+      "id": 207
+    },
+    {
+      "type": "frequency",
+      "title": "Mantem-se em sala de aula",
+      "value": "",
+      "order": 16,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.698Z",
+      "updated_at": "2025-11-11T01:30:37.698Z",
+      "id": 208
+    },
+    {
+      "type": "frequency",
+      "title": "Desloca-se muito na sala",
+      "value": "",
+      "order": 17,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.698Z",
+      "updated_at": "2025-11-11T01:30:37.698Z",
+      "id": 209
+    },
+    {
+      "type": "frequency",
+      "title": "Fala demasiadamente",
+      "value": "",
+      "order": 18,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.699Z",
+      "updated_at": "2025-11-11T01:30:37.699Z",
+      "id": 210
+    },
+    {
+      "type": "frequency",
+      "title": "É pontual",
+      "value": "",
+      "order": 19,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.699Z",
+      "updated_at": "2025-11-11T01:30:37.699Z",
+      "id": 211
+    },
+    {
+      "type": "frequency",
+      "title": "É assíduo",
+      "value": "",
+      "order": 20,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.700Z",
+      "updated_at": "2025-11-11T01:30:37.700Z",
+      "id": 212
+    },
+    {
+      "type": "frequency",
+      "title": "Demonstra desejo de trabalhar",
+      "value": "",
+      "order": 21,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.700Z",
+      "updated_at": "2025-11-11T01:30:37.700Z",
+      "id": 213
+    },
+    {
+      "type": "frequency",
+      "title": "Apropria-se indevidamente daquilo que não é seu",
+      "value": "",
+      "order": 22,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.701Z",
+      "updated_at": "2025-11-11T01:30:37.701Z",
+      "id": 214
+    },
+    {
+      "type": "frequency",
+      "title": "Indica hábito de banho diário",
+      "value": "",
+      "order": 23,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.701Z",
+      "updated_at": "2025-11-11T01:30:37.701Z",
+      "id": 215
+    },
+    {
+      "type": "frequency",
+      "title": "Indica habito de escovação e qualidade na escovação",
+      "value": "",
+      "order": 24,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.702Z",
+      "updated_at": "2025-11-11T01:30:37.702Z",
+      "id": 216
+    },
+    {
+      "type": "frequency",
+      "title": "Indica cuidado com a aparência e limpeza do uniforme",
+      "value": "",
+      "order": 25,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.702Z",
+      "updated_at": "2025-11-11T01:30:37.702Z",
+      "id": 217
+    },
+    {
+      "type": "frequency",
+      "title": "Indica autonomia quanto a estes hábitos (23, 24, 25)",
+      "value": "",
+      "order": 26,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.703Z",
+      "updated_at": "2025-11-11T01:30:37.703Z",
+      "id": 218
+    },
+    {
+      "type": "frequency",
+      "title": "Isola-se do grupo",
+      "value": "",
+      "order": 3,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.688Z",
+      "updated_at": "2025-11-11T01:30:37.688Z",
+      "id": 219
+    },
+    {
+      "type": "frequency",
+      "title": "Possui tolerância a frustração",
+      "value": "",
+      "order": 4,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.689Z",
+      "updated_at": "2025-11-11T01:30:37.689Z",
+      "id": 220
+    },
+    {
+      "type": "frequency",
+      "title": "Respeita colega e professores",
+      "value": "",
+      "order": 5,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.689Z",
+      "updated_at": "2025-11-11T01:30:37.689Z",
+      "id": 221
+    },
+    {
+      "type": "frequency",
+      "title": "Indica falta do uso de medicação com oscilações de comportamento",
+      "value": "",
+      "order": 27,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.703Z",
+      "updated_at": "2025-11-11T01:30:37.703Z",
+      "id": 222
+    },
+    {
+      "type": "frequency",
+      "title": "Faz relatos fantasiosos",
+      "value": "",
+      "order": 6,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.690Z",
+      "updated_at": "2025-11-11T01:30:37.690Z",
+      "id": 223
+    },
+    {
+      "type": "frequency",
+      "title": "Tem meio articulado de conseguir receitas e aquisições das medicações",
+      "value": "",
+      "order": 28,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.704Z",
+      "updated_at": "2025-11-11T01:30:37.704Z",
+      "id": 224
+    },
+    {
+      "type": "frequency",
+      "title": "Traz seus materiais organizados",
+      "value": "",
+      "order": 29,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.704Z",
+      "updated_at": "2025-11-11T01:30:37.704Z",
+      "id": 225
+    },
+    {
+      "type": "frequency",
+      "title": "Usa transporte coletivo",
+      "value": "",
+      "order": 30,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.704Z",
+      "updated_at": "2025-11-11T01:30:37.704Z",
+      "id": 226
+    },
+    {
+      "type": "frequency",
+      "title": "Tem iniciativa diante das atividades propostas",
+      "value": "",
+      "order": 31,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.705Z",
+      "updated_at": "2025-11-11T01:30:37.705Z",
+      "id": 227
+    },
+    {
+      "type": "frequency",
+      "title": "Localiza-se no espaço da Instituição",
+      "value": "",
+      "order": 32,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.705Z",
+      "updated_at": "2025-11-11T01:30:37.705Z",
+      "id": 228
+    },
+    {
+      "type": "frequency",
+      "title": "Situa-se nas trocas de sala e atividades",
+      "value": "",
+      "order": 33,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.705Z",
+      "updated_at": "2025-11-11T01:30:37.705Z",
+      "id": 229
+    },
+    {
+      "type": "frequency",
+      "title": "Interage par a par",
+      "value": "",
+      "order": 34,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.706Z",
+      "updated_at": "2025-11-11T01:30:37.706Z",
+      "id": 230
+    },
+    {
+      "type": "frequency",
+      "title": "Interage em grupo",
+      "value": "",
+      "order": 35,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.706Z",
+      "updated_at": "2025-11-11T01:30:37.706Z",
+      "id": 231
+    },
+    {
+      "type": "frequency",
+      "title": "Cria conflitos e intrigas",
+      "value": "",
+      "order": 36,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.706Z",
+      "updated_at": "2025-11-11T01:30:37.706Z",
+      "id": 232
+    },
+    {
+      "type": "frequency",
+      "title": "Promove a harmonia",
+      "value": "",
+      "order": 37,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.707Z",
+      "updated_at": "2025-11-11T01:30:37.707Z",
+      "id": 233
+    },
+    {
+      "type": "frequency",
+      "title": "Faz intrigas entre colegas x professores",
+      "value": "",
+      "order": 38,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.707Z",
+      "updated_at": "2025-11-11T01:30:37.707Z",
+      "id": 234
+    },
+    {
+      "type": "frequency",
+      "title": "Demonstra interesse em participar das atividades extraclasses",
+      "value": "",
+      "order": 39,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.707Z",
+      "updated_at": "2025-11-11T01:30:37.707Z",
+      "id": 235
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe que existe interação/participação da família em apoio ao usuário na Instituição",
+      "value": "",
+      "order": 40,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.708Z",
+      "updated_at": "2025-11-11T01:30:37.708Z",
+      "id": 236
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe superproteção por parte da família quanto a autonomia do usuário",
+      "value": "",
+      "order": 41,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.709Z",
+      "updated_at": "2025-11-11T01:30:37.709Z",
+      "id": 237
+    },
+    {
+      "type": "frequency",
+      "title": "Usuário traz relatos negativos da família (de forma geral)",
+      "value": "",
+      "order": 42,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.709Z",
+      "updated_at": "2025-11-11T01:30:37.709Z",
+      "id": 238
+    },
+    {
+      "type": "frequency",
+      "title": "Usuário traz relatos positivos da família (de forma geral)",
+      "value": "",
+      "order": 43,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.710Z",
+      "updated_at": "2025-11-11T01:30:37.710Z",
+      "id": 239
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe incentivo quanto a busca de autonomia para o usuário por parte da família",
+      "value": "",
+      "order": 44,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.712Z",
+      "updated_at": "2025-11-11T01:30:37.712Z",
+      "id": 240
+    },
+    {
+      "type": "frequency",
+      "title": "Você percebe incentivo quanto a inserção do usuário no mercado de trabalho por parte da família",
+      "value": "",
+      "order": 45,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.713Z",
+      "updated_at": "2025-11-11T01:30:37.713Z",
+      "id": 241
+    },
+    {
+      "type": "frequency",
+      "title": "Traz os documentos enviados pela Instituição assinado",
+      "value": "",
+      "order": 46,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.714Z",
+      "updated_at": "2025-11-11T01:30:37.714Z",
+      "id": 242
+    },
+    {
+      "type": "textarea",
+      "title": "Em sua opinião o usuário tem perfil para esta instituição? Por quê?",
+      "value": "",
+      "order": 47,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.715Z",
+      "updated_at": "2025-11-11T01:30:37.715Z",
+      "id": 243
+    },
+    {
+      "type": "textarea",
+      "title": "Em que situações demonstra irritações?",
+      "value": "",
+      "order": 48,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.715Z",
+      "updated_at": "2025-11-11T01:30:37.715Z",
+      "id": 244
+    },
+    {
+      "type": "textarea",
+      "title": "Observações",
+      "value": "",
+      "order": 49,
+      "id_evaluation": 5,
+      "created_at": "2025-11-11T01:30:37.716Z",
+      "updated_at": "2025-11-11T01:30:37.716Z",
+      "id": 245
     }
   ],
   "evaluation": [
@@ -1581,6 +2595,42 @@
       "interview_note": 0,
       "note": 0,
       "id": 3
+    },
+    {
+      "student": {
+        "name": "Estudante 1",
+        "phone": "48991111123",
+        "date_of_birth": "2003-10-15T00:00:00.000Z",
+        "cpf": "22222222222",
+        "enabled": true,
+        "created_at": "2025-10-24T00:24:40.490Z",
+        "updated_at": "2025-10-27T23:03:40.323Z",
+        "id": 1
+      },
+      "entry_date": "2025-11-11T00:00:00.000Z",
+      "date": "2025-11-06T00:00:00.000Z",
+      "teacher_name": "Paulo Silva",
+      "interview_note": 0,
+      "note": 0,
+      "id": 4
+    },
+    {
+      "student": {
+        "name": "Estudante 4",
+        "phone": "99999999999",
+        "date_of_birth": "2002-06-20T00:00:00.000Z",
+        "cpf": "22222222222",
+        "enabled": true,
+        "created_at": "2025-10-27T22:36:45.918Z",
+        "updated_at": "2025-10-27T22:43:45.304Z",
+        "id": 4
+      },
+      "entry_date": "2025-11-12T00:00:00.000Z",
+      "date": "2025-11-12T00:00:00.000Z",
+      "teacher_name": "Paulo Silva",
+      "interview_note": 0,
+      "note": 0,
+      "id": 5
     }
   ],
   "monitoring": [
@@ -1673,6 +2723,36 @@
       "created_at": "2025-11-03T22:50:17.863Z",
       "updated_at": "2025-11-03T22:50:17.863Z",
       "id": 3
+    },
+    {
+      "student": {
+        "name": "Pedro Tavares",
+        "phone": "45555555555",
+        "date_of_birth": "2025-11-04T00:00:00.000Z",
+        "cpf": "77777777777",
+        "enabled": true,
+        "created_at": "2025-11-03T22:46:17.128Z",
+        "updated_at": "2025-11-03T22:46:57.319Z",
+        "id": 6
+      },
+      "admission_date": "2025-11-26T00:00:00.000Z",
+      "enterprise": {
+        "name": "Empresa 5",
+        "phone": "48993333333",
+        "cnpj": "12345678000191",
+        "enabled": true,
+        "created_at": "2025-10-19T16:47:16.780Z",
+        "updated_at": "2025-10-19T16:48:01.825Z",
+        "id": 5
+      },
+      "job_title": "Tester de Software",
+      "hr_contact": "55555555555",
+      "hr_resposible": "Carlos Silva",
+      "termination_date_ieedf": null,
+      "observations": "",
+      "created_at": "2025-11-04T00:30:25.777Z",
+      "updated_at": "2025-11-04T00:30:25.777Z",
+      "id": 4
     }
   ],
   "student": [
@@ -1693,7 +2773,7 @@
       "cpf": "33333333333",
       "enabled": false,
       "created_at": "2025-10-24T00:33:50.806Z",
-      "updated_at": "2025-10-28T00:47:04.583Z",
+      "updated_at": "2025-11-04T00:17:39.969Z",
       "id": 2
     },
     {
@@ -1765,7 +2845,7 @@
       "cpf": "12345678910",
       "enabled": true,
       "created_at": "2025-11-01T11:47:17.477Z",
-      "updated_at": "2025-11-01T11:47:17.477Z",
+      "updated_at": "2025-11-04T00:17:22.849Z",
       "id": 3
     },
     {
@@ -1775,8 +2855,18 @@
       "cpf": "11111111111",
       "enabled": false,
       "created_at": "2025-11-03T22:42:42.328Z",
-      "updated_at": "2025-11-03T22:43:48.262Z",
+      "updated_at": "2025-11-04T00:17:19.009Z",
       "id": 4
+    },
+    {
+      "email": "marcos@gmail.com",
+      "password": "$2a$10$xee5L0XH8pSUOs/RijymueWx5up633Gr0rzUBlPXrpuLkke07dfeC",
+      "name": "Marcos",
+      "cpf": "55555585555",
+      "enabled": true,
+      "created_at": "2025-11-04T00:22:13.220Z",
+      "updated_at": "2025-11-04T00:22:13.220Z",
+      "id": 5
     }
   ],
   "enterprise": [
@@ -1959,6 +3049,15 @@
       "created_at": "2025-11-03T22:44:15.987Z",
       "updated_at": "2025-11-03T22:44:15.987Z",
       "id": 20
+    },
+    {
+      "name": "Empresa 60",
+      "phone": "44555555555",
+      "cnpj": "22222222222222",
+      "enabled": true,
+      "created_at": "2025-11-04T00:26:21.303Z",
+      "updated_at": "2025-11-04T00:26:21.303Z",
+      "id": 21
     }
   ]
 }

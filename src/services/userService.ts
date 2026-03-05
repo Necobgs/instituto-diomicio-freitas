@@ -82,7 +82,9 @@ const validateToken = async(): Promise<iUser> => {
 };
 
 const login = async (credentials: iLoginCredentials): Promise<{ token: string; user: iUser }> => {
-    const response = await api.post('/login', credentials);
+    console.log(credentials)
+    const response = await api.post('/auth/login', credentials);
+    console.log(response)
     const { accessToken, user } = response.data;
     localStorage.setItem('token', accessToken);
     return { token: accessToken, user };

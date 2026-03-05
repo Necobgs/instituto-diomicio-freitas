@@ -25,7 +25,7 @@ export interface iParamsUser {
 export type iUserForm = Partial<iUser>;
 
 export interface iLoginCredentials {
-    email: string;
+    username: string;
     password: string;
 }
 
