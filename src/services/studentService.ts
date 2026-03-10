@@ -1,9 +1,5 @@
+import { api } from "@/config/api";
 import { iStudent, iStudentForm, iPaginationStudent, iParamsStudent } from "@/types/student";
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3001/'
-});
 
 const endpoint = 'student';
 

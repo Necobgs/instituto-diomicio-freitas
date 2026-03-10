@@ -1,12 +1,7 @@
+import { api } from "@/config/api";
 import { iMonitoring, iMonitoringForm, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3001/'
-});
 
 const endpoint = 'monitoring';
-
 
 const getMonitorings = async ({ page = 1, limit = 8, student, admission_date, enterprise, job_title, hr_contact, hr_resposible, termination_date_ieedf }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
   let query = `_page=${page}&_limit=${limit}`;

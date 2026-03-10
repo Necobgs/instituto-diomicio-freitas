@@ -1,9 +1,5 @@
+import { api } from "@/config/api";
 import { iEnterprise, iEnterpriseForm, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3001/'
-});
 
 const endpoint = 'enterprise';
 

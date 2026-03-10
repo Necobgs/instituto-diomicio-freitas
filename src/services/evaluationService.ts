@@ -1,9 +1,5 @@
+import { api } from "@/config/api";
 import { iEvaluation, iEvaluationForm, iPaginationEvaluation, iParamsEvaluation } from "@/types/evaluation";
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3001/'
-});
 
 const endpoint = 'evaluation';
 
