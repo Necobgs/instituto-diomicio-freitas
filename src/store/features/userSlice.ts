@@ -5,16 +5,16 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
     users: iUser[];
-    currentUser: iUser | null;  // Usuário logado
+    currentUser: iUserForm | null;  // Usuário logado
     token: string | null;
     isAuthenticated: boolean;
     error: string | null;
     loading: boolean;
-    total: number;
+    count: number;
 }
 
-export const initUsers = createAsyncThunk('user/fetch', async ({ page = 1, limit = 8, name, cpf, email, enabled }: iParamsUser = {})  => {
-    return await userService.getUsers({page, limit, name, cpf, email, enabled});
+export const initUsers = createAsyncThunk('user/fetch', async ({ page = 1, limit = 8, username, cpf, email, enabled }: iParamsUser = {})  => {
+    return await userService.getUsers({page, limit, username, cpf, email, enabled});
 });
 
 export const getUserById = createAsyncThunk("user/getById", async (id: number) => {
@@ -84,7 +84,7 @@ const initialState: UserState = {
     isAuthenticated: false,
     error: null,
     loading: false,
-    total: 0,
+    count: 0,
 };
 
 const userSlice = createSlice({
@@ -105,7 +105,7 @@ const userSlice = createSlice({
             })
             .addCase(initUsers.fulfilled, (state, action: PayloadAction<iPaginationUser>) => {
                 state.users = action.payload.data;
-                state.total = action.payload.total;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.error = null;
             })
@@ -113,7 +113,7 @@ const userSlice = createSlice({
                 state.error = "Erro ao carregar lista de usuários";
                 state.loading = false;
                 state.users = [];
-                state.total = 0;
+                state.count = 0;
             })
             .addCase(addUser.fulfilled, (state, action: PayloadAction<iUser>) => {
                 state.users.push(action.payload);
@@ -160,7 +160,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ token: string; user: iUser }>) => {
+            .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ token: string, user: iUserForm | null }>) => {                
                 state.token = action.payload.token;
                 state.currentUser = action.payload.user;
                 state.isAuthenticated = true;
@@ -200,7 +200,7 @@ const userSlice = createSlice({
 export const selectUsers = (state: { user: UserState }) => state.user.users;
 export const selectUserError = (state: { user: UserState }) => state.user.error;
 export const selectUserLoading = (state: { user: UserState }) => state.user.loading;
-export const selectUserTotal = (state: { user: UserState }) => state.user.total;
+export const selectUserCount = (state: { user: UserState }) => state.user.count;
 export const selectCurrentUser = (state: { user: UserState }) => state.user.currentUser;
 export const selectIsAuthenticated = (state: { user: UserState }) => state.user.isAuthenticated;
 export const selectToken = (state: { user: UserState }) => state.user.token;

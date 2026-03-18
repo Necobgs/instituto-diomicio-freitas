@@ -1,0 +1,18 @@
+export type Operator =
+  | '$eq'
+  | '$ne'
+  | '$gt'
+  | '$gte'
+  | '$lt'
+  | '$lte'
+  | '$in'
+  | '$nin'
+  | '$like'
+  | '$ilike'
+  | '$null'
+  | '$between'
+  | '$contains'
+  | '$contained'
+  | '$overlap'
+  | '$startsWith'
+  | '$endsWith';

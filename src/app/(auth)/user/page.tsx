@@ -8,7 +8,7 @@ import Loading from "@/components/ui/loading";
 import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
-import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserTotal } from "@/store/features/userSlice";
+import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,12 +20,12 @@ export default function UserPage(){
     const router = useRouter();
     const dispatch = useAppDispatch();
     const users = useSelector(selectUsers);
-    const totalItems = useSelector(selectUserTotal);
+    const totalItems = useSelector(selectUserCount);
     const loading = useSelector(selectUserLoading);
     const error = useSelector(selectUserError);
 
     const defaultData = {
-        name: "",
+        username: "",
         cpf: "",
         email: "",
         enabled: ""
@@ -72,9 +72,9 @@ export default function UserPage(){
                 <div className="flex flex-wrap items-center justify-start gap-4">
                     <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
                         <Input                          
-                            id="name"
-                            name="name"
-                            value={formData?.name || ''}
+                            id="username"
+                            name="username"
+                            value={formData?.username || ''}
                             onChange={handleInputChange}
                             placeholder="Nome da usuário"
                         />
@@ -121,12 +121,13 @@ export default function UserPage(){
                 </div>
                 :""
                 }
-                
-                <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
-                    {users.map(user=>
-                        <CardUser user={user} key={user.id} onClick={()=> router.push(`/user/${user.id}`)}/>
-                    )}
-                </div>
+                {   users && users.length > 0 &&
+                    <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
+                        {users.map(user=>
+                            <CardUser user={user} key={user.id} onClick={()=> router.push(`/user/${user.id}`)}/>
+                        )}
+                    </div>
+                }
             </section>
 
             <PaginationComponent

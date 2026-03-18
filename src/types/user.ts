@@ -1,22 +1,22 @@
 import { iRoot } from "./iRoot";
 
 export interface iUser extends iRoot{
-    name:string;
+    username:string;
     email:string;
     cpf:string;
     password:string;
-    enabled:boolean;
+    mustChangePassword:boolean;
 }
 
 export interface iPaginationUser {
   data: iUser[];
-  total: number;
+  count: number;
 }
 
 export interface iParamsUser {
     page?: number;
     limit?: number;
-    name?: string;
+    username?: string;
     cpf?: string;
     email?:string;
     enabled?: string;

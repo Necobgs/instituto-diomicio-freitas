@@ -1,39 +1,29 @@
+import { api } from "@/config/api";
+import { buildFilterQuery } from "@/functions/filter";
 import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iRegisterForm } from "@/types/user";
-import axios from "axios";
 
-const api = axios.create({
-    baseURL: `http://localhost:3001/`
-});
+const endpoint = 'user';
 
-const endpoint = 'users';
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+const getUsers = async ({ page = 1, limit = 8, username, cpf, email, enabled }: iParamsUser = {}): Promise<iPaginationUser> => {
+  
+  const filter: string = buildFilterQuery([
+    { key: 'username', value: username, operator: '$ilike' }, 
+    { key: 'cpf', value: cpf, operator: '$startsWith' },
+    { key: 'email', value: email, operator: '$startsWith' },
+    { key: 'deleted_at', value: enabled, operator: '$null' }
+  ]);
+  
+  const response = await api.get(endpoint,{
+    params: {
+      filter: filter,
+      page,
+      limit
     }
-    return config;
-});
-
-const getUsers = async ({ page = 1, limit = 8, name, cpf, email, enabled }: iParamsUser = {}): Promise<iPaginationUser> => {
-  let query = `_page=${page}&_limit=${limit}`;
-
-  if (name) query += `&name_like=${encodeURIComponent(name)}`;
-
-  if (cpf) query += `&cpf_like=${encodeURIComponent(`^${cpf}`)}`;
-
-  if (email) query += `&email_like=${encodeURIComponent(`^${email}`)}`;
-
-  if (enabled) query += `&enabled=${encodeURIComponent(enabled)}`;
-
-  const response = await api.get(`${endpoint}?${query}`);
-  const total = response.headers["x-total-count"]
-    ? parseInt(response.headers["x-total-count"])
-    : 0;
+  });
 
   return {
-    data: response.data as iUser[],
-    total
+    data: response.data.items as iUser[],
+    count: response.data.count
   };
 };
 
@@ -81,13 +71,20 @@ const validateToken = async(): Promise<iUser> => {
     throw new Error('Token não encontrado');
 };
 
-const login = async (credentials: iLoginCredentials): Promise<{ token: string; user: iUser }> => {
-    console.log(credentials)
+const login = async (credentials: iLoginCredentials): Promise<{ token: string, user: iUserForm | null }> => {
     const response = await api.post('/auth/login', credentials);
-    console.log(response)
-    const { accessToken, user } = response.data;
+    const accessToken = response.data.access_token;
+    let user: iUserForm | null = null;
+    try {
+        user = JSON.parse(atob(accessToken.split('.')[1]));
+    }
+    catch {
+        console.log("Erro ao decodificar token");
+    }
     localStorage.setItem('token', accessToken);
-    return { token: accessToken, user };
+    console.log("user", user);
+    console.log("accessToken", response.data);
+    return { token: accessToken, user: user };
 };
 
 const register = async (newUser: iUserForm): Promise<iUser> => {
@@ -116,3 +113,15 @@ export default {
     logout,
     getMe
 };
+
+
+
+/*class Filter(){
+    function getParam(operator:string, value:string,name:string){
+        
+    }
+
+    function desestructure(variavel:any,name:string){
+        return (variavel && {name: variavel}) || {};
+    }
+}*/

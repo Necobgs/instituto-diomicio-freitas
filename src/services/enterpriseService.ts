@@ -4,7 +4,7 @@ import { iEnterprise, iEnterpriseForm, iPaginationEnterprise, iParamsEnterprise 
 const endpoint = 'enterprise';
 
 const getEnterprises = async ({ page = 1, limit = 8, name, cnpj, enabled }: iParamsEnterprise = {}): Promise<iPaginationEnterprise> => {
-  let query = `_page=${page}&_limit=${limit}`;
+  let query = ``;
 
   // Nome - includes
   if (name) query += `&name_like=${encodeURIComponent(name)}`;
