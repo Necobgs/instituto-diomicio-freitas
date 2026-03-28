@@ -1,15 +1,14 @@
 import { iRoot } from "./iRoot";
+import { iPagination } from "./pagination";
 
 export interface iEnterprise extends iRoot{
     name:string;
-    phone:string;
     cnpj:string;
-    enabled:boolean;
+    phone:string;
 }
 
-export interface iPaginationEnterprise {
+export interface iPaginationEnterprise extends iPagination {
   data: iEnterprise[];
-  total: number;
 }
 
 export interface iParamsEnterprise {
@@ -17,6 +16,7 @@ export interface iParamsEnterprise {
     limit?: number;
     name?: string;
     cnpj?: string;
+    phone?: string;
     enabled?: string;
 }
 

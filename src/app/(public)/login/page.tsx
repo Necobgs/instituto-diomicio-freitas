@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 export default function LoginPage() {
 
   const defaultData = {
-    username: "",
+    email: "",
     password: ""
   };
   const [formData, setFormData] = useState(defaultData);
@@ -76,9 +76,9 @@ export default function LoginPage() {
               <User />
             </div>
             <Input                                     
-              id="username"
-              name="username"
-              value={formData?.username || ''}
+              id="email"
+              name="email"
+              value={formData?.email || ''}
               onChange={handleInputChange} 
               placeholder="Usuário" 
               className="w-80"

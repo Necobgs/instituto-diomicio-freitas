@@ -1,18 +1,11 @@
 
 
 import monitoringService from "@/services/monitoringService";
-import { iMonitoring, iMonitoringForm, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
+import { iMonitoring, iMonitoringForm, iMonitoringState, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface MonitoringState {
-    monitorings: iMonitoring[];
-    error: string | null;
-    loading: boolean;
-    total: number;
-}
-
-export const initMonitorings = createAsyncThunk('monitoring/fetch', async ({ page = 1, limit = 8, student, admission_date, enterprise, job_title, hr_contact, hr_resposible, termination_date_ieedf }: iParamsMonitoring = {})  => {
-    return await monitoringService.getMonitorings({page, limit, student, admission_date, enterprise, job_title, hr_contact, hr_resposible, termination_date_ieedf });
+export const initMonitorings = createAsyncThunk('monitoring/fetch', async ({ page = 1, limit = 8, studentId, enterpriseId, visit_date_ini, visit_date_end, enabled }: iParamsMonitoring = {})  => {
+    return await monitoringService.getMonitorings({page, limit, studentId, enterpriseId, visit_date_ini, visit_date_end, enabled });
 });
 
 export const getMonitoringById = createAsyncThunk("monitoring/getById", async (id: number) => {
@@ -32,11 +25,13 @@ export const removeMonitoring = createAsyncThunk('monitoring/remove', async (pay
     return payload;
 });
 
-const initialState: MonitoringState = {
+const initialState: iMonitoringState = {
     monitorings: [],
     error: null,
     loading: false,
-    total: 0,
+    count: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
 };
 
 const monitoringSlice = createSlice({
@@ -51,15 +46,19 @@ const monitoringSlice = createSlice({
             })
             .addCase(initMonitorings.fulfilled, (state, action: PayloadAction<iPaginationMonitoring>) => {
                 state.monitorings = action.payload.data;
-                state.total = action.payload.total;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.error = null;
+                state.hasNextPage = action.payload.hasNextPage;
+                state.hasPreviousPage = action.payload.hasPreviousPage;
             })
             .addCase(initMonitorings.rejected, (state) => {
                 state.error = "Erro ao carregar lista de acompanhamentos";
                 state.loading = false;
                 state.monitorings = [];
-                state.total = 0;
+                state.count = 0;
+                state.hasNextPage = false;
+                state.hasPreviousPage = false;
             })
             .addCase(addMonitoring.fulfilled, (state, action: PayloadAction<iMonitoring>) => {
                 state.monitorings.push(action.payload);
@@ -73,7 +72,7 @@ const monitoringSlice = createSlice({
             })
             .addCase(removeMonitoring.fulfilled, (state, action: PayloadAction<number>) => {
                 state.monitorings = state.monitorings.filter((t) => t.id !== action.payload);
-                state.total = state.total - 1;
+                state.count = state.count - 1;
                 state.error = null;
                 state.loading = false;
             })
@@ -92,9 +91,11 @@ const monitoringSlice = createSlice({
 });
 
 
-export const selectMonitorings = (state: { monitoring: MonitoringState }) => state.monitoring.monitorings;
-export const selectMonitoringError = (state: { monitoring: MonitoringState }) => state.monitoring.error;
-export const selectMonitoringLoading = (state: { monitoring: MonitoringState }) => state.monitoring.loading;
-export const selectMonitoringTotal = (state: { monitoring: MonitoringState }) => state.monitoring.total;
+export const selectMonitorings = (state: { monitoring: iMonitoringState }) => state.monitoring.monitorings;
+export const selectMonitoringError = (state: { monitoring: iMonitoringState }) => state.monitoring.error;
+export const selectMonitoringLoading = (state: { monitoring: iMonitoringState }) => state.monitoring.loading;
+export const selectMonitoringTotal = (state: { monitoring: iMonitoringState }) => state.monitoring.count;
+export const selectMonitoringHasNextPage = (state: { monitoring: iMonitoringState }) => state.monitoring.hasNextPage;
+export const selectMonitoringHasPreviousPage = (state: { monitoring: iMonitoringState }) => state.monitoring.hasPreviousPage;
 
 export const monitoringReducer = monitoringSlice.reducer;

@@ -8,7 +8,7 @@ import Loading from "@/components/ui/loading";
 import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
-import { initStudents, selectStudentError, selectStudentLoading, selectStudents, selectStudentTotal } from "@/store/features/studentSlice";
+import { initStudents, selectStudentError, selectStudentLoading, selectStudents, selectStudentCount, selectStudentHasNextPage, selectStudentHasPreviousPage } from "@/store/features/studentSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,9 +19,11 @@ export default function StudentPage(){
     const router = useRouter();
     const dispatch = useAppDispatch();
     const students = useSelector(selectStudents);
-    const totalItems = useSelector(selectStudentTotal);
+    const countItems = useSelector(selectStudentCount);
     const loading = useSelector(selectStudentLoading);
     const error = useSelector(selectStudentError);
+    const hasNextPage = useSelector(selectStudentHasNextPage);
+    const hasPreviousPage = useSelector(selectStudentHasPreviousPage);
 
     const defaultData = {
         name: "",
@@ -55,9 +57,6 @@ export default function StudentPage(){
     useEffect(() => {
         dispatch(initStudents({...formData, page: currentPage, limit: itemsPerPage }));
     }, [dispatch, currentPage]);
-
-    const hasNextPage = currentPage * itemsPerPage < totalItems;
-    const hasPreviousPage = currentPage > 1;
     
     return (
         <>
@@ -113,17 +112,20 @@ export default function StudentPage(){
                 <Separator className="mt-6"/>
                 
                 <section className="mt-4 flex-auto">
-                    { students != undefined || error
+                    { !students?.[0] || error
                     ?<div>
-                        {error ? error: `Quantidade de estudantes encontrados: ${totalItems}`}
+                        {error ? error: `Quantidade de estudantes encontrados: ${countItems}`}
                     </div>
                     : ""
                     }
                     
                     <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
-                        {students.map(student=>
-                            <CardStudent {...student} key={student.id}/>
-                        )}
+                        {
+                            students?.[0] &&
+                            students.map(student=>
+                                <CardStudent {...student} key={student.id}/>
+                            )
+                        }
                     </div>
                 </section>
 

@@ -1,14 +1,7 @@
 
 import studentService from "@/services/studentService";
-import { iStudent, iStudentForm, iPaginationStudent, iParamsStudent } from "@/types/student";
+import { iStudent, iStudentForm, iPaginationStudent, iParamsStudent, iStudentState } from "@/types/student";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface StudentState {
-    students: iStudent[];
-    error: string | null;
-    loading: boolean;
-    total: number;
-}
 
 export const initStudents = createAsyncThunk('student/fetch', async ({ page = 1, limit = 8, name, cpf, phone , enabled }: iParamsStudent = {})  => {
     return await studentService.getStudents({page, limit, name, cpf, phone, enabled});
@@ -31,12 +24,13 @@ export const removeStudent = createAsyncThunk('student/remove', async (payload: 
     return response;
 });
 
-
-const initialState: StudentState = {
+const initialState: iStudentState = {
     students: [],
     error: null,
     loading: false,
-    total: 0,
+    count: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
 };
 
 const studentSlice = createSlice({
@@ -50,16 +44,20 @@ const studentSlice = createSlice({
                 state.error = null;
             })
             .addCase(initStudents.fulfilled, (state, action: PayloadAction<iPaginationStudent>) => {
-                state.students = action.payload.data;
-                state.total = action.payload.total;
                 state.loading = false;
                 state.error = null;
+                state.students = action.payload.data;
+                state.count = action.payload.count;
+                state.hasNextPage = action.payload.hasNextPage;
+                state.hasPreviousPage = action.payload.hasPreviousPage;
             })
             .addCase(initStudents.rejected, (state) => {
                 state.error = "Erro ao carregar lista de estudantes";
                 state.loading = false;
                 state.students = [];
-                state.total = 0;
+                state.count = 0;
+                state.hasNextPage = false;
+                state.hasPreviousPage = false;
             })
             .addCase(addStudent.fulfilled, (state, action: PayloadAction<iStudent>) => {
                 state.students.push(action.payload);
@@ -91,9 +89,11 @@ const studentSlice = createSlice({
 });
 
 
-export const selectStudents = (state: { student: StudentState }) => state.student.students;
-export const selectStudentError = (state: { student: StudentState }) => state.student.error;
-export const selectStudentLoading = (state: { student: StudentState }) => state.student.loading;
-export const selectStudentTotal = (state: { student: StudentState }) => state.student.total;
+export const selectStudents = (state: { student: iStudentState }) => state.student.students;
+export const selectStudentError = (state: { student: iStudentState }) => state.student.error;
+export const selectStudentLoading = (state: { student: iStudentState }) => state.student.loading;
+export const selectStudentCount = (state: { student: iStudentState }) => state.student.count;
+export const selectStudentHasNextPage = (state: { student: iStudentState }) => state.student.hasNextPage;
+export const selectStudentHasPreviousPage = (state: { student: iStudentState }) => state.student.hasPreviousPage;
 
 export const studentReducer = studentSlice.reducer;

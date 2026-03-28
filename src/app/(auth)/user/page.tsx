@@ -20,7 +20,7 @@ export default function UserPage(){
     const router = useRouter();
     const dispatch = useAppDispatch();
     const users = useSelector(selectUsers);
-    const totalItems = useSelector(selectUserCount);
+    const countItems = useSelector(selectUserCount);
     const loading = useSelector(selectUserLoading);
     const error = useSelector(selectUserError);
 
@@ -57,7 +57,7 @@ export default function UserPage(){
         dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
     }, [dispatch, currentPage]);
 
-    const hasNextPage = currentPage * itemsPerPage < totalItems;
+    const hasNextPage = currentPage * itemsPerPage < countItems;
     const hasPreviousPage = currentPage > 1;
 
     return (
@@ -115,13 +115,13 @@ export default function UserPage(){
             <Separator className="mt-6"/>
             
             <section className="mt-4 flex-auto">
-                { users != undefined || error
+                { !users?.[0] || error
                 ?<div>
-                    {error ? error : `Quantidade de usuários encontrados: ${totalItems}`}
+                    {error ? error : `Quantidade de usuários encontrados: ${countItems}`}
                 </div>
                 :""
                 }
-                {   users && users.length > 0 &&
+                {   users?.[0] &&
                     <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
                         {users.map(user=>
                             <CardUser user={user} key={user.id} onClick={()=> router.push(`/user/${user.id}`)}/>

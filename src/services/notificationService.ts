@@ -1,9 +1,5 @@
+import { api } from "@/config/api";
 import { iNotification, iNotificationForm, iPaginationNotification, iParamsNotification } from "@/types/notification";
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3001/'
-});
 
 const endpoint = 'notification';
 

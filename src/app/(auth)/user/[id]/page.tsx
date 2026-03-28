@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { iUser } from "@/types/user";
+import { iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
 import { editUser, selectUsers } from "@/store/features/userSlice";
@@ -23,16 +23,13 @@ export default function UserEditPage() {
 
     const defaultData = {
         id: 0, 
-        name: "", 
+        username: "", 
         email: "", 
         cpf: "",
-        password: "",
-        enabled: true, 
-        created_at: new Date(),
-        updated_at: new Date(),
+        deleted_at: null,
     }
 
-    const [formData, setFormData] = useState<iUser>(user ? user : defaultData);
+    const [formData, setFormData] = useState<iUserForm>(user ? user : defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
@@ -53,7 +50,7 @@ export default function UserEditPage() {
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
         }
-        if (errors[name as keyof iUser]) {
+        if (errors[name as keyof iUserForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
     };
@@ -62,14 +59,14 @@ export default function UserEditPage() {
 
         setFormData((prev) => ({ ...prev, [name]: value }));
 
-        if (errors[name as keyof iUser]) {
+        if (errors[name as keyof iUserForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
     }
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.username?.trim()) newErrors.name = "Nome é obrigatório";
         if (!formData.email?.trim()) newErrors.email = "Email é obrigatório";
         if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
         else if (formData.cpf?.trim().length < 11) newErrors.cpf = "CPF inválido";
@@ -97,7 +94,7 @@ export default function UserEditPage() {
         e.preventDefault();
 
         try {
-            await dispatch(editUser({...user, enabled: !user?.enabled, updated_at: new Date()})).unwrap();
+            await dispatch(editUser(user)).unwrap();
             router.push('/user');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao alterar usuário');
@@ -124,7 +121,7 @@ export default function UserEditPage() {
                         <Input
                             id="name"
                             name="name"
-                            value={formData?.name || ''}
+                            value={formData?.username || ''}
                             onChange={handleInputChange}
                             placeholder="Nome do usuário"
                             error={errors.name} 
@@ -154,7 +151,7 @@ export default function UserEditPage() {
                     </div>
                     <div className="flex gap-3">
                         <Button type="submit">Salvar</Button>
-                        <Button type="button" className={user?.enabled ? "bg-red-500 hover:bg-red-400" : "bg-green-700 hover:bg-green-600"} onClick={handleDisableOrEnable}>{user?.enabled ? "Desabilitar" : "Habilitar"}</Button>
+                        <Button type="button" className={!user?.deleted_at ? "bg-red-500 hover:bg-red-400" : "bg-green-700 hover:bg-green-600"} onClick={handleDisableOrEnable}>{user?.enabled ? "Desabilitar" : "Habilitar"}</Button>
                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                             Cancelar
                         </Button>

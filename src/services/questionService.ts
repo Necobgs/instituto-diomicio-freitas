@@ -1,9 +1,5 @@
+import { api } from "@/config/api";
 import { iQuestion, iQuestionForm, iPaginationQuestion, iParamsQuestion } from "@/types/question";
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3001/'
-});
 
 const endpoint = 'question';
 

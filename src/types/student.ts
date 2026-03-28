@@ -1,16 +1,16 @@
 import { iRoot } from "./iRoot";
+import { iPagination } from "./pagination";
+import { iState } from "./state";
 
 export interface iStudent extends iRoot{
     name:string;
     phone:string;
-    date_of_birth:Date | null,
+    date_birthday:Date | null,
     cpf:string;
-    enabled:boolean;
 }
 
-export interface iPaginationStudent {
+export interface iPaginationStudent extends iPagination{
   data: iStudent[];
-  total: number;
 }
 
 export interface iParamsStudent {
@@ -20,6 +20,10 @@ export interface iParamsStudent {
     cpf?: string;
     phone?: string;
     enabled?: string;
+}
+
+export interface iStudentState extends iState {
+    students: iStudent[];
 }
 
 export type iStudentForm = Partial<iStudent>;

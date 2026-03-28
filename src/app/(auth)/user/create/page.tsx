@@ -7,20 +7,16 @@ import { useState } from "react";
 import { iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { registerUser } from "@/store/features/userSlice";
 import MaskedInput from "@/components/ui/masked-input";
+import { addUser } from "@/store/features/userSlice";
 
 export default function UserCreatePage() {
     const router = useRouter();
 
-    const defaultData = {
-        name: "", 
+    const defaultData: iUserForm = {
+        username: "", 
         email: "",
-        password: "",
         cpf: "", 
-        enabled: true,
-        created_at: new Date(),
-        updated_at: new Date(),
     }
     // Estado para os campos do formulário
     const [formData,setFormData] = useState<iUserForm>(defaultData);
@@ -54,17 +50,10 @@ export default function UserCreatePage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
+        if (!formData.username?.trim()) newErrors.username = "Nome é obrigatório";
         if (!formData.email?.trim()) newErrors.email = "Email é obrigatório";
         if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
         else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
-        if (!formData.password?.trim()) newErrors.password = "Senha é obrigatória";
-        else if (formData.password.trim().length < 6) newErrors.password = "Senha deve ter ao menos 6 caracteres";
-        else if (formData.password.trim().length > 20) newErrors.password = "Senha deve ter no máximo 20 caracteres";
-        else if (!/[A-Z]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos uma letra maiúscula";
-        else if (!/[a-z]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos uma letra minúscula";
-        else if (!/[0-9]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos um número";
-        else if (!/[!@#$%^&*]/.test(formData.password)) newErrors.password = "Senha deve conter ao menos um caractere especial (!@#$%^&*)";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -78,7 +67,7 @@ export default function UserCreatePage() {
         }
 
         try {
-            await dispatch(registerUser(formData)).unwrap();
+            await dispatch(addUser(formData)).unwrap();
             handleAlert(false,'Usuário cadastrado com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao cadastrar usuário');
@@ -100,11 +89,11 @@ export default function UserCreatePage() {
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                     <div>
-                        <label htmlFor="name" className="text-sm font-medium">Nome</label>
+                        <label htmlFor="username" className="text-sm font-medium">Nome</label>
                         <Input
-                            id="name"
-                            name="name"
-                            value={formData?.name || ''}
+                            id="username"
+                            name="username"
+                            value={formData?.username || ''}
                             onChange={handleInputChange}
                             placeholder="Nome do usuário"
                             error={errors.name}
@@ -130,18 +119,6 @@ export default function UserCreatePage() {
                             mask="000.000.000-00"
                             onChange={(val) => handleMaskedInputChange("cpf",val)}
                             error={errors.cpf}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password" className="text-sm font-medium">Senha</label>
-                        <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={formData?.password || ''}
-                            onChange={handleInputChange}
-                            placeholder="Senha do usuário"
-                            error={errors.password}
                         />
                     </div>
                     <div className="flex gap-3">

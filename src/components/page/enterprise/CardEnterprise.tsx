@@ -19,7 +19,7 @@ export default function CardEnterprise(enterprise:iEnterprise) {
 
   return (
     <Card className="w-full hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`/enterprise/${enterprise.id}`)}}>
-      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${enterprise.enabled ? 'bg-green-700' : 'bg-red-500'}`}></div>
+      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!enterprise.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
       <CardHeader>
         <CardTitle>{enterprise.name}</CardTitle>
       </CardHeader>

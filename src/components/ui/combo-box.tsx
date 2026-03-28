@@ -34,6 +34,7 @@ interface ComboboxProps {
   notFoundMessage?: string; // Optional message for no results
   width?: string; // Optional width for the button and popover
   error?: string; // Optional error message
+  isSearchable?: boolean; // Optional flag to make the combobox searchable
 }
 
 export function Combobox({
@@ -45,6 +46,7 @@ export function Combobox({
   notFoundMessage = "No item found.",
   width = "200px",
   error = "",
+  isSearchable = true,
 }: ComboboxProps) {
 
   const [open, setOpen] = React.useState(false);

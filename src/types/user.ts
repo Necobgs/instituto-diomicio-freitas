@@ -1,16 +1,16 @@
 import { iRoot } from "./iRoot";
+import { iPagination } from "./pagination";
+import { iState } from "./state";
 
 export interface iUser extends iRoot{
     username:string;
     email:string;
     cpf:string;
-    password:string;
     mustChangePassword:boolean;
 }
 
-export interface iPaginationUser {
+export interface iPaginationUser extends iPagination {
   data: iUser[];
-  count: number;
 }
 
 export interface iParamsUser {
@@ -22,13 +22,16 @@ export interface iParamsUser {
     enabled?: string;
 }
 
-export type iUserForm = Partial<iUser>;
-
 export interface iLoginCredentials {
-    username: string;
+    email: string;
     password: string;
 }
 
-export interface iRegisterForm extends iUserForm {
-    password: string;
+export interface iUserState extends iState {
+    users: iUser[];
+    currentUser: iUserForm | null;  // Usuário logado
+    token: string | null;
+    isAuthenticated: boolean;
 }
+
+export type iUserForm = Partial<iUser>;

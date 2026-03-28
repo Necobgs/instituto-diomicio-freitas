@@ -1,17 +1,10 @@
 
 import enterpriseService from "@/services/enterpriseService";
-import { iEnterprise, iEnterpriseForm, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
+import { iEnterprise, iEnterpriseForm, iEnterpriseState, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface EnterpriseState {
-    enterprises: iEnterprise[];
-    error: string | null;
-    loading: boolean;
-    total: number;
-}
-
-export const initEnterprises = createAsyncThunk('enterprise/fetch', async ({ page = 1, limit = 8, name, cnpj, enabled }: iParamsEnterprise = {})  => {
-    return await enterpriseService.getEnterprises({page, limit, name, cnpj, enabled});
+export const initEnterprises = createAsyncThunk('enterprise/fetch', async ({ page = 1, limit = 8, name, cnpj, phone, enabled }: iParamsEnterprise = {})  => {
+    return await enterpriseService.getEnterprises({page, limit, name, cnpj, phone, enabled});
 });
 
 export const getEnterpriseById = createAsyncThunk("enterprise/getById", async (id: number) => {
@@ -22,20 +15,22 @@ export const addEnterprise = createAsyncThunk('enterprise/add', async (payload: 
     return await enterpriseService.addEnterprise(payload);
 });
 
-export const editEnterprise = createAsyncThunk('enterprise/edit', async (payload: iEnterprise) => {
-    return await enterpriseService.editEnterprise({ ...payload });
+export const editEnterprise = createAsyncThunk('enterprise/edit', async (payload: iEnterpriseForm) => {
+    return await enterpriseService.editEnterprise(payload);
 });
 
-export const removeEnterprise = createAsyncThunk('enterprise/remove', async (payload: iEnterprise) => {
+export const removeEnterprise = createAsyncThunk('enterprise/remove', async (payload: iEnterpriseForm) => {
     const response = await enterpriseService.removeEnterprise(payload);
     return response;
 });
 
-const initialState: EnterpriseState = {
+const initialState: iEnterpriseState = {
     enterprises: [],
     error: null,
     loading: false,
-    total: 0,
+    count: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
 };
 
 const enterpriseSlice = createSlice({
@@ -50,15 +45,19 @@ const enterpriseSlice = createSlice({
             })
             .addCase(initEnterprises.fulfilled, (state, action: PayloadAction<iPaginationEnterprise>) => {
                 state.enterprises = action.payload.data;
-                state.total = action.payload.total;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.error = null;
+                state.hasNextPage = action.payload.hasNextPage;
+                state.hasPreviousPage = action.payload.hasPreviousPage;
             })
             .addCase(initEnterprises.rejected, (state) => {
                 state.error = "Erro ao carregar lista de empresas";
                 state.loading = false;
                 state.enterprises = [];
-                state.total = 0;
+                state.count = 0;
+                state.hasNextPage = false;
+                state.hasPreviousPage = false;
             })
             .addCase(addEnterprise.fulfilled, (state, action: PayloadAction<iEnterprise>) => {
                 state.enterprises.push(action.payload);
@@ -90,9 +89,11 @@ const enterpriseSlice = createSlice({
 });
 
 
-export const selectEnterprises = (state: { enterprise: EnterpriseState }) => state.enterprise.enterprises;
-export const selectEnterpriseError = (state: { enterprise: EnterpriseState }) => state.enterprise.error;
-export const selectEnterpriseLoading = (state: { enterprise: EnterpriseState }) => state.enterprise.loading;
-export const selectEnterpriseTotal = (state: { enterprise: EnterpriseState }) => state.enterprise.total;
+export const selectEnterprises = (state: { enterprise: iEnterpriseState }) => state.enterprise.enterprises;
+export const selectEnterpriseError = (state: { enterprise: iEnterpriseState }) => state.enterprise.error;
+export const selectEnterpriseLoading = (state: { enterprise: iEnterpriseState }) => state.enterprise.loading;
+export const selectEnterpriseCount = (state: { enterprise: iEnterpriseState }) => state.enterprise.count;
+export const selectEnterpriseHasNextPage = (state: { enterprise: iEnterpriseState }) => state.enterprise.hasNextPage;
+export const selectEnterpriseHasPreviousPage = (state: { enterprise: iEnterpriseState }) => state.enterprise.hasPreviousPage;
 
 export const enterpriseReducer = enterpriseSlice.reducer;

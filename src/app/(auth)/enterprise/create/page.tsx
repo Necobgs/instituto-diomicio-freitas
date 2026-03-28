@@ -18,9 +18,6 @@ export default function EnterpriseCreatePage() {
         name: "",
         phone: "",
         cnpj: "",
-        enabled: true,
-        created_at: new Date(),
-        updated_at: new Date(),
     };
     const [formData, setFormData] = useState<iEnterpriseForm>(defaultData);
     const [alertTitle,setAlertTitle] = useState('');
@@ -32,11 +29,9 @@ export default function EnterpriseCreatePage() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "created_at" || name === "updated_at") {
-            setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
-        } else {
-            setFormData((prev) => ({ ...prev, [name]: value }));
-        }
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        
         if (errors[name as keyof iEnterpriseForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }

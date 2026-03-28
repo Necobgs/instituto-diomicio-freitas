@@ -1,36 +1,33 @@
 import { api } from "@/config/api";
+import { buildFilterQuery } from "@/functions/filter";
 import { iMonitoring, iMonitoringForm, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
 
 const endpoint = 'monitoring';
 
-const getMonitorings = async ({ page = 1, limit = 8, student, admission_date, enterprise, job_title, hr_contact, hr_resposible, termination_date_ieedf }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
-  let query = `_page=${page}&_limit=${limit}`;
+const getMonitorings = async ({ page = 1, limit = 8, student, enterprise, visit_date_ini, visit_date_fim, enabled }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
+  
+  const filter: string = buildFilterQuery([
+    { key: 'studentId', value: student?.id, operator: '$eq' }, 
+    { key: 'enterpriseId', value: enterprise?.id, operator: '$eq' },
+    { key: 'visit_date_ini', value: (!visit_date_ini ? '' : `${visit_date_ini}T00:00:00.000Z`), operator: '$gte' },
+    { key: 'visit_date_fim', value: (!visit_date_fim ? '' : `${visit_date_fim}T00:00:00.000Z`), operator: '$lte' },
+  ]);
 
-  console.log(admission_date, termination_date_ieedf)
-
-  if (student) query += `&student.id=${student.id}`;
-
-  if (admission_date) query += `&admission_date=${encodeURIComponent(`${admission_date}T00:00:00.000Z`)}`;
-
-  if (enterprise) query += `&enterprise.id=${enterprise.id}`;
-
-  if (job_title) query += `&job_title_like=${encodeURIComponent(job_title)}`;
-
-  if (hr_contact) query += `&hr_contact_like=${encodeURIComponent(hr_contact)}`;
-
-  if (hr_resposible) query += `&hr_resposible_like=${encodeURIComponent(hr_resposible)}`;
-
-  if (termination_date_ieedf) query += `&termination_date_ieedf=${encodeURIComponent(`${termination_date_ieedf}T00:00:00.000Z`)}`;
-
-  const response = await api.get(`${endpoint}?${query}`);
-
-  const total = response.headers["x-total-count"]
-    ? parseInt(response.headers["x-total-count"])
-    : 0;
+  const response = await api.get(endpoint,{
+    params: {
+      filter: filter,
+      page,
+      limit,
+      withDeleted: enabled === "all" ? true : false,
+      onlyDeleted: enabled === "false" ? true : false,
+    }
+  });
 
   return {
-    data: response.data as iMonitoring[],
-    total
+    data: response.data.items as iMonitoring[],
+    count: response.data.count,
+    hasNextPage: response.data.hasNextPage,
+    hasPreviousPage: response.data.hasPreviousPage
   };
 };
 
@@ -49,11 +46,12 @@ const editMonitoring = async (dataMonitoring: iMonitoringForm): Promise<iMonitor
     return response.data as iMonitoring;
 }
 
-const removeMonitoring = async (id: number): Promise<void> => {
+const removeMonitoring = async (id: number): Promise<iMonitoring> => {
     const response = await api.delete(`${endpoint}/${id}`);
     if (response.status !== 200 && response.status !== 204) {
         throw new Error(`Falha no DELETE: ${response.status}`);
     }
+    return response.data as iMonitoring;
 };
 
 export default {

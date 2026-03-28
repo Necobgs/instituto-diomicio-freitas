@@ -1,17 +1,7 @@
 
 import userService from "@/services/userService";
-import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials } from "@/types/user";
+import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iUserState } from "@/types/user";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface UserState {
-    users: iUser[];
-    currentUser: iUserForm | null;  // Usuário logado
-    token: string | null;
-    isAuthenticated: boolean;
-    error: string | null;
-    loading: boolean;
-    count: number;
-}
 
 export const initUsers = createAsyncThunk('user/fetch', async ({ page = 1, limit = 8, username, cpf, email, enabled }: iParamsUser = {})  => {
     return await userService.getUsers({page, limit, username, cpf, email, enabled});
@@ -25,11 +15,11 @@ export const addUser = createAsyncThunk('user/add', async (payload: iUserForm) =
     return await userService.addUser(payload);
 });
 
-export const editUser = createAsyncThunk('user/edit', async (payload: iUser) => {
+export const editUser = createAsyncThunk('user/edit', async (payload: iUserForm) => {
     return await userService.editUser({ ...payload });
 });
 
-export const removeUser = createAsyncThunk('user/remove', async (payload: iUser) => {
+export const removeUser = createAsyncThunk('user/remove', async (payload: iUserForm) => {
     const response = await userService.removeUser(payload);
     return response;
 });
@@ -53,31 +43,12 @@ export const loginUser = createAsyncThunk('user/login', async (credentials: iLog
     }
 });
 
-export const registerUser = createAsyncThunk('user/register', async (payload: iUserForm, { rejectWithValue }) => {
-    try {
-        const response = await userService.register(payload);
-        return response;
-    } catch (error: any) {
-        return rejectWithValue(error.response?.data?.message || 'Erro no registro');
-    }
-});
-
 export const logoutUser = createAsyncThunk('user/logout', async () => {
     userService.logout();
     return null;
 });
 
-export const fetchMe = createAsyncThunk('user/me', async (_, { rejectWithValue }) => {
-    try {
-        const user = await userService.getMe();
-        return user;
-    } catch (error: any) {
-        userService.logout();
-        return rejectWithValue('Sessão expirada');
-    }
-});
-
-const initialState: UserState = {
+const initialState: iUserState = {
     users: [],
     currentUser: null,
     token: null,
@@ -85,6 +56,8 @@ const initialState: UserState = {
     error: null,
     loading: false,
     count: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
 };
 
 const userSlice = createSlice({
@@ -108,12 +81,16 @@ const userSlice = createSlice({
                 state.count = action.payload.count;
                 state.loading = false;
                 state.error = null;
+                state.hasNextPage = action.payload.hasNextPage;
+                state.hasPreviousPage = action.payload.hasPreviousPage;
             })
             .addCase(initUsers.rejected, (state) => {
                 state.error = "Erro ao carregar lista de usuários";
                 state.loading = false;
                 state.users = [];
                 state.count = 0;
+                state.hasNextPage = false;
+                state.hasPreviousPage = false;
             })
             .addCase(addUser.fulfilled, (state, action: PayloadAction<iUser>) => {
                 state.users.push(action.payload);
@@ -171,39 +148,25 @@ const userSlice = createSlice({
                 state.error = action.payload as string;
                 state.loading = false;
             })
-            .addCase(registerUser.fulfilled, (state, action: PayloadAction<iUser>) => {
-                state.currentUser = action.payload;
-                state.isAuthenticated = true;
-                state.error = null;
-            })
-            .addCase(registerUser.rejected, (state, action) => {
-                state.error = action.payload as string;
-            })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.currentUser = null;
                 state.token = null;
                 state.isAuthenticated = false;
                 state.users = [];
-            })
-            .addCase(fetchMe.fulfilled, (state, action: PayloadAction<iUser>) => {
-                state.currentUser = action.payload;
-                state.isAuthenticated = true;
-            })
-            .addCase(fetchMe.rejected, (state) => {
-                state.isAuthenticated = false;
-                state.currentUser = null;
             });
     },
 });
 
 
-export const selectUsers = (state: { user: UserState }) => state.user.users;
-export const selectUserError = (state: { user: UserState }) => state.user.error;
-export const selectUserLoading = (state: { user: UserState }) => state.user.loading;
-export const selectUserCount = (state: { user: UserState }) => state.user.count;
-export const selectCurrentUser = (state: { user: UserState }) => state.user.currentUser;
-export const selectIsAuthenticated = (state: { user: UserState }) => state.user.isAuthenticated;
-export const selectToken = (state: { user: UserState }) => state.user.token;
+export const selectUsers = (state: { user: iUserState }) => state.user.users;
+export const selectUserError = (state: { user: iUserState }) => state.user.error;
+export const selectUserLoading = (state: { user: iUserState }) => state.user.loading;
+export const selectUserCount = (state: { user: iUserState }) => state.user.count;
+export const selectCurrentUser = (state: { user: iUserState }) => state.user.currentUser;
+export const selectIsAuthenticated = (state: { user: iUserState }) => state.user.isAuthenticated;
+export const selectToken = (state: { user: iUserState }) => state.user.token;
+export const selectUserHasNextPage = (state: { user: iUserState }) => state.user.hasNextPage;
+export const selectUserHasPreviousPage = (state: { user: iUserState }) => state.user.hasPreviousPage;
 
 export const { removeAllUsers } = userSlice.actions;
 export const userReducer = userSlice.reducer;

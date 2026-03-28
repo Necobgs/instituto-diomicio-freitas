@@ -1,6 +1,6 @@
 import { api } from "@/config/api";
 import { buildFilterQuery } from "@/functions/filter";
-import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iRegisterForm } from "@/types/user";
+import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials } from "@/types/user";
 
 const endpoint = 'user';
 
@@ -10,20 +10,23 @@ const getUsers = async ({ page = 1, limit = 8, username, cpf, email, enabled }: 
     { key: 'username', value: username, operator: '$ilike' }, 
     { key: 'cpf', value: cpf, operator: '$startsWith' },
     { key: 'email', value: email, operator: '$startsWith' },
-    { key: 'deleted_at', value: enabled, operator: '$null' }
   ]);
   
   const response = await api.get(endpoint,{
     params: {
       filter: filter,
       page,
-      limit
+      limit,
+      withDeleted: enabled === "all" ? true : false,
+      onlyDeleted: enabled === "false" ? true : false,
     }
   });
 
   return {
     data: response.data.items as iUser[],
-    count: response.data.count
+    count: response.data.count,
+    hasNextPage: response.data.hasNextPage,
+    hasPreviousPage: response.data.hasPreviousPage
   };
 };
 
@@ -37,13 +40,13 @@ const addUser = async (newUser: iUserForm): Promise<iUser> => {
     return response.data as iUser;
 }
 
-const editUser = async (dataUser: iUser): Promise<iUser> => {
-    const { password, ...userWithoutPassword } = dataUser;
+const editUser = async (dataUser: iUserForm): Promise<iUser> => {
+    const { ...userWithoutPassword } = dataUser;
     const response = await api.patch(`${endpoint}/${dataUser.id}`, userWithoutPassword);
     return response.data as iUser;
 }
 
-const removeUser = async (user: iUser): Promise<iUser> => {
+const removeUser = async (user: iUserForm): Promise<iUser> => {
     const response = await api.delete(`${endpoint}/${user.id}`);
     return response.data as iUser;
 }
@@ -87,18 +90,8 @@ const login = async (credentials: iLoginCredentials): Promise<{ token: string, u
     return { token: accessToken, user: user };
 };
 
-const register = async (newUser: iUserForm): Promise<iUser> => {
-    const response = await api.post('/register', newUser);
-    return response.data;
-};
-
 const logout = () => {
     localStorage.removeItem('token');
-};
-
-const getMe = async (): Promise<iUser> => {
-    const response = await api.get('/me');
-    return response.data;
 };
 
 export default {
@@ -107,11 +100,9 @@ export default {
     editUser,
     removeUser,
     getUserById,
-    register,
     validateToken,
     login,
     logout,
-    getMe
 };
 
 

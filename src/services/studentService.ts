@@ -1,28 +1,32 @@
 import { api } from "@/config/api";
+import { buildFilterQuery } from "@/functions/filter";
 import { iStudent, iStudentForm, iPaginationStudent, iParamsStudent } from "@/types/student";
 
 const endpoint = 'student';
 
 const getStudents = async ({ page = 1, limit = 8, name, cpf, phone , enabled }: iParamsStudent = {}): Promise<iPaginationStudent> => {
-  let query = `_page=${page}&_limit=${limit}`;
+  
+  const filter: string = buildFilterQuery([
+    { key: 'name', value: name, operator: '$ilike' }, 
+    { key: 'cpf', value: cpf, operator: '$startsWith' },
+    { key: 'phone', value: phone, operator: '$startsWith' },
+  ]);
 
-  if (name) query += `&name_like=${encodeURIComponent(name)}`;
-
-  if (cpf) query += `&cpf_like=${encodeURIComponent(`^${cpf}`)}`;
-
-  if (phone) query += `&phone_like=${encodeURIComponent(`^${phone}`)}`;
-
-  if (enabled) query += `&enabled=${encodeURIComponent(enabled)}`;
-
-  const response = await api.get(`${endpoint}?${query}`);
-
-  const total = response.headers["x-total-count"]
-    ? parseInt(response.headers["x-total-count"])
-    : 0;
+  const response = await api.get(endpoint,{
+    params: {
+      filter: filter,
+      page,
+      limit,
+      withDeleted: enabled === "all" ? true : false,
+      onlyDeleted: enabled === "false" ? true : false,
+    }
+  });
 
   return {
-    data: response.data as iStudent[],
-    total
+    data: response.data.items as iStudent[],
+    count: response.data.count,
+    hasNextPage: response.data.hasNextPage,
+    hasPreviousPage: response.data.hasPreviousPage
   };
 };
 
@@ -37,7 +41,7 @@ const addStudent = async (newStudent: iStudentForm): Promise<iStudent> => {
 }
 
 const editStudent = async (dataStudent: iStudent): Promise<iStudent> => {
-    const response = await api.put(`${endpoint}/${dataStudent.id}`, dataStudent);
+    const response = await api.patch(`${endpoint}/${dataStudent.id}`, dataStudent);
     return response.data as iStudent;
 }
 

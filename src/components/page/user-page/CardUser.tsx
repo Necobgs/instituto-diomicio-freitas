@@ -19,9 +19,9 @@ interface iProps{
 export default function CardUser({user, onClick} : iProps) {
   return (
     <Card className="w-full hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={onClick}>
-      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${user.enabled ? 'bg-green-700' : 'bg-red-500'}`}></div>
+      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!user.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
       <CardHeader>
-        <CardTitle>{user.name}</CardTitle>
+        <CardTitle>{user.username}</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>

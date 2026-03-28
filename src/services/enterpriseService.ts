@@ -1,29 +1,32 @@
 import { api } from "@/config/api";
+import { buildFilterQuery } from "@/functions/filter";
 import { iEnterprise, iEnterpriseForm, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
 
 const endpoint = 'enterprise';
 
-const getEnterprises = async ({ page = 1, limit = 8, name, cnpj, enabled }: iParamsEnterprise = {}): Promise<iPaginationEnterprise> => {
-  let query = ``;
-
-  // Nome - includes
-  if (name) query += `&name_like=${encodeURIComponent(name)}`;
-
-  // CNPJ - startsWith (usa regex ^)
-  if (cnpj) query += `&cnpj_like=${encodeURIComponent(`^${cnpj}`)}`;
-
-  // Status
-  if (enabled) query += `&enabled=${encodeURIComponent(enabled)}`;
-
-  const response = await api.get(`${endpoint}?${query}`);
-
-  const total = response.headers["x-total-count"]
-    ? parseInt(response.headers["x-total-count"])
-    : 0;
+const getEnterprises = async ({ page = 1, limit = 8, name, cnpj, phone, enabled }: iParamsEnterprise = {}): Promise<iPaginationEnterprise> => {
+  
+  const filter: string = buildFilterQuery([
+    { key: 'name', value: name, operator: '$ilike' }, 
+    { key: 'cnpj', value: cnpj, operator: '$startsWith' },
+    { key: 'phone', value: phone, operator: '$startsWith' },
+  ]);
+  
+  const response = await api.get(endpoint,{
+    params: {
+      filter: filter,
+      page,
+      limit,
+      withDeleted: enabled === "all" ? true : false,
+      onlyDeleted: enabled === "false" ? true : false,
+    }
+  });
 
   return {
-    data: response.data as iEnterprise[],
-    total
+    data: response.data.items as iEnterprise[],
+    count: response.data.count,
+    hasNextPage: response.data.hasNextPage,
+    hasPreviousPage: response.data.hasPreviousPage
   };
 };
 
@@ -37,12 +40,12 @@ const addEnterprise = async (newEnterprise: iEnterpriseForm): Promise<iEnterpris
     return response.data as iEnterprise;
 }
 
-const editEnterprise = async (dataEnterprise: iEnterprise): Promise<iEnterprise> => {
-    const response = await api.put(`${endpoint}/${dataEnterprise.id}`, dataEnterprise);
+const editEnterprise = async (dataEnterprise: iEnterpriseForm): Promise<iEnterprise> => {
+    const response = await api.patch(`${endpoint}/${dataEnterprise.id}`, dataEnterprise);
     return response.data as iEnterprise;
 }
 
-const removeEnterprise = async (enterprise: iEnterprise): Promise<iEnterprise> => {
+const removeEnterprise = async (enterprise: iEnterpriseForm): Promise<iEnterprise> => {
     const response = await api.delete(`${endpoint}/${enterprise.id}`);
     return response.data as iEnterprise;
 }

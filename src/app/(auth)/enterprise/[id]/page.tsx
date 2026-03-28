@@ -4,10 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { iEnterprise } from "@/types/enterprise";
+import { iEnterpriseForm } from "@/types/enterprise";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
-import { editEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
+import { editEnterprise, removeEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
 import { useAppDispatch } from "@/store/hooks";
 import MaskedInput from "@/components/ui/masked-input";
 
@@ -18,16 +18,13 @@ export default function EnterpriseEditPage() {
     const { id } = params;
     const enterprises = useSelector(selectEnterprises);
     const enterprise = enterprises.find(enterprise => enterprise.id.toString() === id);
-    const defaultData: iEnterprise = {
+    const defaultData: iEnterpriseForm = {
         id: 0,
         name: "",
         phone: "",
         cnpj: "",
-        enabled: true,
-        created_at: new Date(),
-        updated_at: new Date(),
     };
-    const [formData, setFormData] = useState<iEnterprise>(enterprise ? enterprise : defaultData);
+    const [formData, setFormData] = useState<iEnterpriseForm>(enterprise ? enterprise : defaultData);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
@@ -50,7 +47,7 @@ export default function EnterpriseEditPage() {
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
         }
-        if (errors[name as keyof iEnterprise]) {
+        if (errors[name as keyof iEnterpriseForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
     };
@@ -59,7 +56,7 @@ export default function EnterpriseEditPage() {
 
         setFormData((prev) => ({ ...prev, [name]: value }));
 
-        if (errors[name as keyof iEnterprise]) {
+        if (errors[name as keyof iEnterpriseForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
     }
@@ -84,7 +81,7 @@ export default function EnterpriseEditPage() {
         }
 
         try {
-            await dispatch(editEnterprise({...formData, updated_at: new Date()})).unwrap();
+            await dispatch(editEnterprise({...formData })).unwrap();
             handleAlert(false,'Empresa alterada com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao alterar empresa');
@@ -95,7 +92,7 @@ export default function EnterpriseEditPage() {
         e.preventDefault();
 
         try {
-            await dispatch(editEnterprise({...enterprise, enabled: !enterprise?.enabled, updated_at: new Date()})).unwrap();
+            await dispatch(removeEnterprise({...enterprise})).unwrap();
             router.push('/enterprise');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao alterar empresa');
@@ -148,8 +145,12 @@ export default function EnterpriseEditPage() {
                         />
                     </div>
                     <div className="flex gap-3">
-                        <Button type="submit">Salvar</Button>
-                        <Button type="button" className={enterprise?.enabled ? "bg-red-500 hover:bg-red-400" : "bg-green-700 hover:bg-green-600"} onClick={handleDisableOrEnable}>{enterprise?.enabled ? "Desabilitar" : "Habilitar"}</Button>
+                        {!enterprise?.deleted_at &&
+                        <>
+                            <Button type="submit">Salvar</Button>
+                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDisableOrEnable}>Desabilitar</Button>
+                        </>
+        }
                         <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                             Cancelar
                         </Button>
