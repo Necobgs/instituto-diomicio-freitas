@@ -13,8 +13,10 @@ export interface iReferral extends iRoot{
   termination_date_ieedf: Date | null;
 }
 
+export type iReferralForm = Partial<iReferral>;
+
 export interface iPaginationReferral extends iPagination {
-  data: iReferral[];
+  data: iReferralForm[];
 }
 
 export interface iParamsReferral{
@@ -33,5 +35,3 @@ export interface iParamsReferral{
 export interface iReferralState extends iState {
     referrals: iReferral[];
 }
-
-export type iReferralForm = Partial<iReferral>;

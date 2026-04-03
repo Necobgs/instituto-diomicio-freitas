@@ -17,14 +17,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { iStudentForm } from "@/types/student";
+import { iUserForm } from "@/types/user";
 import { useSelector } from "react-redux";
-import { initStudents, selectStudents } from "@/store/features/studentSlice";
+import { initUsers, selectUsers } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 
-interface StudentComboboxProps {
-  student: iStudentForm | undefined;
-  setStudent: (student: iStudentForm | undefined) => void;
+interface UserComboboxProps {
+  user: iUserForm | undefined;
+  setUser: (user: iUserForm | undefined) => void;
   placeholder?: string;
   searchPlaceholder?: string;
   notFoundMessage?: string;
@@ -32,34 +32,34 @@ interface StudentComboboxProps {
   error?: string;
 }
 
-export function StudentCombobox({
-  student,
-  setStudent,
-  placeholder = "Selecione o estudante...",
-  searchPlaceholder = "Nome do estudante...",
-  notFoundMessage = "Nenhum estudante encontrado.",
+export function UserCombobox({
+  user,
+  setUser,
+  placeholder = "Selecione o usuário...",
+  searchPlaceholder = "Nome do usuário...",
+  notFoundMessage = "Nenhum usuário encontrado.",
   width = "200px",
   error = "",
-}: StudentComboboxProps) {
+}: UserComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const students = useSelector(selectStudents);
+  const users = useSelector(selectUsers);
   const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    dispatch(initStudents({ page:1, limit:200, name:search, enabled:'true' }));
+    dispatch(initUsers({ page:1, limit:200, username:search, enabled:'true' }));
   };
 
   const handleSelect = (currentValue: number) => {
-    const selectedId = currentValue === student?.id ? "" : currentValue;
+    const selectedId = currentValue === user?.id ? "" : currentValue;
   
-    const selectedStudent = students.find((student) => student.id.toString() == selectedId);
-    setStudent(selectedStudent);
+    const selectedUser = users.find((user) => user.id.toString() == selectedId);
+    setUser(selectedUser);
     setOpen(false);
-    dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+    dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
   };
 
   React.useEffect(() => {
-      dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+      dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
   }, [dispatch]);
 
   return (
@@ -70,9 +70,9 @@ export function StudentCombobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("justify-between", `w-[${width}]`,!student ? `text-black/50` : ``, error ? "border-red-600" : "")}
+            className={cn("justify-between", `w-[${width}]`,!user ? `text-black/50` : ``, error ? "border-red-600" : "")}
           >
-            {student?.name ?? placeholder}
+            {user?.username ?? placeholder}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -86,17 +86,17 @@ export function StudentCombobox({
             <CommandList>
               <CommandEmpty>{notFoundMessage}</CommandEmpty>
               <CommandGroup>
-                {students.map((s) => (
+                {users.map((s) => (
                   <CommandItem
                     key={s.id}
-                    value={s.name} // Use label para evitar conflitos com a filtragem
+                    value={s.username} // Use label para evitar conflitos com a filtragem
                     onSelect={() => handleSelect(s.id)}
                   >
-                    {s.name}
+                    {s.username}
                     <Check
                       className={cn(
                         "ml-auto h-4 w-4",
-                        student?.id == s.id ? "opacity-100" : "opacity-0"
+                        user?.id == s.id ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

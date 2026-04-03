@@ -4,15 +4,16 @@ import CardEvaluation from "@/components/page/evaluation-page/CardEvaluation";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combo-box";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
+import { UserCombobox } from "@/components/ui/combo-box-user";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
-import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { initEvaluations, selectEvaluationError, selectEvaluationLoading, selectEvaluations, selectEvaluationTotal } from "@/store/features/evaluationSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { iParamsEvaluation } from "@/types/evaluation";
-import { iStudent } from "@/types/student";
+import { iStudentForm } from "@/types/student";
+import { iUserForm } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -28,9 +29,10 @@ export default function EvaluationPage(){
 
     const defaultData: iParamsEvaluation = {
         student: undefined,
-        entry_date: "",
-        date: "",
-        teacher_name: "",
+        user: undefined,
+        dateIni: "",
+        dateEnd: "",
+        enabled: "true",
     };
     const [formData, setFormData] = useState(defaultData);
 
@@ -39,10 +41,6 @@ export default function EvaluationPage(){
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleMaskedInputChange = (name: string, value: string) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
@@ -75,39 +73,46 @@ export default function EvaluationPage(){
                         <div>
                             <StudentCombobox
                                 student={formData.student}
-                                setStudent={(student: iStudent | undefined) =>
-                                setFormData((prev) => ({ ...prev, student }))
-                            }
+                                setStudent={(student: iStudentForm | undefined) =>
+                                    setFormData((prev) => ({ ...prev, student }))
+                                }
+                            />
+                        </div>
+                        <div>
+                            <UserCombobox
+                                user={formData.user}
+                                setUser={(user: iUserForm | undefined) =>
+                                    setFormData((prev) => ({ ...prev, user }))
+                                }
                             />
                         </div>
                         <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
                             <Input 
-                                id="teacher_name"
-                                name="teacher_name"
-                                value={formData?.teacher_name || ''}
+                                id="dateIni"
+                                name="dateIni"
+                                value={formData?.dateIni}
                                 onChange={handleInputChange}
-                                placeholder="Nome do professor" 
+                                placeholder="Data da avaliação início" 
+                                type="date" 
                             />
                         </div>
                         <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                        <Input 
-                            id="entry_date"
-                            name="entry_date"
-                            value={formData?.entry_date}
-                            onChange={handleInputChange}
-                            placeholder="Data da entrada" 
-                            type="date" 
-                        />
+                            <Input
+                                id="dateEnd"
+                                name="dateEnd"
+                                value={formData?.dateEnd}
+                                onChange={handleInputChange}
+                                placeholder="Data da avaliação fim"
+                                type="date" 
+                            />
                         </div>
-                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                        <Input
-                            id="date"
-                            name="date"
-                            value={formData?.date}
-                            onChange={handleInputChange}
-                            placeholder="Data da avaliação"
-                            type="date" 
-                        />
+                        <div>
+                            <Combobox
+                                items={[{ value: "all", label: "Ambos"}, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                                value={formData?.enabled}
+                                setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
+                                isSearchable={false}
+                            />
                         </div>
                         <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
                             <Button className="w-full" onClick={handleSearch}>Buscar</Button>

@@ -11,8 +11,10 @@ export interface iMonitoring extends iRoot{
   visit_date: Date | null;
 }
 
+export type iMonitoringForm = Partial<iMonitoring>;
+
 export interface iPaginationMonitoring extends iPagination {
-  data: iMonitoring[];
+  data: iMonitoringForm[];
 }
 
 export interface iParamsMonitoring{
@@ -28,5 +30,3 @@ export interface iParamsMonitoring{
 export interface iMonitoringState extends iState {
     monitorings: iMonitoring[];
 }
-
-export type iMonitoringForm = Partial<iMonitoring>;

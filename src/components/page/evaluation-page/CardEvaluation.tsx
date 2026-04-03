@@ -10,26 +10,26 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { formatDate } from "@/lib/format";
-import { iEvaluation } from "@/types/evaluation";
+import { iEvaluationForm } from "@/types/evaluation";
 import { useRouter } from "next/navigation"
 
-export default function CardEvaluation(evaluation:iEvaluation) {
+export default function CardEvaluation(evaluation:iEvaluationForm) {
 
   const router = useRouter();
 
   return (
-    <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer" onClick={() => {router.push(`evaluation/${evaluation.id}`)}}>
+    <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`evaluation/${evaluation.id}`)}}>
+      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!evaluation.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
       <CardHeader>
         <CardTitle>{evaluation?.student?.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          Data da entrada: {evaluation?.entry_date ? formatDate(evaluation?.entry_date) : ""} <br/>
           Data da avaliação: {evaluation?.date ? formatDate(evaluation?.date) : ""}
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Label>Nota da entrevista com os pais: {evaluation.interview_note}<br/>
+        <Label>Nota da entrevista com os pais: {evaluation.interviewNote}<br/>
                Nota da avaliação: {evaluation.note}
         </Label>
       </CardFooter>

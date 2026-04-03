@@ -1,51 +1,53 @@
 import { api } from "@/config/api";
-import { iEvaluation, iEvaluationForm, iPaginationEvaluation, iParamsEvaluation } from "@/types/evaluation";
+import { buildFilterQuery } from "@/functions/filter";
+import { iEvaluationForm, iPaginationEvaluation, iParamsEvaluation } from "@/types/evaluation";
+import { iMonitoringForm } from "@/types/monitoring";
 
 const endpoint = 'evaluation';
 
-const getEvaluations = async ({ page = 1, limit = 8, student, teacher_name, entry_date, date }: iParamsEvaluation = {}): Promise<iPaginationEvaluation> => {
-  let query = `_page=${page}&_limit=${limit}`;
+const getEvaluations = async ({ page = 1, limit = 8, user, student, dateIni, dateEnd, enabled }: iParamsEvaluation = {}): Promise<iPaginationEvaluation> => {
+  const filter: string = buildFilterQuery([
+    { key: 'user_id', value: user?.id, operator: '$eq' }, 
+    { key: 'student_id', value: student?.id, operator: '$eq' },
+    { key: 'date', value: [dateIni, dateEnd], operator: ['$gte', '$lte'] },
+  ]);
 
-  if (student) query += `&student.id=${student.id}`;
-
-  if (teacher_name) query += `&teacher_name_like=${encodeURIComponent(`^${teacher_name}`)}`;
-
-  if (entry_date) query += `&entry_date=${encodeURIComponent(`${entry_date}T00:00:00.000Z`)}`;
-
-  if (date) query += `&date=${encodeURIComponent(`${date}T00:00:00.000Z`)}`;
-
-  const response = await api.get(`${endpoint}?${query}`);
-
-  const total = response.headers["x-total-count"]
-    ? parseInt(response.headers["x-total-count"])
-    : 0;
+  const response = await api.get(endpoint,{
+    params: {
+      filter: filter,
+      page,
+      limit,
+      withDeleted: enabled === "all" ? true : false,
+      onlyDeleted: enabled === "false" ? true : false,
+    }
+  });
 
   return {
-    data: response.data as iEvaluation[],
-    total
+    data: response.data.items as iMonitoringForm[],
+    count: response.data.count,
+    hasNextPage: response.data.hasNextPage,
+    hasPreviousPage: response.data.hasPreviousPage
   };
 };
 
-const getEvaluationById = async (id: number): Promise<iEvaluation> => {
+const getEvaluationById = async (id: number): Promise<iEvaluationForm> => {
   const response = await api.get(`${endpoint}/${id}`);
-  return response.data as iEvaluation;
+  return response.data as iEvaluationForm;
 };
 
-const addEvaluation = async (newEvaluation: iEvaluationForm): Promise<iEvaluation> => {
+const addEvaluation = async (newEvaluation: iEvaluationForm): Promise<iEvaluationForm> => {
     const response = await api.post(endpoint, newEvaluation);
-    return response.data as iEvaluation;
+    return response.data as iEvaluationForm;
 }
 
-const editEvaluation = async (dataEvaluation: iEvaluationForm): Promise<iEvaluation> => {
-    const response = await api.put(`${endpoint}/${dataEvaluation.id}`, dataEvaluation);
-    return response.data as iEvaluation;
+const editEvaluation = async (dataEvaluation: iEvaluationForm): Promise<iEvaluationForm> => {
+    const response = await api.patch(`${endpoint}/${dataEvaluation.id}`, dataEvaluation);
+    return response.data as iEvaluationForm;
 }
 
-const removeEvaluation = async (id: number): Promise<void> => {
+const removeEvaluation = async (id: number): Promise<iEvaluationForm> => {
     const response = await api.delete(`${endpoint}/${id}`);
-    if (response.status !== 200 && response.status !== 204) {
-        throw new Error(`Falha no DELETE: ${response.status}`);
-    }
+    return response.data as iEvaluationForm;
 };
 
 export default {

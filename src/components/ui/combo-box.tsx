@@ -27,7 +27,7 @@ interface ComboboxItem {
 // Define the props for the Combobox component
 interface ComboboxProps {
   items: ComboboxItem[]; // List of items to display
-  value: string; // Selected value
+  value: string | undefined; // Selected value
   setValue: (value: string) => void; // Function to update selected value
   placeholder?: string; // Optional placeholder for the button
   searchPlaceholder?: string; // Optional placeholder for the search input

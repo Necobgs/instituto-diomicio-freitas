@@ -20,6 +20,6 @@ export type iOperator =
 
 export interface iFilterParameters {
     key: string;
-    value: any;
-    operator?: iOperator;
+    value: any | any[];
+    operator?: iOperator | iOperator[];
 }

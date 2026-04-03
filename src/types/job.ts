@@ -6,8 +6,10 @@ export interface iJob extends iRoot{
     name: string;
 }
 
+export type iJobForm = Partial<iJob>;
+
 export interface iPaginationJob extends iPagination {
-  data: iJob[];
+  data: iJobForm[];
 }
 
 export interface iParamsJob {
@@ -20,5 +22,3 @@ export interface iParamsJob {
 export interface iJobState extends iState {
     jobs: iJob[];
 }
-
-export type iJobForm = Partial<iJob>;

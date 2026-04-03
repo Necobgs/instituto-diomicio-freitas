@@ -1,5 +1,6 @@
 import { iRoot } from "./iRoot";
 import { iPagination } from "./pagination";
+import { iState } from "./state";
 
 export interface iEnterprise extends iRoot{
     name:string;
@@ -7,8 +8,10 @@ export interface iEnterprise extends iRoot{
     phone:string;
 }
 
+export type iEnterpriseForm = Partial<iEnterprise>;
+
 export interface iPaginationEnterprise extends iPagination {
-  data: iEnterprise[];
+  data: iEnterpriseForm[];
 }
 
 export interface iParamsEnterprise {
@@ -20,4 +23,6 @@ export interface iParamsEnterprise {
     enabled?: string;
 }
 
-export type iEnterpriseForm = Partial<iEnterprise>;
+export interface iEnterpriseState extends iState {
+    enterprises: iEnterprise[];
+}

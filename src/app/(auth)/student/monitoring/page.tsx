@@ -14,7 +14,7 @@ import { selectEnterpriseError } from "@/store/features/enterpriseSlice";
 import { initMonitorings, removeMonitoring, selectMonitoringLoading, selectMonitorings, selectMonitoringTotal } from "@/store/features/monitoringSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { iEnterprise } from "@/types/enterprise";
-import { iParamsMonitoring, monitoringColumns } from "@/types/monitoring";
+import { iParamsMonitoring } from "@/types/monitoring";
 import { iStudent } from "@/types/student";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

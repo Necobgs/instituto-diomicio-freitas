@@ -9,8 +9,10 @@ export interface iStudent extends iRoot{
     cpf:string;
 }
 
+export type iStudentForm = Partial<iStudent>;
+
 export interface iPaginationStudent extends iPagination{
-  data: iStudent[];
+  data: iStudentForm[];
 }
 
 export interface iParamsStudent {
@@ -25,5 +27,3 @@ export interface iParamsStudent {
 export interface iStudentState extends iState {
     students: iStudent[];
 }
-
-export type iStudentForm = Partial<iStudent>;

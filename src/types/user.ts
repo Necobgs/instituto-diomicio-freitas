@@ -9,8 +9,10 @@ export interface iUser extends iRoot{
     mustChangePassword:boolean;
 }
 
+export type iUserForm = Partial<iUser>;
+
 export interface iPaginationUser extends iPagination {
-  data: iUser[];
+  data: iUserForm[];
 }
 
 export interface iParamsUser {
@@ -33,5 +35,3 @@ export interface iUserState extends iState {
     token: string | null;
     isAuthenticated: boolean;
 }
-
-export type iUserForm = Partial<iUser>;
