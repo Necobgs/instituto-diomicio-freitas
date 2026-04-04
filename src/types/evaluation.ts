@@ -1,5 +1,6 @@
 import { iRoot } from "./iRoot";
 import { iPagination } from "./pagination";
+import { iState } from "./state";
 import { iStudentForm } from "./student";
 import { iUserForm } from "./user";
 
@@ -86,13 +87,18 @@ export interface iQuestionEvaluation {
     type?: "discursive" | "alternative";
 }
 
-export interface iEvaluationState {
+export interface iEvaluationState extends iState {
     evaluations: iEvaluationForm[];
     evaluation: iEvaluationForm | null;
-    error: string | null;
-    loading: boolean;
-    total: number;
 }
+
+export const defaultFilterEvaluation: iParamsEvaluation = {
+    student: undefined,
+    user: undefined,
+    dateIni: "",
+    dateEnd: "",
+    enabled: "true",
+};
 
 export const defaultEvaluation: iEvaluationForm = {
     student: undefined,

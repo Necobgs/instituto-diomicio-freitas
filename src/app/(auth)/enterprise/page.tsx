@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { initEnterprises, selectEnterpriseError, selectEnterpriseLoading, selectEnterprises, selectEnterpriseCount, selectEnterpriseHasPreviousPage, selectEnterpriseHasNextPage } from "@/store/features/enterpriseSlice";
 import MaskedInput from "@/components/ui/masked-input";
+import { defaultFilterEnterprise } from "@/types/enterprise";
 
 export default function EnterprisePage() {
 
@@ -25,14 +26,7 @@ export default function EnterprisePage() {
     const hasNextPage = useSelector(selectEnterpriseHasNextPage);
     const hasPreviousPage = useSelector(selectEnterpriseHasPreviousPage);
 
-    const defaultData = {
-        name: "",
-        cnpj: "",
-        phone: "",
-        enabled: "true"
-    };
-    const [formData, setFormData] = useState(defaultData);
-
+    const [formData, setFormData] = useState(defaultFilterEnterprise);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
@@ -110,12 +104,9 @@ export default function EnterprisePage() {
                     <Separator className="mt-6" />
 
                     <section className="mt-4 flex-auto">
-                        {!enterprises?.[0] || error
-                            ? <div>
-                                {error ? error : `Quantidade de empresas encontradas: ${countItems}`}
-                            </div>
-                            : ""
-                        }
+                        <div>
+                            {error ? error : `Quantidade de empresas encontradas: ${countItems}`}
+                        </div>
 
                         <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
                             {

@@ -4,27 +4,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iEnterpriseForm } from "@/types/enterprise";
+import { defaultEnterprise, iEnterpriseForm } from "@/types/enterprise";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { addEnterprise } from "@/store/features/enterpriseSlice";
+import { addEnterprise, selectEnterpriseLoading } from "@/store/features/enterpriseSlice";
 import MaskedInput from "@/components/ui/masked-input";
+import { useSelector } from "react-redux";
+import Loading from "@/components/ui/loading";
 
 export default function EnterpriseCreatePage() {
 
     const router = useRouter();
 
-    const defaultData: iEnterpriseForm = {
-        name: "",
-        phone: "",
-        cnpj: "",
-    };
-    const [formData, setFormData] = useState<iEnterpriseForm>(defaultData);
+    const [formData, setFormData] = useState<iEnterpriseForm>(defaultEnterprise);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const loading = useSelector(selectEnterpriseLoading);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +68,7 @@ export default function EnterpriseCreatePage() {
             handleAlert(false,'Empresa cadastrada com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao cadastrar empresa');
+            console.log(error)
         }
     };
 
@@ -81,59 +80,64 @@ export default function EnterpriseCreatePage() {
     }
 
     return (
-        <div className="w-full h-full p-4">
-            <section className="min-h-16 flex flex-col gap-5">
-                <div className="text-left">
-                    <h1 className="text-2xl">Criar Empresa</h1>
+        <>
+            {loading
+                ? <Loading/>
+                :<div className="w-full h-full p-4">
+                    <section className="min-h-16 flex flex-col gap-5">
+                        <div className="text-left">
+                            <h1 className="text-2xl">Criar Empresa</h1>
+                        </div>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
+                            <div>
+                                <label htmlFor="name" className="text-sm font-medium">Nome</label>
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    value={formData?.name || ''}
+                                    onChange={handleInputChange}
+                                    placeholder="Nome da empresa"
+                                    error={errors.name}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
+                                <MaskedInput
+                                    value={formData?.phone || ''}
+                                    placeholder="Telefone da empresa"
+                                    mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
+                                    onChange={(val) => handleMaskedInputChange("phone",val)}
+                                    error={errors.phone}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
+                                <MaskedInput
+                                    value={formData?.cnpj || ''}
+                                    placeholder="CNPJ da empresa"
+                                    mask="00.000.000/0000-00"
+                                    onChange={(val) => handleMaskedInputChange("cnpj",val)}
+                                    error={errors.cnpj}
+                                />
+                            </div>
+                            <div className="flex gap-3">
+                                <Button type="submit">Salvar</Button>
+                                <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
+                                    Cancelar
+                                </Button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <InfoAlertDialog
+                        message={alertDesc} 
+                        title={alertTitle} 
+                        open={infoAlertOpen} 
+                        onOpenChange={setInfoAlertOpen}
+                        onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
+                    />
                 </div>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
-                    <div>
-                        <label htmlFor="name" className="text-sm font-medium">Nome</label>
-                        <Input
-                            id="name"
-                            name="name"
-                            value={formData?.name || ''}
-                            onChange={handleInputChange}
-                            placeholder="Nome da empresa"
-                            error={errors.name}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
-                        <MaskedInput
-                            value={formData?.phone || ''}
-                            placeholder="Telefone da empresa"
-                            mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
-                            onChange={(val) => handleMaskedInputChange("phone",val)}
-                            error={errors.phone}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
-                        <MaskedInput
-                            value={formData?.cnpj || ''}
-                            placeholder="CNPJ da empresa"
-                            mask="00.000.000/0000-00"
-                            onChange={(val) => handleMaskedInputChange("cnpj",val)}
-                            error={errors.cnpj}
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        <Button type="submit">Salvar</Button>
-                        <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
-                            Cancelar
-                        </Button>
-                    </div>
-                </form>
-            </section>
-            
-            <InfoAlertDialog
-                message={alertDesc} 
-                title={alertTitle} 
-                open={infoAlertOpen} 
-                onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
-            />
-        </div>
+            }
+        </>
     );
 }

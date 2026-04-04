@@ -1,6 +1,6 @@
 
 import enterpriseService from "@/services/enterpriseService";
-import { iEnterprise, iEnterpriseForm, iEnterpriseState, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
+import { iEnterpriseForm, iEnterpriseState, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const initEnterprises = createAsyncThunk('enterprise/fetch', async ({ page = 1, limit = 8, name, cnpj, phone, enabled }: iParamsEnterprise = {})  => {
@@ -19,13 +19,14 @@ export const editEnterprise = createAsyncThunk('enterprise/edit', async (payload
     return await enterpriseService.editEnterprise(payload);
 });
 
-export const removeEnterprise = createAsyncThunk('enterprise/remove', async (payload: iEnterpriseForm) => {
-    const response = await enterpriseService.removeEnterprise(payload);
+export const removeEnterprise = createAsyncThunk('enterprise/remove', async (id: number) => {
+    const response = await enterpriseService.removeEnterprise(id);
     return response;
 });
 
 const initialState: iEnterpriseState = {
     enterprises: [],
+    enterprise: null,
     error: null,
     loading: false,
     count: 0,
@@ -59,17 +60,44 @@ const enterpriseSlice = createSlice({
                 state.hasNextPage = false;
                 state.hasPreviousPage = false;
             })
-            .addCase(addEnterprise.fulfilled, (state, action: PayloadAction<iEnterprise>) => {
+            .addCase(getEnterpriseById.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(getEnterpriseById.fulfilled, (state, action: PayloadAction<iEnterpriseForm>) => {
+                state.enterprise = action.payload;
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(getEnterpriseById.rejected, (state) => {
+                state.error = "Erro ao buscar empresa";
+                state.loading = false;
+            })
+            .addCase(addEnterprise.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(addEnterprise.fulfilled, (state, action: PayloadAction<iEnterpriseForm>) => {
                 state.enterprises.push(action.payload);
                 state.error = null;
+                state.loading = false;
             })
             .addCase(addEnterprise.rejected, (state) => {
                 state.error = "Erro ao adicionar empresa";
+                state.loading = false;
+            })
+            .addCase(editEnterprise.fulfilled, (state, action: PayloadAction<iEnterpriseForm>) => {
+                state.enterprises = state.enterprises.map((t) => (t.id === action.payload.id ? action.payload : t));
+                state.error = null;
+            })
+            .addCase(editEnterprise.rejected, (state) => {
+                state.error = "Erro ao editar empresa";
             })
             .addCase(removeEnterprise.pending, (state) => {
+                state.error = null;
                 state.loading = true;
             })
-            .addCase(removeEnterprise.fulfilled, (state, action: PayloadAction<iEnterprise>) => {
+            .addCase(removeEnterprise.fulfilled, (state, action: PayloadAction<iEnterpriseForm>) => {
                 state.enterprises = state.enterprises.filter((t) => t.id !== action.payload.id);
                 state.error = null;
                 state.loading = false;
@@ -78,18 +106,12 @@ const enterpriseSlice = createSlice({
                 state.error = "Erro ao remover registro";
                 state.loading = false;
             })
-            .addCase(editEnterprise.fulfilled, (state, action: PayloadAction<iEnterprise>) => {
-                state.enterprises = state.enterprises.map((t) => (t.id === action.payload.id ? action.payload : t));
-                state.error = null;
-            })
-            .addCase(editEnterprise.rejected, (state) => {
-                state.error = "Erro ao editar empresa";
-            });
     },
 });
 
 
 export const selectEnterprises = (state: { enterprise: iEnterpriseState }) => state.enterprise.enterprises;
+export const selectEnterprise = (state: { enterprise: iEnterpriseState }) => state.enterprise.enterprise;
 export const selectEnterpriseError = (state: { enterprise: iEnterpriseState }) => state.enterprise.error;
 export const selectEnterpriseLoading = (state: { enterprise: iEnterpriseState }) => state.enterprise.loading;
 export const selectEnterpriseCount = (state: { enterprise: iEnterpriseState }) => state.enterprise.count;

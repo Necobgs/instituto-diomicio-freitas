@@ -3,50 +3,36 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
-import { iEnterpriseForm } from "@/types/enterprise";
+import { useEffect, useState } from "react";
+import { defaultEnterprise, iEnterpriseForm } from "@/types/enterprise";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
-import { useSelector } from "react-redux";
-import { editEnterprise, removeEnterprise, selectEnterprises } from "@/store/features/enterpriseSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { editEnterprise, getEnterpriseById, removeEnterprise, selectEnterprise, selectEnterpriseLoading } from "@/store/features/enterpriseSlice";
 import MaskedInput from "@/components/ui/masked-input";
+import { useSelector } from "react-redux";
+import Loading from "@/components/ui/loading";
 
-export default function EnterpriseEditPage() {
-    
-    const params = useParams();
+export default function EnterpriseCreatePage() {
+
     const router = useRouter();
-    const { id } = params;
-    const enterprises = useSelector(selectEnterprises);
-    const enterprise = enterprises.find(enterprise => enterprise.id.toString() === id);
-    const defaultData: iEnterpriseForm = {
-        id: 0,
-        name: "",
-        phone: "",
-        cnpj: "",
-    };
-    const [formData, setFormData] = useState<iEnterpriseForm>(enterprise ? enterprise : defaultData);
+    const params = useParams();
+
+    const id = parseInt(params.id?.toString() || "0");
+    const [formData, setFormData] = useState<iEnterpriseForm>(defaultEnterprise);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const enterprise = useSelector(selectEnterprise);
+    const loading = useSelector(selectEnterpriseLoading);
     const dispatch = useAppDispatch();
-
-    if (!enterprise) {
-        return (
-            <div className="w-full h-full p-4 flex justify-center items-center text-center">
-                <p>Empresa não encontrada :(</p>
-            </div>
-        );
-    }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "created_at" || name === "updated_at") {
-            setFormData((prev) => ({ ...prev, [name]: new Date(value) }));
-        } else {
-            setFormData((prev) => ({ ...prev, [name]: value }));
-        }
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        
         if (errors[name as keyof iEnterpriseForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
@@ -81,23 +67,31 @@ export default function EnterpriseEditPage() {
         }
 
         try {
-            await dispatch(editEnterprise({...formData })).unwrap();
+            await dispatch(editEnterprise(formData)).unwrap();
             handleAlert(false,'Empresa alterada com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao alterar empresa');
         }
     };
 
-    const handleDisableOrEnable = async(e: React.FormEvent) => {
+    const handleDisable = async(e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            await dispatch(removeEnterprise({...enterprise})).unwrap();
-            router.push('/enterprise');
+            await dispatch(removeEnterprise(id)).unwrap();
+            handleAlert(false,'Empresa desabilitada com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar empresa');
+            handleAlert(true,error?.message || 'Erro ao desabilitar empresa');
         }
     };
+
+    const getEnterprise = async (id: number) => {
+        try {
+            await dispatch(getEnterpriseById(id)).unwrap();
+        } catch (error: any) {
+            handleAlert(true,error?.message || 'Erro ao buscar empresa');
+        }
+    }
 
     const handleAlert = (error: boolean, message: string) => {
         setAlertTitle(error ? "Erro" : "Sucesso");
@@ -106,65 +100,82 @@ export default function EnterpriseEditPage() {
         setIsError(error);
     }
 
-    return (
-        <div className="w-full h-full p-4">
-            <section className="min-h-16 flex flex-col gap-5">
-                <div className="text-left">
-                    <h1 className="text-2xl">Editar Empresa</h1>
-                </div>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
-                    <div>
-                        <label htmlFor="name" className="text-sm font-medium">Nome</label>
-                        <Input
-                            id="name"
-                            name="name"
-                            value={formData?.name || ''}
-                            onChange={handleInputChange}
-                            placeholder="Nome da empresa"
-                            error={errors.name}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
-                        <MaskedInput
-                            value={formData?.phone || ''}
-                            placeholder="Telefone da empresa"
-                            mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
-                            onChange={(val) => handleMaskedInputChange("phone",val)}
-                            error={errors.phone}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
-                        <MaskedInput
-                            value={formData?.cnpj || ''}
-                            placeholder="CNPJ da empresa"
-                            mask="00.000.000/0000-00"
-                            onChange={(val) => handleMaskedInputChange("cnpj",val)}
-                            error={errors.cnpj}
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        {!enterprise?.deleted_at &&
-                        <>
-                            <Button type="submit">Salvar</Button>
-                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDisableOrEnable}>Desabilitar</Button>
-                        </>
+    useEffect(() => {
+        return () => {
+            getEnterprise(id);
         }
-                        <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
-                            Cancelar
-                        </Button>
-                    </div>
-                </form>
-            </section>
+    }, []);
 
-            <InfoAlertDialog
-                message={alertDesc} 
-                title={alertTitle} 
-                open={infoAlertOpen} 
-                onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
-            />
-        </div>
+    useEffect(() => {
+        if (enterprise) {
+            setFormData({...enterprise});
+        }
+    }, [enterprise]);
+
+    return (
+        <>
+            {loading
+                ? <Loading/>
+                :<div className="w-full h-full p-4">
+                    <section className="min-h-16 flex flex-col gap-5">
+                        <div className="text-left">
+                            <h1 className="text-2xl">Criar Empresa</h1>
+                        </div>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
+                            <div>
+                                <label htmlFor="name" className="text-sm font-medium">Nome</label>
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    value={formData?.name || ''}
+                                    onChange={handleInputChange}
+                                    placeholder="Nome da empresa"
+                                    error={errors.name}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
+                                <MaskedInput
+                                    value={formData?.phone || ''}
+                                    placeholder="Telefone da empresa"
+                                    mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
+                                    onChange={(val) => handleMaskedInputChange("phone",val)}
+                                    error={errors.phone}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
+                                <MaskedInput
+                                    value={formData?.cnpj || ''}
+                                    placeholder="CNPJ da empresa"
+                                    mask="00.000.000/0000-00"
+                                    onChange={(val) => handleMaskedInputChange("cnpj",val)}
+                                    error={errors.cnpj}
+                                />
+                            </div>
+                            <div className="flex gap-3">
+                                {!enterprise?.deleted_at &&
+                                    <>
+                                        <Button type="submit">Salvar</Button>
+                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDisable}>Desabilitar</Button>
+                                    </>
+                                }
+                                <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
+                                    Cancelar
+                                </Button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <InfoAlertDialog
+                        message={alertDesc} 
+                        title={alertTitle} 
+                        open={infoAlertOpen} 
+                        onOpenChange={setInfoAlertOpen}
+                        onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
+                    />
+                </div>
+            }
+        </>
     );
 }

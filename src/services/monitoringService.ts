@@ -4,13 +4,12 @@ import { iMonitoring, iMonitoringForm, iPaginationMonitoring, iParamsMonitoring 
 
 const endpoint = 'monitoring';
 
-const getMonitorings = async ({ page = 1, limit = 8, student, enterprise, visit_date_ini, visit_date_fim, enabled }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
+const getMonitorings = async ({ page = 1, limit = 8, student, enterprise, visitDateIni, visitDateEnd, enabled }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
   
   const filter: string = buildFilterQuery([
     { key: 'studentId', value: student?.id, operator: '$eq' }, 
     { key: 'enterpriseId', value: enterprise?.id, operator: '$eq' },
-    { key: 'visit_date_ini', value: (!visit_date_ini ? '' : `${visit_date_ini}T00:00:00.000Z`), operator: '$gte' },
-    { key: 'visit_date_fim', value: (!visit_date_fim ? '' : `${visit_date_fim}T00:00:00.000Z`), operator: '$lte' },
+    { key: 'visitDate', value: [visitDateIni, visitDateEnd], operator: ['$gte', '$lte'] },
   ]);
 
   const response = await api.get(endpoint,{

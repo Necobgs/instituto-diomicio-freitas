@@ -6,9 +6,8 @@ import { iState } from "./state";
 
 export interface iMonitoring extends iRoot{
   student: iStudentForm;
-  enterprise: iEnterpriseForm;
   observations: string;
-  visit_date: Date | null;
+  visitDate: Date | null;
 }
 
 export type iMonitoringForm = Partial<iMonitoring>;
@@ -21,10 +20,10 @@ export interface iParamsMonitoring{
   page?: number;
   limit?: number;
   enabled?: string;
-  studentId?: number;
-  enterpriseId?: number;
-  visit_date_ini?: string;
-  visit_date_end?: string;
+  student?: iStudentForm;
+  enterprise?: iEnterpriseForm;
+  visitDateIni?: string;
+  visitDateEnd?: string;
 }
 
 export interface iMonitoringState extends iState {

@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { formatCnpj, formatPhone } from "@/lib/format";
-import { iEnterprise } from "@/types/enterprise"
+import { iEnterpriseForm } from "@/types/enterprise"
 import { useRouter } from "next/navigation"
 
-export default function CardEnterprise(enterprise:iEnterprise) {
+export default function CardEnterprise(enterprise:iEnterpriseForm) {
 
   const router = useRouter();
 

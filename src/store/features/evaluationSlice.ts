@@ -30,7 +30,9 @@ const initialState: iEvaluationState = {
     evaluation: null,
     error: null,
     loading: false,
-    total: 0,
+    count: 0,
+    hasNextPage: false,
+    hasPreviousPage: false
 };
 
 const evaluationSlice = createSlice({
@@ -45,15 +47,17 @@ const evaluationSlice = createSlice({
             })
             .addCase(initEvaluations.fulfilled, (state, action: PayloadAction<iPaginationEvaluation>) => {
                 state.evaluations = action.payload.data;
-                state.total = action.payload.count;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.error = null;
+                state.hasNextPage = action.payload.hasNextPage;
+                state.hasPreviousPage = action.payload.hasPreviousPage;
             })
             .addCase(initEvaluations.rejected, (state) => {
                 state.error = "Erro ao carregar lista de avaliações";
                 state.loading = false;
                 state.evaluations = [];
-                state.total = 0;
+                state.count = 0;
             })
             .addCase(getEvaluationById.pending, (state) => {
                 state.loading = true;
@@ -68,7 +72,7 @@ const evaluationSlice = createSlice({
                 state.error = "Erro ao carregar avaliação";
                 state.loading = false;
                 state.evaluation = null;
-                state.total = 0;
+                state.count = 0;
             })
             .addCase(addEvaluation.pending, (state) => {
                 state.loading = true;
@@ -116,6 +120,8 @@ export const selectEvaluations = (state: { evaluation: iEvaluationState }) => st
 export const selectEvaluation = (state: { evaluation: iEvaluationState }) => state.evaluation.evaluation;
 export const selectEvaluationError = (state: { evaluation: iEvaluationState }) => state.evaluation.error;
 export const selectEvaluationLoading = (state: { evaluation: iEvaluationState }) => state.evaluation.loading;
-export const selectEvaluationTotal = (state: { evaluation: iEvaluationState }) => state.evaluation.total;
+export const selectEvaluationCount = (state: { evaluation: iEvaluationState }) => state.evaluation.count;
+export const selectEvaluationHasNextPage = (state: { evaluation: iEvaluationState }) => state.evaluation.hasNextPage;
+export const selectEvaluationHasPreviousPage = (state: { evaluation: iEvaluationState }) => state.evaluation.hasPreviousPage;
 
 export const evaluationReducer = evaluationSlice.reducer;

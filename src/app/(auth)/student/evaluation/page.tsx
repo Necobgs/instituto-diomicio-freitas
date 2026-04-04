@@ -9,9 +9,9 @@ import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
-import { initEvaluations, selectEvaluationError, selectEvaluationLoading, selectEvaluations, selectEvaluationTotal } from "@/store/features/evaluationSlice";
+import { initEvaluations, selectEvaluationCount, selectEvaluationError, selectEvaluationHasNextPage, selectEvaluationHasPreviousPage, selectEvaluationLoading, selectEvaluations } from "@/store/features/evaluationSlice";
 import { useAppDispatch } from "@/store/hooks";
-import { iParamsEvaluation } from "@/types/evaluation";
+import { defaultFilterEvaluation } from "@/types/evaluation";
 import { iStudentForm } from "@/types/student";
 import { iUserForm } from "@/types/user";
 import { useRouter } from "next/navigation";
@@ -23,19 +23,13 @@ export default function EvaluationPage(){
     const router = useRouter();
     const dispatch = useAppDispatch();
     const evaluations = useSelector(selectEvaluations);
-    const totalItems = useSelector(selectEvaluationTotal);
+    const countItems = useSelector(selectEvaluationCount);
     const loading = useSelector(selectEvaluationLoading);
     const error = useSelector(selectEvaluationError);
+    const hasNextPage = useSelector(selectEvaluationHasNextPage);
+    const hasPreviousPage = useSelector(selectEvaluationHasPreviousPage);
 
-    const defaultData: iParamsEvaluation = {
-        student: undefined,
-        user: undefined,
-        dateIni: "",
-        dateEnd: "",
-        enabled: "true",
-    };
-    const [formData, setFormData] = useState(defaultData);
-
+    const [formData, setFormData] = useState(defaultFilterEvaluation);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
@@ -56,9 +50,6 @@ export default function EvaluationPage(){
     useEffect(() => {
         dispatch(initEvaluations({...formData, page: currentPage, limit: itemsPerPage }));
     }, [dispatch, currentPage]);
-
-    const hasNextPage = currentPage * itemsPerPage < totalItems;
-    const hasPreviousPage = currentPage > 1;
     
     return (
         <>
@@ -125,7 +116,7 @@ export default function EvaluationPage(){
                 <section className="mt-4 flex-auto">
                     { evaluations != undefined || error
                     ?<div>
-                        {error ? error: `Quantidade de avaliações encontradas: ${totalItems}`}
+                        {error ? error: `Quantidade de avaliações encontradas: ${countItems}`}
                     </div>
                     : ""
                     }

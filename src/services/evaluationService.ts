@@ -31,23 +31,43 @@ const getEvaluations = async ({ page = 1, limit = 8, user, student, dateIni, dat
 };
 
 const getEvaluationById = async (id: number): Promise<iEvaluationForm> => {
-  const response = await api.get(`${endpoint}/${id}`);
-  return response.data as iEvaluationForm;
+  try {
+    const response = await api.get(`${endpoint}/${id}`);
+    return response.data as iEvaluationForm;
+  } catch (error: any) {
+    console.log("Error fetching evaluation:", error);
+    throw error?.response?.data?.message || 'Erro ao buscar avaliação';
+  }
 };
 
 const addEvaluation = async (newEvaluation: iEvaluationForm): Promise<iEvaluationForm> => {
+  try {
     const response = await api.post(endpoint, newEvaluation);
     return response.data as iEvaluationForm;
+  } catch (error: any) {
+    console.log("Error adding evaluation:", error);
+    throw error?.response?.data?.message || 'Erro ao adicionar avaliação';
+  }
 }
 
 const editEvaluation = async (dataEvaluation: iEvaluationForm): Promise<iEvaluationForm> => {
+  try {
     const response = await api.patch(`${endpoint}/${dataEvaluation.id}`, dataEvaluation);
     return response.data as iEvaluationForm;
+  } catch (error: any) {
+    console.log("Error editing evaluation:", error);
+    throw error?.response?.data?.message || 'Erro ao editar avaliação';
+  }
 }
 
 const removeEvaluation = async (id: number): Promise<iEvaluationForm> => {
+  try {
     const response = await api.delete(`${endpoint}/${id}`);
     return response.data as iEvaluationForm;
+  } catch (error: any) {
+    console.log("Error removing evaluation:", error);
+    throw error?.response?.data?.message || 'Erro ao remover avaliação';
+  }
 };
 
 export default {

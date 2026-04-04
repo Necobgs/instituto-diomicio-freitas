@@ -24,5 +24,19 @@ export interface iParamsEnterprise {
 }
 
 export interface iEnterpriseState extends iState {
-    enterprises: iEnterprise[];
+    enterprises: iEnterpriseForm[];
+    enterprise: iEnterpriseForm | null;
 }
+
+export const defaultFilterEnterprise: iParamsEnterprise = {
+    name: "",
+    phone: "",
+    cnpj: "",
+    enabled: "true"
+};
+
+export const defaultEnterprise: iEnterpriseForm = {
+    name: "",
+    phone: "",
+    cnpj: "",
+};

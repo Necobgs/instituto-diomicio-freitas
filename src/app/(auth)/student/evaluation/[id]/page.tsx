@@ -87,7 +87,7 @@ export default function EvaluationCreatePage() {
 
             await dispatch(editEvaluation({...dataToSubmit})).unwrap();
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao cadastrar avaliação');
+            handleAlert(true,error?.message || 'Erro ao alterar avaliação');
             errorResponse = true;
         }
 
@@ -103,7 +103,7 @@ export default function EvaluationCreatePage() {
             await dispatch(removeEvaluation(id)).unwrap();
             router.push('/student/evaluation');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar empresa');
+            handleAlert(true,error?.message || 'Erro ao desabilitar avaliação');
         }
     }
 
