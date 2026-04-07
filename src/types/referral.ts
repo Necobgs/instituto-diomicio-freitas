@@ -6,11 +6,14 @@ import { iState } from "./state";
 import { iJobForm } from "./job";
 
 export interface iReferral extends iRoot{
-  student: iStudentForm;
-  enterprise: iEnterpriseForm;
-  job: iJobForm;
-  admission_date: Date | null;
-  termination_date_ieedf: Date | null;
+  student?: iStudentForm;
+  enterprise?: iEnterpriseForm;
+  job?: iJobForm;
+  studentId?: number;
+  enterpriseId?: number;
+  jobId?: number;
+  admissionDate: Date | null;
+  terminationDateIeedf: Date | null;
 }
 
 export type iReferralForm = Partial<iReferral>;
@@ -23,15 +26,16 @@ export interface iParamsReferral{
   page?: number;
   limit?: number;
   enabled?: string;
-  studentId?: number;
-  enterpriseId?: number;
-  jobId?: number;
-  admission_date_ini?: string;
-  admission_date_end?: string;
-  termination_date_ieedf_ini?: string;
-  termination_date_ieedf_end?: string;
+  student?: iStudentForm | undefined;
+  enterprise?: iEnterpriseForm | undefined;
+  job?: iJobForm | undefined;
+  admissionDateIni?: string;
+  admissionDateEnd?: string;
+  terminationDateIeedfIni?: string;
+  terminationDateIeedfEnd?: string;
 }
 
 export interface iReferralState extends iState {
-    referrals: iReferral[];
+    referrals: iReferralForm[];
+    referral: iReferralForm | null;
 }

@@ -1,11 +1,11 @@
 
 
 import monitoringService from "@/services/monitoringService";
-import { iMonitoring, iMonitoringForm, iMonitoringState, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
+import { iMonitoringForm, iMonitoringState, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initMonitorings = createAsyncThunk('monitoring/fetch', async ({ page = 1, limit = 8, studentId, enterpriseId, visit_date_ini, visit_date_end, enabled }: iParamsMonitoring = {})  => {
-    return await monitoringService.getMonitorings({page, limit, studentId, enterpriseId, visit_date_ini, visit_date_end, enabled });
+export const initMonitorings = createAsyncThunk('monitoring/fetch', async ({ page = 1, limit = 8, student, visitDateIni, visitDateEnd, enabled }: iParamsMonitoring = {})  => {
+    return await monitoringService.getMonitorings({page, limit, student, visitDateIni, visitDateEnd, enabled });
 });
 
 export const getMonitoringById = createAsyncThunk("monitoring/getById", async (id: number) => {
@@ -21,12 +21,12 @@ export const editMonitoring = createAsyncThunk('monitoring/edit', async (payload
 });
 
 export const removeMonitoring = createAsyncThunk('monitoring/remove', async (payload: number) => {
-    await monitoringService.removeMonitoring(payload);
-    return payload;
+    return await monitoringService.removeMonitoring(payload);
 });
 
 const initialState: iMonitoringState = {
     monitorings: [],
+    monitoring: null,
     error: null,
     loading: false,
     count: 0,
@@ -60,17 +60,50 @@ const monitoringSlice = createSlice({
                 state.hasNextPage = false;
                 state.hasPreviousPage = false;
             })
-            .addCase(addMonitoring.fulfilled, (state, action: PayloadAction<iMonitoring>) => {
+            .addCase(getMonitoringById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getMonitoringById.fulfilled, (state, action: PayloadAction<iMonitoringForm>) => {
+                state.monitoring = action.payload;
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(getMonitoringById.rejected, (state) => {
+                state.error = "Erro ao buscar acompanhamento";
+                state.loading = false;
+            })
+            .addCase(addMonitoring.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addMonitoring.fulfilled, (state, action: PayloadAction<iMonitoringForm>) => {
                 state.monitorings.push(action.payload);
                 state.error = null;
+                state.loading = false;
             })
             .addCase(addMonitoring.rejected, (state) => {
                 state.error = "Erro ao adicionar acompanhamento";
+                state.loading = false;
+            })
+            .addCase(editMonitoring.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(editMonitoring.fulfilled, (state, action: PayloadAction<iMonitoringForm>) => {
+                state.monitorings = state.monitorings.map((t) => (t.id === action.payload.id ? action.payload : t));
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(editMonitoring.rejected, (state) => {
+                state.error = "Erro ao editar acompanhamento";
+                state.loading = false;
             })
             .addCase(removeMonitoring.pending, (state) => {
+                state.error = null;
                 state.loading = true;
             })
-            .addCase(removeMonitoring.fulfilled, (state, action: PayloadAction<number>) => {
+            .addCase(removeMonitoring.fulfilled, (state, action: PayloadAction<iMonitoringForm>) => {
                 state.monitorings = state.monitorings.filter((t) => t.id !== action.payload);
                 state.count = state.count - 1;
                 state.error = null;
@@ -79,22 +112,16 @@ const monitoringSlice = createSlice({
             .addCase(removeMonitoring.rejected, (state) => {
                 state.error = "Erro ao remover registro";
                 state.loading = false;
-            })
-            .addCase(editMonitoring.fulfilled, (state, action: PayloadAction<iMonitoring>) => {
-                state.monitorings = state.monitorings.map((t) => (t.id === action.payload.id ? action.payload : t));
-                state.error = null;
-            })
-            .addCase(editMonitoring.rejected, (state) => {
-                state.error = "Erro ao editar acompanhamento";
             });
     },
 });
 
 
 export const selectMonitorings = (state: { monitoring: iMonitoringState }) => state.monitoring.monitorings;
+export const selectMonitoring = (state: { monitoring: iMonitoringState }) => state.monitoring.monitoring;
 export const selectMonitoringError = (state: { monitoring: iMonitoringState }) => state.monitoring.error;
 export const selectMonitoringLoading = (state: { monitoring: iMonitoringState }) => state.monitoring.loading;
-export const selectMonitoringTotal = (state: { monitoring: iMonitoringState }) => state.monitoring.count;
+export const selectMonitoringCount = (state: { monitoring: iMonitoringState }) => state.monitoring.count;
 export const selectMonitoringHasNextPage = (state: { monitoring: iMonitoringState }) => state.monitoring.hasNextPage;
 export const selectMonitoringHasPreviousPage = (state: { monitoring: iMonitoringState }) => state.monitoring.hasPreviousPage;
 

@@ -25,13 +25,13 @@ export default function CardEvaluation(evaluation:iEvaluationForm) {
       </CardHeader>
       <CardContent>
         <CardDescription>
-          Data da avaliação: {evaluation?.date ? formatDate(evaluation?.date) : ""}
+          <div className="text-black/80"><span className="font-semibold">Professor:</span> {evaluation?.user?.username}</div>
+          <div className="text-black/80"><span className="font-semibold">Data da avaliação:</span> {evaluation?.date ? formatDate(evaluation?.date) : ""}</div>
+          <div className="text-black/80"><span className="font-semibold">Nota da entrevista com os pais:</span> {evaluation.interviewNote}</div>
+          <div className="text-black/80"><span className="font-semibold">Nota da avaliação:</span> {evaluation.note}</div>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Label>Nota da entrevista com os pais: {evaluation.interviewNote}<br/>
-               Nota da avaliação: {evaluation.note}
-        </Label>
       </CardFooter>
     </Card>
   )

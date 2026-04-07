@@ -7,7 +7,7 @@ import { iState } from "./state";
 export interface iMonitoring extends iRoot{
   student: iStudentForm;
   observations: string;
-  visitDate: Date | null;
+  visitDate: Date | null | string;
 }
 
 export type iMonitoringForm = Partial<iMonitoring>;
@@ -21,11 +21,24 @@ export interface iParamsMonitoring{
   limit?: number;
   enabled?: string;
   student?: iStudentForm;
-  enterprise?: iEnterpriseForm;
   visitDateIni?: string;
   visitDateEnd?: string;
 }
 
 export interface iMonitoringState extends iState {
-    monitorings: iMonitoring[];
+  monitorings: iMonitoringForm[];
+  monitoring: iMonitoringForm | null;
 }
+
+export const defaulFilterMonitoring: iParamsMonitoring = {
+  student: undefined,
+  visitDateIni: "",
+  visitDateEnd: "",
+  enabled: "true",
+};
+
+export const defaultMonitoring: iMonitoringForm = {
+  student: undefined,
+  visitDate: "",
+  observations: "",
+};

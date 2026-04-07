@@ -25,11 +25,11 @@ export default function CardEnterprise(enterprise:iEnterpriseForm) {
       </CardHeader>
       <CardContent>
         <CardDescription>
-          {formatPhone(enterprise.phone)}
+          <div className="text-black/80"><span className="font-semibold">Telefone:</span> {formatPhone(enterprise.phone)}</div>
+          <div className="text-black/80"><span className="font-semibold">CNPJ:</span> {formatCnpj(enterprise.cnpj)}</div>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Label>{formatCnpj(enterprise.cnpj)}</Label>
       </CardFooter>
     </Card>
   )

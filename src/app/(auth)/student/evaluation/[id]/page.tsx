@@ -1,6 +1,6 @@
 "use client";
 
-import { InfoAlertDialog } from "@/components/ui/alert-dialog";
+import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,7 @@ export default function EvaluationCreatePage() {
     const [formData, setFormData] = useState<iEvaluationForm>({...defaultEvaluation});
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
+    const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -227,7 +228,9 @@ export default function EvaluationCreatePage() {
                                 {!evaluation?.deleted_at &&
                                     <>
                                         <Button type="submit">Salvar</Button>
-                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={handleDisable}>Desabilitar</Button>
+                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                            Desabilitar
+                                        </Button>
                                     </>
                                 }
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student/evaluation')}>
@@ -236,6 +239,15 @@ export default function EvaluationCreatePage() {
                             </div>
                         </form>
                     </section>
+
+                    <DefaultAlertDialog
+                        message="Tem certeza que deseja desabilitar este registro?" 
+                        title="Confirmação" 
+                        open={alertOpen} 
+                        textBtn="Confirmar" 
+                        onClickBtn={handleDisable} 
+                        onOpenChange={setAlertOpen}
+                    />
                     
                     <InfoAlertDialog
                         message={alertDesc} 

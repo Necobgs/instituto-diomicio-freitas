@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Factory, Home, LogOut, User, Users } from "lucide-react";
+import { ChevronDown, Factory, Home, LogOut, User, Users } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -20,9 +20,6 @@ import Link from "next/link"; // Importe o Link para navegação
 import { useAppDispatch } from "@/store/hooks";
 import { logoutUser } from "@/store/features/userSlice";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { selectHasUnreadNotifications, verifyHasUnreadNotifications } from "@/store/features/notificationSlice";
-import { useEffect } from "react";
 
 // Dados dos itens do menu principal
 const items = [
@@ -30,11 +27,6 @@ const items = [
     title: "Página principal",
     url: "/",
     icon: Home,
-  },
-  {
-    title: "Notificações",
-    url: "/notification",
-    icon: Bell,
   },
   {
     title:'Usuários',
@@ -68,16 +60,11 @@ export default function AppSidebar() {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const hasUnreadNotifications = useSelector(selectHasUnreadNotifications)
 
   const handleLogout = () => {
     dispatch(logoutUser());
     router.push("/login");
   } 
-
-  useEffect(() => {
-    dispatch(verifyHasUnreadNotifications())
-  }, [dispatch])
 
   return (
     <Sidebar>
@@ -92,7 +79,6 @@ export default function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
                       <div className="relative">
-                        {item.url.includes("notification") && hasUnreadNotifications ? <div className="bg-red-500 w-2 h-2 absolute rounded-full -top-0.5 left-0.5"></div> : ""}
                         <item.icon className="h-5 w-5"/>
                       </div>
                       <span>{item.title}</span>

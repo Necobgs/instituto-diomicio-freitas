@@ -1,11 +1,11 @@
 
 
 import referralService from "@/services/referralService";
-import { iReferral, iReferralForm, iReferralState, iPaginationReferral, iParamsReferral } from "@/types/referral";
+import { iReferralForm, iReferralState, iPaginationReferral, iParamsReferral } from "@/types/referral";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initReferrals = createAsyncThunk('referral/fetch', async ({ page = 1, limit = 8, studentId, enterpriseId, jobId, admission_date_ini, admission_date_end, termination_date_ieedf_ini, termination_date_ieedf_end, enabled }: iParamsReferral = {})  => {
-    return await referralService.getReferrals({ page, limit,  studentId, enterpriseId, jobId, admission_date_ini, admission_date_end, termination_date_ieedf_ini, termination_date_ieedf_end, enabled});
+export const initReferrals = createAsyncThunk('referral/fetch', async ({ page = 1, limit = 8, student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled }: iParamsReferral = {})  => {
+    return await referralService.getReferrals({ page, limit,  student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled});
 });
 
 export const getReferralById = createAsyncThunk("referral/getById", async (id: number) => {
@@ -27,6 +27,7 @@ export const removeReferral = createAsyncThunk('referral/remove', async (payload
 
 const initialState: iReferralState = {
     referrals: [],
+    referral: null,
     error: null,
     loading: false,
     count: 0,
@@ -60,15 +61,48 @@ const referralSlice = createSlice({
                 state.hasNextPage = false;
                 state.hasPreviousPage = false;
             })
-            .addCase(addReferral.fulfilled, (state, action: PayloadAction<iReferral>) => {
+            .addCase(getReferralById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getReferralById.fulfilled, (state, action: PayloadAction<iReferralForm>) => {
+                state.referral = action.payload;
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(getReferralById.rejected, (state) => {
+                state.error = "Erro ao buscar encaminhamento";
+                state.loading = false;
+            })
+            .addCase(addReferral.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addReferral.fulfilled, (state, action: PayloadAction<iReferralForm>) => {
                 state.referrals.push(action.payload);
                 state.error = null;
+                state.loading = false;
             })
             .addCase(addReferral.rejected, (state) => {
                 state.error = "Erro ao adicionar encaminhamento";
+                state.loading = false;
+            })
+            .addCase(editReferral.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(editReferral.fulfilled, (state, action: PayloadAction<iReferralForm>) => {
+                state.referrals = state.referrals.map((t) => (t.id === action.payload.id ? action.payload : t));
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(editReferral.rejected, (state) => {
+                state.error = "Erro ao editar encaminhamento";
+                state.loading = false;
             })
             .addCase(removeReferral.pending, (state) => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(removeReferral.fulfilled, (state, action: PayloadAction<number>) => {
                 state.referrals = state.referrals.filter((t) => t.id !== action.payload);
@@ -79,19 +113,13 @@ const referralSlice = createSlice({
             .addCase(removeReferral.rejected, (state) => {
                 state.error = "Erro ao remover registro";
                 state.loading = false;
-            })
-            .addCase(editReferral.fulfilled, (state, action: PayloadAction<iReferral>) => {
-                state.referrals = state.referrals.map((t) => (t.id === action.payload.id ? action.payload : t));
-                state.error = null;
-            })
-            .addCase(editReferral.rejected, (state) => {
-                state.error = "Erro ao editar encaminhamento";
             });
     },
 });
 
 
 export const selectReferrals = (state: { referral: iReferralState }) => state.referral.referrals;
+export const selectReferral = (state: { referral: iReferralState }) => state.referral.referral;
 export const selectReferralError = (state: { referral: iReferralState }) => state.referral.error;
 export const selectReferralLoading = (state: { referral: iReferralState }) => state.referral.loading;
 export const selectReferralTotal = (state: { referral: iReferralState }) => state.referral.count;

@@ -46,12 +46,11 @@ export function Combobox({
   notFoundMessage = "No item found.",
   width = "200px",
   error = "",
-  isSearchable = true,
 }: ComboboxProps) {
 
   const [open, setOpen] = React.useState(false);
   const [filteredItems, setFilteredItems] = React.useState(items);
-  
+
   const handleSearch = (search: string) => {
     setFilteredItems(() => {
       let newItems: ComboboxItem[] = items;

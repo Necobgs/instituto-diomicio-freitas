@@ -73,7 +73,7 @@ export interface iParamsEvaluation{
     page?: number;
     limit?: number;
     student?: iStudentForm | undefined;
-    user?: iUserForm;
+    user?: iUserForm | undefined;
     dateIni?: string;
     dateEnd?: string;
     enabled?: string;
@@ -203,7 +203,7 @@ export const defaultQuestions: iQuestionEvaluation[] = [
     { key: "q44", value: "", title: "Família incentiva a autonomia do usuário.", type: "alternative", obrigatory: true },
     { key: "q45", value: "", title: "Família incentiva a inserção no mercado de trabalho.", type: "alternative", obrigatory: true },
     { key: "q46", value: "", title: "Traz os documentos enviados pela Instituição assinados.", type: "alternative", obrigatory: true },
-    { key: "q47", value: "", title: "Em sua opinião o usuário tem perfil para esta instituição? Por quê?", type: "discursive", obrigatory: false },
-    { key: "q48", value: "", title: "Em que situações demonstra irritações?", type: "discursive", obrigatory: false },
-    { key: "q49", value: "", title: "Caso o aluno faça uso de medicação", type: "discursive", obrigatory: false },
+    { key: "q47", value: "", title: "Em sua opinião o usuário tem perfil para esta instituição? Por quê?", type: "discursive", obrigatory: true },
+    { key: "q48", value: "", title: "Em que situações demonstra irritações?", type: "discursive", obrigatory: true },
+    { key: "q49", value: "", title: "Caso o aluno faça uso de medicação", type: "discursive", obrigatory: true },
 ];

@@ -10,6 +10,7 @@ import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { initStudents, selectStudentError, selectStudentLoading, selectStudents, selectStudentCount, selectStudentHasNextPage, selectStudentHasPreviousPage } from "@/store/features/studentSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { defaultFilterStudent } from "@/types/student";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -25,13 +26,7 @@ export default function StudentPage(){
     const hasNextPage = useSelector(selectStudentHasNextPage);
     const hasPreviousPage = useSelector(selectStudentHasPreviousPage);
 
-    const defaultData = {
-        name: "",
-        cpf: "",
-        phone: "",
-        enabled: ""
-    };
-    const [formData, setFormData] = useState(defaultData);
+    const [formData, setFormData] = useState(defaultFilterStudent);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
@@ -93,9 +88,56 @@ export default function StudentPage(){
                                 onChange={(val) => handleMaskedInputChange("phone",val)}
                             />
                         </div>
+                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                            <Input                          
+                                id="responsibleName"
+                                name="responsibleName"
+                                value={formData?.responsibleName || ''}
+                                onChange={handleInputChange}
+                                placeholder="Nome do responsável"
+                            />
+                        </div>
+                         <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                            <MaskedInput 
+                                value={formData?.responsiblePhone || ''}
+                                placeholder="Telefone do responsável"
+                                mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
+                                onChange={(val) => handleMaskedInputChange("responsiblePhone",val)}
+                            />
+                        </div>
+                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                            <Input 
+                                id="dateEntryIni"
+                                name="dateEntryIni"
+                                value={formData?.dateEntryIni}
+                                onChange={handleInputChange}
+                                placeholder="Data de entrada início" 
+                                type="date" 
+                            />
+                        </div>
+                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                            <Input
+                                id="dateEntryEnd"
+                                name="dateEntryEnd"
+                                value={formData?.dateEntryEnd}
+                                onChange={handleInputChange}
+                                placeholder="Data de entrada fim"
+                                type="date" 
+                            />
+                        </div>
                         <div>
                             <Combobox
-                                items={[{ value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                                items={[{ value: "true", label: "Sim" }, { value: "false", label: "Não" }]}
+                                value={formData?.useMedicine}
+                                setValue={(value) => setFormData(prev => ({ ...prev, useMedicine: value }))}
+                                placeholder="Usa medicamentos?"
+                                searchPlaceholder="Buscar opção..."
+                                notFoundMessage="Nenhuma situação encontrada"
+                            />
+                        </div>
+                        <div>
+                            <Combobox
+                                items={[{value: "all", label: "Todos" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
                                 value={formData?.enabled}
                                 setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
                                 placeholder="Selecione a situação..."
@@ -112,12 +154,9 @@ export default function StudentPage(){
                 <Separator className="mt-6"/>
                 
                 <section className="mt-4 flex-auto">
-                    { !students?.[0] || error
-                    ?<div>
+                    <div>
                         {error ? error: `Quantidade de estudantes encontrados: ${countItems}`}
                     </div>
-                    : ""
-                    }
                     
                     <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
                         {

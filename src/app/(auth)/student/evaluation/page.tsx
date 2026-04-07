@@ -102,7 +102,9 @@ export default function EvaluationPage(){
                                 items={[{ value: "all", label: "Ambos"}, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
                                 value={formData?.enabled}
                                 setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
-                                isSearchable={false}
+                                placeholder="Selecione a situação..."
+                                searchPlaceholder="Buscar situação..."
+                                notFoundMessage="Nenhuma situação encontrada"
                             />
                         </div>
                         <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
@@ -114,15 +116,12 @@ export default function EvaluationPage(){
                 <Separator className="mt-6"/>
                 
                 <section className="mt-4 flex-auto">
-                    { evaluations != undefined || error
-                    ?<div>
+                    <div>
                         {error ? error: `Quantidade de avaliações encontradas: ${countItems}`}
                     </div>
-                    : ""
-                    }
                     
                     <div className="mt-5 grid gap-5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))] mb-5">
-                        {evaluations.map(evaluation=>
+                        {evaluations?.[0] && evaluations.map(evaluation=>
                             <CardEvaluation {...evaluation} key={evaluation.id}/>
                         )}
                     </div>

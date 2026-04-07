@@ -1,6 +1,6 @@
 
 import jobService from "@/services/jobService";
-import { iJob, iJobForm, iJobState, iPaginationJob, iParamsJob } from "@/types/job";
+import { iJobForm, iJobState, iPaginationJob, iParamsJob } from "@/types/job";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const initJobs = createAsyncThunk('job/fetch', async ({ page = 1, limit = 8, name, enabled }: iParamsJob = {})  => {
@@ -26,6 +26,7 @@ export const removeJob = createAsyncThunk('job/remove', async (payload: iJobForm
 
 const initialState: iJobState = {
     jobs: [],
+    job: null,
     error: null,
     loading: false,
     count: 0,
@@ -59,17 +60,50 @@ const jobSlice = createSlice({
                 state.hasNextPage = false;
                 state.hasPreviousPage = false;
             })
-            .addCase(addJob.fulfilled, (state, action: PayloadAction<iJob>) => {
+            .addCase(getJobById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getJobById.fulfilled, (state, action: PayloadAction<iJobForm>) => {
+                state.job = action.payload;
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(getJobById.rejected, (state) => {
+                state.error = "Erro ao buscar cargo";
+                state.loading = false;
+            })
+            .addCase(addJob.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addJob.fulfilled, (state, action: PayloadAction<iJobForm>) => {
                 state.jobs.push(action.payload);
                 state.error = null;
+                state.loading = false;
             })
             .addCase(addJob.rejected, (state) => {
                 state.error = "Erro ao adicionar cargo";
+                state.loading = false;
+            })
+            .addCase(editJob.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(editJob.fulfilled, (state, action: PayloadAction<iJobForm>) => {
+                state.jobs = state.jobs.map((t) => (t.id === action.payload.id ? action.payload : t));
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(editJob.rejected, (state) => {
+                state.error = "Erro ao editar cargo";
+                state.loading = false;
             })
             .addCase(removeJob.pending, (state) => {
                 state.loading = true;
+                state.error = null;
             })
-            .addCase(removeJob.fulfilled, (state, action: PayloadAction<iJob>) => {
+            .addCase(removeJob.fulfilled, (state, action: PayloadAction<iJobForm>) => {
                 state.jobs = state.jobs.filter((t) => t.id !== action.payload.id);
                 state.error = null;
                 state.loading = false;
@@ -77,19 +111,13 @@ const jobSlice = createSlice({
             .addCase(removeJob.rejected, (state) => {
                 state.error = "Erro ao remover registro";
                 state.loading = false;
-            })
-            .addCase(editJob.fulfilled, (state, action: PayloadAction<iJob>) => {
-                state.jobs = state.jobs.map((t) => (t.id === action.payload.id ? action.payload : t));
-                state.error = null;
-            })
-            .addCase(editJob.rejected, (state) => {
-                state.error = "Erro ao editar cargo";
             });
     },
 });
 
 
 export const selectJobs = (state: { job: iJobState }) => state.job.jobs;
+export const selectJob = (state: { job: iJobState }) => state.job.job;
 export const selectJobError = (state: { job: iJobState }) => state.job.error;
 export const selectJobLoading = (state: { job: iJobState }) => state.job.loading;
 export const selectJobCount = (state: { job: iJobState }) => state.job.count;

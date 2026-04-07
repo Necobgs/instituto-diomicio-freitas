@@ -20,8 +20,7 @@ export const editEnterprise = createAsyncThunk('enterprise/edit', async (payload
 });
 
 export const removeEnterprise = createAsyncThunk('enterprise/remove', async (id: number) => {
-    const response = await enterpriseService.removeEnterprise(id);
-    return response;
+    return await enterpriseService.removeEnterprise(id);
 });
 
 const initialState: iEnterpriseState = {
