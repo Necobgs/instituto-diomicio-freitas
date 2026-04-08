@@ -17,14 +17,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { iEnterpriseForm } from "@/types/enterprise";
-import { initEnterprises, selectEnterprises } from "@/store/features/enterpriseSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { iJobForm } from "@/types/job";
 import { useSelector } from "react-redux";
+import { initJobs, selectJobs } from "@/store/features/jobSlice";
+import { useAppDispatch } from "@/store/hooks";
 
-interface EnterpriseComboboxProps {
-  enterprise: iEnterpriseForm | undefined;
-  setEnterprise: (enterprise: iEnterpriseForm | undefined) => void;
+interface JobComboboxProps {
+  job: iJobForm | undefined;
+  setJob: (job: iJobForm | undefined) => void;
   placeholder?: string;
   searchPlaceholder?: string;
   notFoundMessage?: string;
@@ -32,34 +32,34 @@ interface EnterpriseComboboxProps {
   error?: string;
 }
 
-export function EnterpriseCombobox({
-  enterprise,
-  setEnterprise,
-  placeholder = "Selecione a empresa...",
-  searchPlaceholder = "Procurando empresas...",
-  notFoundMessage = "Nenhuma empresa encontrada.",
+export function JobCombobox({
+  job,
+  setJob,
+  placeholder = "Selecione o cargo...",
+  searchPlaceholder = "Nome do cargo...",
+  notFoundMessage = "Nenhum cargo encontrado.",
   width = "200px",
   error = "",
-}: EnterpriseComboboxProps) {
+}: JobComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const enterprises = useSelector(selectEnterprises);
+  const jobs = useSelector(selectJobs);
   const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    dispatch(initEnterprises({ page:1, limit:200, name: search, enabled:'true' }))
+    dispatch(initJobs({ page:1, limit:200, name:search, enabled:'true' }));
   };
 
-  const handleSelect = (currentId: number) => {
-    const selectedId = currentId == enterprise?.id ? "" : currentId;
-
-    const selectedEnterprise = enterprises.find((enterprise) => enterprise.id == selectedId);
-    setEnterprise(selectedEnterprise);
+  const handleSelect = (currentValue: number) => {
+    const selectedId = currentValue === job?.id ? "" : currentValue;
+  
+    const selectedJob = jobs.find((job) => job?.id?.toString() == selectedId);
+    setJob(selectedJob);
     setOpen(false);
-    dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+    dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
   };
 
   React.useEffect(() => {
-      dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+      dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
   }, [dispatch]);
 
   return (
@@ -70,14 +70,14 @@ export function EnterpriseCombobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("justify-between", `w-[${width}]`,!enterprise ? `text-black/50` : ``, error ? "border-red-600" : "")}
+            className={cn("justify-between", `w-[${width}]`,!job ? `text-black/50` : ``, error ? "border-red-600" : "")}
           >
-            {enterprise?.name ?? placeholder}
+            {job?.name ?? placeholder}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className={cn(`w-[${width}] p-0`)}>
-          <Command shouldFilter={false}> {/* Desativa a filtragem interna do Command */}
+          <Command shouldFilter={false}>
             <CommandInput
               placeholder={searchPlaceholder}
               className="h-9"
@@ -86,17 +86,17 @@ export function EnterpriseCombobox({
             <CommandList>
               <CommandEmpty>{notFoundMessage}</CommandEmpty>
               <CommandGroup>
-                {enterprises.map((e) => (
+                {jobs.map((s) => (
                   <CommandItem
-                    key={e.id}
-                    value={e.name} // Use label para evitar conflitos com a filtragem
-                    onSelect={() => handleSelect(e?.id ? e.id : 0)}
+                    key={s.id}
+                    value={s.name} // Use label para evitar conflitos com a filtragem
+                    onSelect={() => handleSelect(s?.id ? s.id : 0)}
                   >
-                    {e.name}
+                    {s.name}
                     <Check
                       className={cn(
                         "ml-auto h-4 w-4",
-                        enterprise?.id == e.id ? "opacity-100" : "opacity-0"
+                        job?.id == s.id ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

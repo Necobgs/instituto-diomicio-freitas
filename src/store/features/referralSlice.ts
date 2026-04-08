@@ -122,7 +122,7 @@ export const selectReferrals = (state: { referral: iReferralState }) => state.re
 export const selectReferral = (state: { referral: iReferralState }) => state.referral.referral;
 export const selectReferralError = (state: { referral: iReferralState }) => state.referral.error;
 export const selectReferralLoading = (state: { referral: iReferralState }) => state.referral.loading;
-export const selectReferralTotal = (state: { referral: iReferralState }) => state.referral.count;
+export const selectReferralCount = (state: { referral: iReferralState }) => state.referral.count;
 export const selectReferralHasNextPage = (state: { referral: iReferralState }) => state.referral.hasNextPage;
 export const selectReferralHasPreviousPage = (state: { referral: iReferralState }) => state.referral.hasPreviousPage;
 

@@ -52,7 +52,7 @@ export function StudentCombobox({
   const handleSelect = (currentValue: number) => {
     const selectedId = currentValue === student?.id ? "" : currentValue;
   
-    const selectedStudent = students.find((student) => student.id.toString() == selectedId);
+    const selectedStudent = students.find((student) => student?.id?.toString() == selectedId);
     setStudent(selectedStudent);
     setOpen(false);
     dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
@@ -90,7 +90,7 @@ export function StudentCombobox({
                   <CommandItem
                     key={s.id}
                     value={s.name} // Use label para evitar conflitos com a filtragem
-                    onSelect={() => handleSelect(s.id)}
+                    onSelect={() => handleSelect(s?.id ? s.id : 0)}
                   >
                     {s.name}
                     <Check

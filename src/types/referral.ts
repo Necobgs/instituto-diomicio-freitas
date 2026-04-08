@@ -12,8 +12,8 @@ export interface iReferral extends iRoot{
   studentId?: number;
   enterpriseId?: number;
   jobId?: number;
-  admissionDate: Date | null;
-  terminationDateIeedf: Date | null;
+  admissionDate: Date | null | string;
+  terminationDateIeedf: Date | null | string;
 }
 
 export type iReferralForm = Partial<iReferral>;
@@ -38,4 +38,22 @@ export interface iParamsReferral{
 export interface iReferralState extends iState {
     referrals: iReferralForm[];
     referral: iReferralForm | null;
+}
+
+export const defaultFilterReferral: iParamsReferral = {
+    student: undefined,
+    enterprise: undefined,
+    job: undefined,
+    admissionDateIni: "",
+    admissionDateEnd: "",
+    terminationDateIeedfIni: "",
+    terminationDateIeedfEnd: "",
+}
+
+export const defaultReferral: iReferralForm = {
+    student: undefined,
+    enterprise: undefined,
+    job: undefined,
+    admissionDate: "",
+    terminationDateIeedf: "",
 }

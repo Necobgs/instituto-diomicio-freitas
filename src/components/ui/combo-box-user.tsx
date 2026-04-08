@@ -90,7 +90,7 @@ export function UserCombobox({
                   <CommandItem
                     key={s.id}
                     value={s.username} // Use label para evitar conflitos com a filtragem
-                    onSelect={() => handleSelect(s.id)}
+                    onSelect={() => handleSelect(s?.id ? s.id : 0)}
                   >
                     {s.username}
                     <Check
