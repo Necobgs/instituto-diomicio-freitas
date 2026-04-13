@@ -145,9 +145,7 @@ export default function ReferralCreatePage() {
                             </div>
                             <div className="flex gap-3">
                                 <Button type="submit">Salvar</Button>
-                                <Button type="button" variant="secondary" onClick={() => router.push('/referral')}>
-                                    Cancelar
-                                </Button>
+                                <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
                             </div>
                         </form>
                     </section>
@@ -157,7 +155,7 @@ export default function ReferralCreatePage() {
                         title={alertTitle} 
                         open={infoAlertOpen} 
                         onOpenChange={setInfoAlertOpen}
-                        onClickBtn={() => {isError ? "" : router.push('/referral');}}
+                        onClickBtn={() => {isError ? "" : router.push('/student/referral');}}
                     />
                 </div>
             }

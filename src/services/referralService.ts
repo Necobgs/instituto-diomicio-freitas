@@ -54,7 +54,7 @@ const addReferral = async (newReferral: iReferralForm): Promise<iReferralForm> =
 
 const editReferral = async (dataReferral: iReferralForm): Promise<iReferralForm> => {
   try {
-    const response = await api.put(`${endpoint}/${dataReferral.id}`, dataReferral);
+    const response = await api.patch(`${endpoint}/${dataReferral.id}`, dataReferral);
     return response.data as iReferralForm;
   } catch (error: any) {
     console.log("Error editing referral:", error);

@@ -70,7 +70,7 @@ export default function MonitoringEditPage() {
           };
 
           await dispatch(editMonitoring({...dataToSubmit})).unwrap();
-          handleAlert(false,'Acompanhamento cadastrado com sucesso!');
+          handleAlert(false,'Acompanhamento alterado com sucesso!');
       } catch (error: any) {
           handleAlert(true,error?.message || 'Erro ao cadastrar acompanhamento');
       }

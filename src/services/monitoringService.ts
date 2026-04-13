@@ -51,7 +51,7 @@ const addMonitoring = async (newMonitoring: iMonitoringForm): Promise<iMonitorin
 
 const editMonitoring = async (dataMonitoring: iMonitoringForm): Promise<iMonitoringForm> => {
   try {
-    const response = await api.put(`${endpoint}/${dataMonitoring.id}`, dataMonitoring);
+    const response = await api.patch(`${endpoint}/${dataMonitoring.id}`, dataMonitoring);
     return response.data as iMonitoringForm;
   } catch (error: any) {
     console.log("Error editing monitoring:", error);

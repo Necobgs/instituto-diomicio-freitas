@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { defaultReferral, iReferralForm } from "@/types/referral";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { addReferral, getReferralById, removeReferral, selectReferral, selectReferralLoading } from "@/store/features/referralSlice";
+import { editReferral, getReferralById, removeReferral, selectReferral, selectReferralLoading } from "@/store/features/referralSlice";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
@@ -73,8 +73,8 @@ export default function ReferralCreatePage() {
                 jobId: job?.id,
             };
 
-            await dispatch(addReferral({...dataToSubmit})).unwrap();
-            handleAlert(false,'Encaminhamento cadastrado com sucesso!');
+            await dispatch(editReferral({...dataToSubmit})).unwrap();
+            handleAlert(false,'Encaminhamento alterado com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao cadastrar encaminhamento');
             console.log(error)
@@ -187,7 +187,7 @@ export default function ReferralCreatePage() {
                                         </Button>
                                     </>
                                 }                               
-                                <Button type="button" variant="secondary" onClick={() => router.push('/referral')}>Cancelar</Button>
+                                <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
                             </div>
                         </form>
                     </section>
@@ -206,7 +206,7 @@ export default function ReferralCreatePage() {
                         title={alertTitle} 
                         open={infoAlertOpen} 
                         onOpenChange={setInfoAlertOpen}
-                        onClickBtn={() => {isError ? "" : router.push('/referral');}}
+                        onClickBtn={() => {isError ? "" : router.push('/student/referral');}}
                     />
                 </div>
             }

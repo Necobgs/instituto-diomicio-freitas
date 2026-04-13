@@ -47,6 +47,10 @@ const collapsibleItems = [
     url: "/student",
   },
   {
+    title: "Encaminhamento",
+    url: "/student/referral",
+  },
+  {
     title: "Acompanhamento",
     url: "/student/monitoring",
   },

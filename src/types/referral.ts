@@ -48,6 +48,7 @@ export const defaultFilterReferral: iParamsReferral = {
     admissionDateEnd: "",
     terminationDateIeedfIni: "",
     terminationDateIeedfEnd: "",
+    enabled: "true",
 }
 
 export const defaultReferral: iReferralForm = {
