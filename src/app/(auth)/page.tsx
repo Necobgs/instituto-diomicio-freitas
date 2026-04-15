@@ -8,7 +8,7 @@ export default function HomePage() {
 
   return (
     <div className="flex-1 flex items-center justify-center w-full h-full">
-      {`Bem vindo(a) ${currentUser?.name ? currentUser?.name : ""}!`}
+      {`Bem vindo(a) ${currentUser?.username ? currentUser?.username : ""}!`}
     </div>
   );
 }

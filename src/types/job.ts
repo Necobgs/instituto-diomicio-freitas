@@ -23,3 +23,12 @@ export interface iJobState extends iState {
     jobs: iJobForm[];
     job: iJobForm | null;
 }
+
+export const defaultFilterJob: iParamsJob = {
+    name: "",
+    enabled: "true",
+};
+
+export const defaultJob: iJobForm = {
+    name: "",
+};

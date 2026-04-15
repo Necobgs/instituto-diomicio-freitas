@@ -4,56 +4,42 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { defaultEnterprise, iEnterpriseForm } from "@/types/enterprise";
+import { defaultJob, iJobForm } from "@/types/job";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { editEnterprise, getEnterpriseById, removeEnterprise, selectEnterprise, selectEnterpriseLoading } from "@/store/features/enterpriseSlice";
-import MaskedInput from "@/components/ui/masked-input";
+import { addJob, editJob, getJobById, removeJob, selectJob, selectJobLoading } from "@/store/features/jobSlice";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 
-export default function EnterpriseCreatePage() {
+export default function JobCreatePage() {
 
     const router = useRouter();
     const params = useParams();
     const id = parseInt(params.id?.toString() || "0");
-    const [formData, setFormData] = useState<iEnterpriseForm>(defaultEnterprise);
+    const [formData, setFormData] = useState<iJobForm>(defaultJob);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const enterprise = useSelector(selectEnterprise);
-    const loading = useSelector(selectEnterpriseLoading);
+    const job = useSelector(selectJob);
+    const loading = useSelector(selectJobLoading);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
         setFormData((prev) => ({ ...prev, [name]: value }));
-        
-        if (errors[name as keyof iEnterpriseForm]) {
+
+        if (errors[name as keyof iJobForm]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
     };
 
-    const handleMaskedInputChange = (name: string, value: string) => {
-
-        setFormData((prev) => ({ ...prev, [name]: value }));
-
-        if (errors[name as keyof iEnterpriseForm]) {
-            setErrors((prev) => ({ ...prev, [name]: '' }));
-        }
-    }
-
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
         if (!formData.name?.trim()) newErrors.name = "Nome é obrigatório";
-        if (!formData.phone?.trim()) newErrors.phone = "Telefone é obrigatório";
-        else if (formData.phone?.trim().length < 10) newErrors.phone = "Telefone inválido";
-        if (!formData.cnpj?.trim()) newErrors.cnpj = "CNPJ é obrigatório";
-        else if (formData.cnpj?.trim().length < 14) newErrors.cnpj = "CNPJ inválido";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -63,14 +49,15 @@ export default function EnterpriseCreatePage() {
         e.preventDefault();
 
         if (!validateForm()) {
-            return; 
+            return;
         }
 
         try {
-            await dispatch(editEnterprise(formData)).unwrap();
-            handleAlert(false,'Empresa alterada com sucesso!');
+            await dispatch(editJob(formData)).unwrap();
+            handleAlert(false,'Cargo alterado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar empresa');
+            handleAlert(true,error?.message || 'Erro ao alterar cargo');
+            console.log(error)
         }
     };
 
@@ -78,41 +65,41 @@ export default function EnterpriseCreatePage() {
         e.preventDefault();
 
         try {
-            await dispatch(removeEnterprise(id)).unwrap();
-            handleAlert(false,'Empresa desabilitada com sucesso!');
+            await dispatch(removeJob(id)).unwrap();
+            handleAlert(false,'Cargo desabilitado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar empresa');
+            handleAlert(true,error?.message || 'Erro ao desabilitar cargo');
         }
 
         setAlertOpen(false);
     };
 
-    const getEnterprise = async (id: number) => {
+    const getJob = async (id: number) => {
         try {
-            await dispatch(getEnterpriseById(id)).unwrap();
+            await dispatch(getJobById(id)).unwrap();
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao buscar empresa');
+            handleAlert(true,error?.message || 'Erro ao buscar cargo');
         }
-    }
+    };
 
     const handleAlert = (error: boolean, message: string) => {
         setAlertTitle(error ? "Erro" : "Sucesso");
         setAlertDesc(message)
         setInfoAlertOpen(true);
         setIsError(error);
-    }
+    };
 
     useEffect(() => {
         return () => {
-            getEnterprise(id);
+            getJob(id);
         }
     }, []);
 
     useEffect(() => {
-        if (enterprise) {
-            setFormData({...enterprise});
+        if (job) {
+            setFormData({...job});
         }
-    }, [enterprise]);
+    }, [job]);
 
     return (
         <>
@@ -121,7 +108,7 @@ export default function EnterpriseCreatePage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Alterar Empresa</h1>
+                            <h1 className="text-2xl">Alterar Cargo</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -131,32 +118,12 @@ export default function EnterpriseCreatePage() {
                                     name="name"
                                     value={formData?.name || ''}
                                     onChange={handleInputChange}
-                                    placeholder="Nome da empresa"
+                                    placeholder="Nome do cargo"
                                     error={errors.name}
                                 />
                             </div>
-                            <div>
-                                <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
-                                <MaskedInput
-                                    value={formData?.phone || ''}
-                                    placeholder="Telefone da empresa"
-                                    mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
-                                    onChange={(val) => handleMaskedInputChange("phone",val)}
-                                    error={errors.phone}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
-                                <MaskedInput
-                                    value={formData?.cnpj || ''}
-                                    placeholder="CNPJ da empresa"
-                                    mask="00.000.000/0000-00"
-                                    onChange={(val) => handleMaskedInputChange("cnpj",val)}
-                                    error={errors.cnpj}
-                                />
-                            </div>
                             <div className="flex gap-3">
-                                {!enterprise?.deleted_at &&
+                                {!job?.deleted_at &&
                                     <>
                                         <Button type="submit">Salvar</Button>
                                         <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
@@ -164,7 +131,7 @@ export default function EnterpriseCreatePage() {
                                         </Button>
                                     </>
                                 }
-                                <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
+                                <Button type="button" variant="secondary" onClick={() => router.push('/job')}>
                                     Cancelar
                                 </Button>
                             </div>
@@ -179,13 +146,13 @@ export default function EnterpriseCreatePage() {
                         onClickBtn={handleDisable} 
                         onOpenChange={setAlertOpen}
                     />
-                    
+
                     <InfoAlertDialog
-                        message={alertDesc} 
-                        title={alertTitle} 
-                        open={infoAlertOpen} 
+                        message={alertDesc}
+                        title={alertTitle}
+                        open={infoAlertOpen}
                         onOpenChange={setInfoAlertOpen}
-                        onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
+                        onClickBtn={() => {isError ? "" : router.push('/job');}}
                     />
                 </div>
             }

@@ -28,7 +28,7 @@ export default function CardReferral(referral:iReferralForm) {
           <div className="text-black/80"><span className="font-semibold">Empresa:</span> {referral?.enterprise?.name}</div>
           <div className="text-black/80"><span className="font-semibold">Cargo:</span> {referral?.job?.name}</div>
           <div className="text-black/80"><span className="font-semibold">Data de admissão:</span> {formatDate(referral?.admissionDate)}</div>
-          <div className="text-black/80"><span className="font-semibold">Provável data desligamento IEEDF:</span> {formatDate(referral?.admissionDate)}</div>
+          <div className="text-black/80"><span className="font-semibold">Prov. data deslig. IEEDF:</span> {formatDate(referral?.terminationDateIeedf)}</div>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">

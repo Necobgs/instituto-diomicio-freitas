@@ -85,6 +85,8 @@ export default function MonitoringEditPage() {
       } catch (error: any) {
           handleAlert(true,error?.message || 'Erro ao desabilitar acompanhamento');
       }
+
+      setAlertOpen(false);
   }
 
   const getMonitoring = async (id: number) => {
@@ -121,7 +123,7 @@ export default function MonitoringEditPage() {
           ? <Loading/>
           : <div className="w-full h-full p-4">
           <section className="min-h-16 flex flex-col gap-5">
-            <h1 className="text-2xl">Criar acompanhamento</h1>
+            <h1 className="text-2xl">Alterar acompanhamento</h1>
 
             <form
               onSubmit={handleSubmit}

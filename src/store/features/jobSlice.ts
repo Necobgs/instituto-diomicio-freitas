@@ -19,8 +19,8 @@ export const editJob = createAsyncThunk('job/edit', async (payload: iJobForm) =>
     return await jobService.editJob(payload);
 });
 
-export const removeJob = createAsyncThunk('job/remove', async (payload: iJobForm) => {
-    const response = await jobService.removeJob(payload);
+export const removeJob = createAsyncThunk('job/remove', async (id: number) => {
+    const response = await jobService.removeJob(id);
     return response;
 });
 

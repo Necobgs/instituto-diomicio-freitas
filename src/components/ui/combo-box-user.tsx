@@ -70,7 +70,7 @@ export function UserCombobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("justify-between", `w-[${width}]`,!user ? `text-black/50` : ``, error ? "border-red-600" : "")}
+            className={cn("overflow-hidden whitespace-nowrap text-ellipsis justify-between", `w-[${width}]`,!user ? `text-black/50` : ``, error ? "border-red-600" : "")}
           >
             {user?.username ?? placeholder}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

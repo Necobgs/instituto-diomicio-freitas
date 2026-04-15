@@ -1,4 +1,4 @@
-import { ChevronDown, Factory, Home, LogOut, User, Users } from "lucide-react";
+import { ChevronDown, Factory, Home, LogOut, User, Users, Wrench } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -37,6 +37,11 @@ const items = [
     title:'Empresas',
     url:'/enterprise',
     icon:Factory
+  },
+  {
+    title:'Cargos',
+    url:'/job',
+    icon:Wrench
   }
 ];
 

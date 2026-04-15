@@ -92,6 +92,8 @@ export default function StudentEditPage() {
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao remover estudante');
         }
+
+        setAlertOpen(false);
     };
 
     const getStudent = async (id: number) => {
@@ -128,7 +130,7 @@ export default function StudentEditPage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Criar Estudante</h1>
+                            <h1 className="text-2xl">Alterar Estudante</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>

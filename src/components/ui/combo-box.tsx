@@ -80,7 +80,7 @@ export function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("justify-between", `w-[${width}]`, !value ? `text-black/50` : `` , error ? "border-red-600" : "")}
+            className={cn("overflow-hidden whitespace-nowrap text-ellipsis justify-between", `w-[${width}]`, !value ? `text-black/50` : `` , error ? "border-red-600" : "")}
           >
             {value
               ? items.find((item) => item.value === value)?.label

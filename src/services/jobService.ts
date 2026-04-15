@@ -58,9 +58,9 @@ const editJob = async (dataJob: iJobForm): Promise<iJobForm> => {
   }
 }
 
-const removeJob = async (job: iJobForm): Promise<iJobForm> => {
+const removeJob = async (id: number): Promise<iJobForm> => {
   try {
-  const response = await api.delete(`${endpoint}/${job.id}`);
+    const response = await api.delete(`${endpoint}/${id}`);
     return response.data as iJobForm;
   } catch (error: any) {
     console.log("Error removing job:", error);

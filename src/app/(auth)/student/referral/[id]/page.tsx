@@ -90,6 +90,8 @@ export default function ReferralCreatePage() {
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao desabilitar encaminhamento');
         }
+
+        setAlertOpen(false);
     };
 
     const getReferral = async (id: number) => {
@@ -126,7 +128,7 @@ export default function ReferralCreatePage() {
                 : <div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Criar Encaminhamento</h1>
+                            <h1 className="text-2xl">Alterar Encaminhamento</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
