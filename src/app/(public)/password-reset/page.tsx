@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Key } from "lucide-react";
+import { Key } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,42 +13,43 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { isValidEmail } from "@/app/utils/validations";
 import { useAppDispatch } from "@/store/hooks";
-import { passwordChangeRequest } from "@/store/features/userSlice";
+import { passwordChange } from "@/store/features/userSlice";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RecoveryPasswordPage() {
-  const [email, setEmail] = useState<string>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();  
+  const dispatch = useAppDispatch();
+  const token = searchParams.get("token") || "";
+  const [password, setPassword] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(true);
-  const dispatch = useAppDispatch();
 
-  // Função para lidar com a recuperação de senha
-  const handlePasswordRecovery = async () => {
-    // Validação: campo vazio
-    if (!email) {
-      setDialogMessage("Por favor, insira um e-mail.");
+  const handleSubmit= async () => {
+    if (!password) {
+      setDialogMessage("Por favor, insira uma senha.");
       setIsSuccess(false);
       setIsDialogOpen(true);
       return;
     }
 
-    // Validação: e-mail válido
-    if (!isValidEmail(email)) {
-      setDialogMessage("Por favor, insira um e-mail válido.");
+    if (password.length < 6) {
+      setDialogMessage("A senha deve ter pelo menos 6 caracteres.");
       setIsSuccess(false);
       setIsDialogOpen(true);
       return;
     }
 
     try {
-      const response = await dispatch(passwordChangeRequest(email)).unwrap();
-      setDialogMessage(response?.message || `Um e-mail foi enviado para ${email} com instruções para redefinir sua senha.`);
+      const response = await dispatch(passwordChange({ newPassword: password, token: token })).unwrap();
+      setDialogMessage(response?.message || `Senha alterada com sucesso!`);
       setIsSuccess(true);
       setIsDialogOpen(true);
+      router.push('/login');
     } catch (error: any) {
-      setDialogMessage(error?.message || "Ocorreu um erro ao enviar o e-mail. Tente novamente.");
+      setDialogMessage(error?.message || "Ocorreu um erro ao alterar a senha.");
       setIsSuccess(false);
       setIsDialogOpen(true);
     }
@@ -56,25 +57,22 @@ export default function RecoveryPasswordPage() {
 
   return (
     <div className="bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
-        <a className="flex items-center justify-start w-full gap-2" href="/login">
-            <ArrowLeft size={20}/>
-            <span className="text-sm">Voltar</span>
-        </a>
       <div className="flex justify-center items-center m-5">
         <Key />
       </div>
       <p className="text-sm text-center">
-        Ao clicar em 'Recuperar a senha', um e-mail será <br />
-        enviado com instruções para redefinir sua senha
+        Ao clicar em 'Atualizar a senha', a senha  referente a<br />
+        este e-mail será alterada para a nova senha digitada<br />
       </p>
       <Input
-        placeholder="E-mail"
+        placeholder="Digite a nova senha"
         className="w-80"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
-      <Button className="w-80" onClick={handlePasswordRecovery}>
-        Recuperar a senha
+      <Button className="w-80" onClick={handleSubmit}>
+        Atualizar a senha
       </Button>
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent>

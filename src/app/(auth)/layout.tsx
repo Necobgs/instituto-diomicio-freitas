@@ -4,7 +4,7 @@ import AppSidebar from "@/components/layout/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useSelector } from "react-redux";
 import { redirect } from 'next/navigation';
-import { selectIsAuthenticated } from "@/store/features/userSlice";
+import { selectIdUser } from "@/store/features/userSlice";
 import { useEffect } from "react";
 
 export default function RootAuthLayout({
@@ -13,13 +13,13 @@ export default function RootAuthLayout({
   children: React.ReactNode;
 }>) {
 
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const idUser = useSelector(selectIdUser);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!idUser) {
       redirect("/login");
     }
-  },[isAuthenticated]) 
+  },[idUser]) 
 
   return (
     <SidebarProvider>

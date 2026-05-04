@@ -137,7 +137,7 @@ export default function StudentPage(){
                         </div>
                         <div>
                             <Combobox
-                                items={[{value: "all", label: "Todos" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                                items={[{value: "all", label: "Ambos" }, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
                                 value={formData?.enabled}
                                 setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
                                 placeholder="Selecione a situação..."

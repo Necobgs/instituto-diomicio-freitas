@@ -4,7 +4,8 @@ import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
-import { loginUser, selectIsAuthenticated, fetchMe, validateTokenUser } from "@/store/features/userSlice";
+import { getApp } from "@/store/features/appSlice";
+import { getUserById, getUserPermissionsById, loginUser, selectCurrentUser, selectIdUser, selectUserLoading, setTokenFromStorage } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,7 +24,9 @@ export default function LoginPage() {
   const [infoAlertOpen, setInfoAlertOpen] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const idUser = useSelector(selectIdUser);
+  const currentUser = useSelector(selectCurrentUser);
+  const loading = useSelector(selectUserLoading);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -47,29 +50,53 @@ export default function LoginPage() {
       setInfoAlertOpen(true);
   }
 
-  useEffect(() => {
-    const validateAuth = async () => {
+  const validateToken = async () => {
       try {
-        await dispatch(validateTokenUser()).unwrap();
-        router.push('/');
+          await dispatch(getApp()).unwrap();
+          dispatch(setTokenFromStorage());
       } catch (error: any) {
+          console.log('Erro',error?.message || 'Erro ao validar token, faça login novamente');
       }
-    }
+  }
 
-    if (localStorage.getItem('token')) {
-      validateAuth();
-    }
-  }, [dispatch]);
+  const getUserPermissions = async (id: number) => {
+      try {
+          await dispatch(getUserPermissionsById(id)).unwrap();
+      } catch (error: any) {
+          handleAlert('Erro',error?.message || 'Erro ao buscar permissões do usuário');
+      }
+  };
+
+  const getUser = async (id: number) => {
+      try {
+          await dispatch(getUserById(id)).unwrap();
+          getUserPermissions(id);
+      } catch (error: any) {
+          handleAlert('Erro',error?.message || 'Erro ao buscar usuário');
+      }
+  };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (localStorage.getItem('token')) {
+      validateToken();
+    } 
+  }, []);
+
+  useEffect(() => {
+    if (idUser) {
+      getUser(idUser);
+    }
+  }, [router, idUser]);
+
+  useEffect(() => {
+    if (currentUser) {
       router.push('/');
     }
-  }, [router, isAuthenticated]);
+  }, [router, currentUser]);
 
   return (
     <>
-      {isAuthenticated
+      {loading
         ?<Loading/>
         :<div className="min-h-8/12 bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
             <div className="flex justify-center items-center m-5">

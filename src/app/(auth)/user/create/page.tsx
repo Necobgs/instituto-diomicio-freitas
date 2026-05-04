@@ -4,27 +4,26 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { iUserForm } from "@/types/user";
+import { defaultUser, iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
 import MaskedInput from "@/components/ui/masked-input";
-import { addUser } from "@/store/features/userSlice";
+import { addUser, selectUserLoading } from "@/store/features/userSlice";
+import { useSelector } from "react-redux";
+import Loading from "@/components/ui/loading";
+import { PermissionModal } from "@/components/ui/permission-modal";
 
 export default function UserCreatePage() {
     const router = useRouter();
-
-    const defaultData: iUserForm = {
-        username: "", 
-        email: "",
-        cpf: "", 
-    }
     // Estado para os campos do formulário
-    const [formData,setFormData] = useState<iUserForm>(defaultData);
+    const [formData,setFormData] = useState<iUserForm>(defaultUser);
     const [alertTitle,setAlertTitle] = useState('');
     const [alertDesc,setAlertDesc] = useState('');
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [permissionsOpen, setPermissionsOpen] = useState(false);
+    const loading = useSelector(selectUserLoading);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,61 +81,76 @@ export default function UserCreatePage() {
     }
 
     return (
-        <div className="w-full h-full p-4">
-            <section className="min-h-16 flex flex-col gap-5">
-                <div className="text-left">
-                    <h1 className="text-2xl">Cadastrar Usuário</h1>
-                </div>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
-                    <div>
-                        <label htmlFor="username" className="text-sm font-medium">Nome</label>
-                        <Input
-                            id="username"
-                            name="username"
-                            value={formData?.username || ''}
-                            onChange={handleInputChange}
-                            placeholder="Nome do usuário"
-                            error={errors.name}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="text-sm font-medium">Email</label>
-                        <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={formData?.email || ''}
-                            onChange={handleInputChange}
-                            placeholder="Email do usuário"
-                            error={errors.email}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
-                        <MaskedInput
-                            value={formData?.cpf || ''}
-                            placeholder="CPF do usuário"
-                            mask="000.000.000-00"
-                            onChange={(val) => handleMaskedInputChange("cpf",val)}
-                            error={errors.cpf}
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        <Button type="submit">Salvar</Button>
-                        <Button type="button" variant="secondary" onClick={() => router.back()}>
-                            Cancelar
-                        </Button>
-                    </div>
-                </form>
-            </section>
+        <>
+            {loading
+                ? <Loading/>
+                :<div className="w-full h-full p-4">
+                        <section className="min-h-16 flex flex-col gap-5">
+                            <div className="text-left">
+                                <h1 className="text-2xl">Cadastrar Usuário</h1>
+                            </div>
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
+                                <div>
+                                    <label htmlFor="username" className="text-sm font-medium">Nome</label>
+                                    <Input
+                                        id="username"
+                                        name="username"
+                                        value={formData?.username || ''}
+                                        onChange={handleInputChange}
+                                        placeholder="Nome do usuário"
+                                        error={errors.name}
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="text-sm font-medium">Email</label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        value={formData?.email || ''}
+                                        onChange={handleInputChange}
+                                        placeholder="Email do usuário"
+                                        error={errors.email}
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
+                                    <MaskedInput
+                                        value={formData?.cpf || ''}
+                                        placeholder="CPF do usuário"
+                                        mask="000.000.000-00"
+                                        onChange={(val) => handleMaskedInputChange("cpf",val)}
+                                        error={errors.cpf}
+                                    />
+                                </div>
+                                <div className="flex gap-3">
+                                    <Button type="submit">Salvar</Button>
+                                    <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
+                                        Permissões
+                                    </Button>
+                                    <Button type="button" variant="secondary" onClick={() => router.back()}>
+                                        Cancelar
+                                    </Button>
+                                </div>
+                            </form>
+                        </section>
 
-            <InfoAlertDialog
-                message={alertDesc} 
-                title={alertTitle} 
-                open={infoAlertOpen} 
-                onOpenChange={setInfoAlertOpen}
-                onClickBtn={() => {isError ? "" : router.push('/user');}}
-            />
-        </div>
+                        <PermissionModal
+                            open={permissionsOpen}
+                            onOpenChange={setPermissionsOpen}
+                            formData={formData}
+                            setFormData={setFormData}
+                        />
+
+                        <InfoAlertDialog
+                            message={alertDesc} 
+                            title={alertTitle} 
+                            open={infoAlertOpen} 
+                            onOpenChange={setInfoAlertOpen}
+                            onClickBtn={() => {isError ? "" : router.push('/user');}}
+                        />
+                    </div>
+            }
+        </>
     );
 }

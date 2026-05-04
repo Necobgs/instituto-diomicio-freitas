@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { formatCpf } from "@/lib/format"
-import { iUser } from "@/types/user"
+import { iUserForm } from "@/types/user"
 import React, { MouseEventHandler } from "react"
 
 interface iProps{
-  user:iUser,
+  user:iUserForm,
   onClick?: (event: React.MouseEvent<HTMLDivElement>) => void
 }
 
@@ -25,11 +25,11 @@ export default function CardUser({user, onClick} : iProps) {
       </CardHeader>
       <CardContent>
         <CardDescription>
-          {user.email}
+            <div className="text-black/80"><span className="font-semibold">Email:</span> {user.email}</div>
+            <div className="text-black/80"><span className="font-semibold">CPF:</span> {formatCpf(user.cpf)}</div>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Label>{formatCpf(user.cpf)}</Label>
       </CardFooter>
     </Card>
   )

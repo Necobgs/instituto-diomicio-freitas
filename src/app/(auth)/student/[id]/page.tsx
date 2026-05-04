@@ -87,10 +87,10 @@ export default function StudentEditPage() {
         e.preventDefault();
 
         try {
-            await dispatch(removeStudent(formData)).unwrap();
-            handleAlert(false,'Estudante removido com sucesso!');
+            await dispatch(removeStudent(id)).unwrap();
+            handleAlert(false,'Estudante desabilitado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao remover estudante');
+            handleAlert(true,error?.message || 'Erro ao desabilitar estudante');
         }
 
         setAlertOpen(false);

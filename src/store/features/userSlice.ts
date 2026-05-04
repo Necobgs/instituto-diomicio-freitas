@@ -1,6 +1,8 @@
 
 import userService from "@/services/userService";
-import { iUser, iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iUserState } from "@/types/user";
+import { iDefaultResponse } from "@/types/app";
+import { iPermissionForm } from "@/types/permission";
+import { iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iUserState, iPasswordChangeForm } from "@/types/user";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const initUsers = createAsyncThunk('user/fetch', async ({ page = 1, limit = 8, username, cpf, email, enabled }: iParamsUser = {})  => {
@@ -11,6 +13,10 @@ export const getUserById = createAsyncThunk("user/getById", async (id: number) =
     return await userService.getUserById(id);
 });
 
+export const getUserPermissionsById = createAsyncThunk("user/getPermissionsById", async (id: number) => {
+    return await userService.getUserPermissionsById(id);
+});
+
 export const addUser = createAsyncThunk('user/add', async (payload: iUserForm) => {
     return await userService.addUser(payload);
 });
@@ -19,19 +25,24 @@ export const editUser = createAsyncThunk('user/edit', async (payload: iUserForm)
     return await userService.editUser({ ...payload });
 });
 
-export const removeUser = createAsyncThunk('user/remove', async (payload: iUserForm) => {
-    const response = await userService.removeUser(payload);
+export const removeUser = createAsyncThunk('user/remove', async (id: number) => {
+    const response = await userService.removeUser(id);
     return response;
 });
 
-export const validateTokenUser = createAsyncThunk('user/validateToken', async (_, { rejectWithValue }) => {
-    try {
-        const response = await userService.validateToken();
-        return response;
-    } catch (error: any) {
-        localStorage.removeItem('token');
-        return rejectWithValue(error.response?.data?.message || 'Erro ao validar token');
-    }
+export const passwordChange = createAsyncThunk('user/password-change', async (payload: iPasswordChangeForm) => {
+    const response = await userService.passwordChange(payload);
+    return response;
+});
+
+export const resetToDefaultPasswordByID = createAsyncThunk('user/reset-to-default-password', async (id: number) => {
+    const response = await userService.resetToDefaultPasswordByID(id);
+    return response;
+});
+
+export const passwordChangeRequest = createAsyncThunk('user/password-change-request', async (email: string) => {
+    const response = await userService.passwordChangeRequest(email);
+    return response;
 });
 
 export const loginUser = createAsyncThunk('user/login', async (credentials: iLoginCredentials, { rejectWithValue }) => {
@@ -50,9 +61,11 @@ export const logoutUser = createAsyncThunk('user/logout', async () => {
 
 const initialState: iUserState = {
     users: [],
+    user: null,
+    userPermissions: [],
     currentUser: null,
+    idUser: 0,
     token: null,
-    isAuthenticated: false,
     error: null,
     loading: false,
     count: 0,
@@ -64,10 +77,18 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        removeAllUsers(state) {
-            state.users = [];
+        setTokenFromStorage(state) {
+
             state.error = null;
             state.loading = false;
+
+            try {
+                state.token = localStorage.getItem('token');
+                state.idUser = !state.token ? 0 : (JSON.parse(atob(state.token.split('.')[1]))?.id || 0);
+            }
+            catch {
+                state.error = "Erro ao decodificar token";
+            }
         },
     },
     extraReducers: (builder) => {
@@ -92,17 +113,69 @@ const userSlice = createSlice({
                 state.hasNextPage = false;
                 state.hasPreviousPage = false;
             })
-            .addCase(addUser.fulfilled, (state, action: PayloadAction<iUser>) => {
+            .addCase(getUserById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getUserById.fulfilled, (state, action: PayloadAction<iUserForm>) => {
+                state.user = action.payload;
+                if (state.user.id === state.idUser) {
+                    state.currentUser = action.payload;
+                }
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(getUserById.rejected, (state) => {
+                state.error = "Erro ao buscar usuário";
+                state.loading = false;
+            })
+            .addCase(getUserPermissionsById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getUserPermissionsById.fulfilled, (state, action: PayloadAction<iPermissionForm[]>) => {
+                state.userPermissions = action.payload;
+                if (state.user?.id === state.currentUser?.id && state.currentUser) {
+                    state.currentUser.permissions = action.payload;
+                }
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(getUserPermissionsById.rejected, (state) => {
+                state.error = "Erro ao buscar permissões do usuário";
+                state.loading = false;
+            })
+            .addCase(addUser.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(addUser.fulfilled, (state, action: PayloadAction<iUserForm>) => {
                 state.users.push(action.payload);
+                state.loading = false;
                 state.error = null;
             })
             .addCase(addUser.rejected, (state, action) => {
                 state.error = action.payload as string;
+                state.loading = false;
             })
-            .addCase(removeUser.pending, (state) => {
+            .addCase(editUser.pending, (state) => {
+                state.error = null;
                 state.loading = true;
             })
-            .addCase(removeUser.fulfilled, (state, action: PayloadAction<iUser>) => {
+            .addCase(editUser.fulfilled, (state, action: PayloadAction<iUserForm>) => {
+                state.users = state.users.map((t) => (t.id === action.payload.id ? action.payload : t));
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(editUser.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+            })
+            .addCase(removeUser.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(removeUser.fulfilled, (state, action: PayloadAction<iUserForm>) => {
                 state.users = state.users.filter((t) => t.id !== action.payload.id);
                 state.error = null;
                 state.loading = false;
@@ -111,25 +184,39 @@ const userSlice = createSlice({
                 state.error = action.payload as string;
                 state.loading = false;
             })
-            .addCase(editUser.fulfilled, (state, action: PayloadAction<iUser>) => {
-                state.users = state.users.map((t) => (t.id === action.payload.id ? action.payload : t));
+            .addCase(passwordChange.pending, (state) => {
                 state.error = null;
-            })
-            .addCase(editUser.rejected, (state, action) => {
-                state.error = action.payload as string;
-            })
-            .addCase(validateTokenUser.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
-            .addCase(validateTokenUser.fulfilled, (state, action: PayloadAction<iUser>) => {
-                state.token = localStorage.getItem('token');
-                state.currentUser = action.payload;
-                state.isAuthenticated = true;
+            .addCase(passwordChange.fulfilled, (state, action: PayloadAction<iDefaultResponse>) => {
+                state.error = null;
                 state.loading = false;
-                state.error = null;
             })
-            .addCase(validateTokenUser.rejected, (state, action) => {
+            .addCase(passwordChange.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+            })
+            .addCase(resetToDefaultPasswordByID.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(resetToDefaultPasswordByID.fulfilled, (state, action: PayloadAction<iDefaultResponse>) => {
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(resetToDefaultPasswordByID.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+            })
+            .addCase(passwordChangeRequest.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(passwordChangeRequest.fulfilled, (state, action: PayloadAction<iDefaultResponse>) => {
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(passwordChangeRequest.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.loading = false;
             })
@@ -137,10 +224,9 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ token: string, user: iUserForm | null }>) => {                
+            .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ token: string, id: number }>) => {                
                 state.token = action.payload.token;
-                state.currentUser = action.payload.user;
-                state.isAuthenticated = true;
+                state.idUser = action.payload.id;
                 state.loading = false;
                 state.error = null;
             })
@@ -150,23 +236,24 @@ const userSlice = createSlice({
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.currentUser = null;
+                state.idUser = 0;
                 state.token = null;
-                state.isAuthenticated = false;
-                state.users = [];
             });
     },
 });
 
 
 export const selectUsers = (state: { user: iUserState }) => state.user.users;
+export const selectUser = (state: { user: iUserState }) => state.user.user;
+export const selectUserPermissions = (state: { user: iUserState }) => state.user.userPermissions;
 export const selectUserError = (state: { user: iUserState }) => state.user.error;
 export const selectUserLoading = (state: { user: iUserState }) => state.user.loading;
 export const selectUserCount = (state: { user: iUserState }) => state.user.count;
 export const selectCurrentUser = (state: { user: iUserState }) => state.user.currentUser;
-export const selectIsAuthenticated = (state: { user: iUserState }) => state.user.isAuthenticated;
+export const selectIdUser = (state: { user: iUserState }) => state.user.idUser;
 export const selectToken = (state: { user: iUserState }) => state.user.token;
 export const selectUserHasNextPage = (state: { user: iUserState }) => state.user.hasNextPage;
 export const selectUserHasPreviousPage = (state: { user: iUserState }) => state.user.hasPreviousPage;
 
-export const { removeAllUsers } = userSlice.actions;
+export const { setTokenFromStorage } = userSlice.actions;
 export const userReducer = userSlice.reducer;

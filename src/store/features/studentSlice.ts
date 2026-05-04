@@ -19,8 +19,8 @@ export const editStudent = createAsyncThunk('student/edit', async (payload: iStu
     return await studentService.editStudent({ ...payload });
 });
 
-export const removeStudent = createAsyncThunk('student/remove', async (payload: iStudentForm) => {
-    const response = await studentService.removeStudent(payload);
+export const removeStudent = createAsyncThunk('student/remove', async (id: number) => {
+    const response = await studentService.removeStudent(id);
     return response;
 });
 

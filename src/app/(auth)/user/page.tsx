@@ -8,8 +8,9 @@ import Loading from "@/components/ui/loading";
 import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
-import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount } from "@/store/features/userSlice";
+import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount, selectUserHasNextPage } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { defaultFilterUser } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,14 +24,10 @@ export default function UserPage(){
     const countItems = useSelector(selectUserCount);
     const loading = useSelector(selectUserLoading);
     const error = useSelector(selectUserError);
+    const hasNextPage = useSelector(selectUserHasNextPage);
+    const hasPreviousPage = useSelector(selectUserHasNextPage);
 
-    const defaultData = {
-        username: "",
-        cpf: "",
-        email: "",
-        enabled: ""
-    };
-    const [formData, setFormData] = useState(defaultData);
+    const [formData, setFormData] = useState(defaultFilterUser);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
@@ -56,9 +53,6 @@ export default function UserPage(){
     useEffect(() => {
         dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
     }, [dispatch, currentPage]);
-
-    const hasNextPage = currentPage * itemsPerPage < countItems;
-    const hasPreviousPage = currentPage > 1;
 
     return (
         <>
@@ -98,7 +92,7 @@ export default function UserPage(){
                     </div>
                     <div>
                         <Combobox
-                            items={[{ value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
+                            items={[{ value: "all", label: "Ambos"}, { value: "true", label: "Ativos" }, { value: "false", label: "Inativos" }]}
                             value={formData?.enabled}
                             setValue={(value) => setFormData(prev => ({ ...prev, enabled: value }))}
                             placeholder="Selecione a situação..."

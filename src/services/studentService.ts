@@ -65,9 +65,9 @@ const editStudent = async (dataStudent: iStudentForm): Promise<iStudentForm> => 
   }
 }
 
-const removeStudent = async (student: iStudentForm): Promise<iStudentForm> => {
+const removeStudent = async (id: number): Promise<iStudentForm> => {
   try {
-    const response = await api.delete(`${endpoint}/${student.id}`);
+    const response = await api.delete(`${endpoint}/${id}`);
     return response.data as iStudentForm;
   } catch (error: any) {
     console.log("Error removing student:", error);

@@ -1,5 +1,6 @@
 import { iRoot } from "./iRoot";
 import { iPagination } from "./pagination";
+import { iPermissionForm } from "./permission";
 import { iState } from "./state";
 
 export interface iUser extends iRoot{
@@ -7,6 +8,8 @@ export interface iUser extends iRoot{
     email:string;
     cpf:string;
     mustChangePassword:boolean;
+    permissionsId?: number[];
+    permissions?: iPermissionForm[] | null;
 }
 
 export type iUserForm = Partial<iUser>;
@@ -29,9 +32,30 @@ export interface iLoginCredentials {
     password: string;
 }
 
+export interface iPasswordChangeForm {
+    newPassword: string;
+    token: string;
+}
+
 export interface iUserState extends iState {
-    users: iUser[];
+    users: iUserForm[];
+    user: iUserForm | null;  // Usuário selecionado para visualização/edição
+    userPermissions: iPermissionForm[]; // Permissões do usuário selecionado
     currentUser: iUserForm | null;  // Usuário logado
+    idUser: number;
     token: string | null;
-    isAuthenticated: boolean;
+}
+
+export const defaultFilterUser: iParamsUser = {
+    username: "",
+    cpf: "",
+    email: "",
+    enabled: "true",
+};
+
+export const defaultUser: iUserForm = {
+    username: "", 
+    email: "",
+    cpf: "", 
+    permissionsId: [],
 }
