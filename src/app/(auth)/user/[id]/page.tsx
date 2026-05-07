@@ -8,10 +8,11 @@ import { use, useEffect, useState } from "react";
 import { defaultUser, iUserForm } from "@/types/user";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
-import { editUser, getUserById, getUserPermissionsById, removeUser, selectUser, selectUserLoading, selectUserPermissions } from "@/store/features/userSlice";
+import { editUser, getUserById, getUserPermissionsById, removeUser, selectCurrentUser, selectUser, selectUserLoading, selectUserPermissions } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import MaskedInput from "@/components/ui/masked-input";
 import Loading from "@/components/ui/loading";
+import { can } from "@/functions/can";
 
 export default function UserEditPage() {
 
@@ -19,7 +20,7 @@ export default function UserEditPage() {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const id = parseInt(params?.id?.toString() || "");
-    const loading = useSelector(selectUserLoading);
+    const [loading, setLoading] = useState(false);
     const user = useSelector(selectUser);
     const userPermissions = useSelector(selectUserPermissions);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -30,6 +31,7 @@ export default function UserEditPage() {
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [permissionsOpen, setPermissionsOpen] = useState(false);
+    const currentUser = useSelector(selectCurrentUser);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -71,10 +73,13 @@ export default function UserEditPage() {
         }
 
         try {
+            setLoading(true);
             await dispatch(editUser({...formData})).unwrap();
+            setLoading(false);
             handleAlert(false,'Usuário alterado com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao alterar usuário');
+            setLoading(false);
         }
     };
 
@@ -82,27 +87,36 @@ export default function UserEditPage() {
         e.preventDefault();
 
         try {
+            setLoading(true);
             await dispatch(removeUser(id)).unwrap();
+            setLoading(false);
             router.push('/user');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao alterar usuário');
+            setLoading(false);
         }
     };
 
     const getUser = async (id: number) => {
         try {
+            setLoading(true);
             await dispatch(getUserById(id)).unwrap();
             getUserPermissions(id);
+            setLoading(false);
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao buscar usuário');
+            setLoading(false);
         }
     };
 
     const getUserPermissions = async (id: number) => {
         try {
+            setLoading(true);
             await dispatch(getUserPermissionsById(id)).unwrap();
+            setLoading(false);
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao buscar permissões do usuário');
+            setLoading(false);
         }
     };
 
@@ -181,15 +195,21 @@ export default function UserEditPage() {
                                     <div className="flex flex-wrap gap-3">
                                         {!user?.deleted_at &&
                                             <>
-                                                <Button type="submit">Salvar</Button>
-                                                <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
-                                                    Desabilitar
-                                                </Button>
+                                                {can(currentUser, "user", "update") && (
+                                                    <Button type="submit">Salvar</Button>
+                                                )}
+                                                {can(currentUser, "user", "delete") && (
+                                                    <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                                        Desabilitar
+                                                    </Button>
+                                                )}
                                             </>
                                         }
-                                        <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
-                                            Permissões
-                                        </Button>
+                                        {can(currentUser, "permission", "read") && (
+                                            <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
+                                                Permissões
+                                            </Button>
+                                        )}
                                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                                             Cancelar
                                         </Button>

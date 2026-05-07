@@ -8,7 +8,7 @@ export interface iUser extends iRoot{
     email:string;
     cpf:string;
     mustChangePassword:boolean;
-    permissionsId?: number[];
+    permissionsId?: number[] | null;
     permissions?: iPermissionForm[] | null;
 }
 

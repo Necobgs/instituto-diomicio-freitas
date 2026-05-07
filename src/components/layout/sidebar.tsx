@@ -18,27 +18,33 @@ import {
 } from "@/components/ui/collapsible";
 import Link from "next/link"; // Importe o Link para navegação
 import { useAppDispatch } from "@/store/hooks";
-import { logoutUser } from "@/store/features/userSlice";
+import { logoutUser, selectCurrentUser } from "@/store/features/userSlice";
 import { useRouter } from "next/navigation";
+import { can } from "@/functions/can";
+import { useSelector } from "react-redux";
 
 // Dados dos itens do menu principal
 const items = [
   {
+    identifier:'home',
     title: "Página principal",
     url: "/",
     icon: Home,
   },
   {
+    identifier:'user',
     title:'Usuários',
     url:'/user',
     icon:User
   },
   {
+    identifier:'enterprise',
     title:'Empresas',
     url:'/enterprise',
     icon:Factory
   },
   {
+    identifier:'job',
     title:'Cargos',
     url:'/job',
     icon:Wrench
@@ -48,18 +54,22 @@ const items = [
 // Dados do submenu colapsável
 const collapsibleItems = [
   {
+    identifier:'student',
     title: "Visualizar estudantes",
     url: "/student",
   },
   {
+    identifier:'referral',
     title: "Encaminhamento",
     url: "/student/referral",
   },
   {
+    identifier:'monitoring',
     title: "Acompanhamento",
     url: "/student/monitoring",
   },
   {
+    identifier:'evaluation',
     title: "Avaliação",
     url: "/student/evaluation",
   },
@@ -69,6 +79,7 @@ export default function AppSidebar() {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const currentUser = useSelector(selectCurrentUser);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -83,7 +94,9 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {/* Itens principais */}
-              {items.map((item) => (
+              {items.filter((item) => {
+                return can(currentUser, item.identifier, "read") || can(currentUser, item.identifier, "create");
+              }).map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
@@ -107,7 +120,9 @@ export default function AppSidebar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {collapsibleItems.map((subItem) => (
+                      {collapsibleItems.filter((item) => {
+                        return can(currentUser, item.identifier, "read") || can(currentUser, item.identifier, "create");
+                      }).map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuButton asChild>
                             <Link href={subItem.url} className="pl-8">

@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { can } from "@/functions/can";
 import { initEvaluations, selectEvaluationCount, selectEvaluationError, selectEvaluationHasNextPage, selectEvaluationHasPreviousPage, selectEvaluationLoading, selectEvaluations } from "@/store/features/evaluationSlice";
+import { selectCurrentUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaultFilterEvaluation } from "@/types/evaluation";
 import { iStudentForm } from "@/types/student";
@@ -28,6 +30,7 @@ export default function EvaluationPage(){
     const error = useSelector(selectEvaluationError);
     const hasNextPage = useSelector(selectEvaluationHasNextPage);
     const hasPreviousPage = useSelector(selectEvaluationHasPreviousPage);
+    const currentUser = useSelector(selectCurrentUser);
 
     const [formData, setFormData] = useState(defaultFilterEvaluation);
     const [currentPage, setCurrentPage] = useState(1);
@@ -40,7 +43,9 @@ export default function EvaluationPage(){
 
     const handleSearch = () => {
         if (currentPage === 1)  {
-            dispatch(initEvaluations({...formData, page: currentPage, limit: itemsPerPage }));
+            if (can(currentUser,"evaluation","read")) {
+                dispatch(initEvaluations({...formData, page: currentPage, limit: itemsPerPage }));
+            }
         }
         else {
             setCurrentPage(1);
@@ -48,7 +53,9 @@ export default function EvaluationPage(){
     }
 
     useEffect(() => {
-        dispatch(initEvaluations({...formData, page: currentPage, limit: itemsPerPage }));
+        if (can(currentUser,"evaluation","read")) {
+            dispatch(initEvaluations({...formData, page: currentPage, limit: itemsPerPage }));
+        }
     }, [dispatch, currentPage]);
     
     return (
@@ -135,7 +142,11 @@ export default function EvaluationPage(){
                     pageActivated={currentPage}
                 />
 
-                <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/evaluation/create')}}>+</button>
+                {can(currentUser, "evaluation", "create") && (
+                    <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/evaluation/create')}}>
+                        +
+                    </button>
+                )}
             </div>}
         </>
     )

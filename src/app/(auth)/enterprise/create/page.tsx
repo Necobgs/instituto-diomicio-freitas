@@ -11,6 +11,8 @@ import { addEnterprise, selectEnterpriseLoading } from "@/store/features/enterpr
 import MaskedInput from "@/components/ui/masked-input";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function EnterpriseCreatePage() {
 
@@ -23,6 +25,7 @@ export default function EnterpriseCreatePage() {
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const loading = useSelector(selectEnterpriseLoading);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +124,9 @@ export default function EnterpriseCreatePage() {
                                 />
                             </div>
                             <div className="flex gap-3">
-                                <Button type="submit">Salvar</Button>
+                                {can(currentUser,"enterprise","create") && 
+                                    <Button type="submit">Salvar</Button>
+                                }
                                 <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                                     Cancelar
                                 </Button>

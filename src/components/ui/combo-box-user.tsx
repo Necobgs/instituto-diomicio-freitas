@@ -19,8 +19,9 @@ import {
 } from "@/components/ui/popover";
 import { iUserForm } from "@/types/user";
 import { useSelector } from "react-redux";
-import { initUsers, selectUsers } from "@/store/features/userSlice";
+import { initUsers, selectCurrentUser, selectUsers } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { can } from "@/functions/can";
 
 interface UserComboboxProps {
   user: iUserForm | undefined;
@@ -43,23 +44,30 @@ export function UserCombobox({
 }: UserComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const users = useSelector(selectUsers);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    dispatch(initUsers({ page:1, limit:200, username:search, enabled:'true' }));
+    if (can(currentUser, "user", "read")) {
+      dispatch(initUsers({ page:1, limit:200, username:search, enabled:'true' }));
+    }
   };
 
   const handleSelect = (currentValue: number) => {
     const selectedId = currentValue === user?.id ? "" : currentValue;
   
-    const selectedUser = users.find((user) => user.id.toString() == selectedId);
+    const selectedUser = users.find((user) => user?.id?.toString() == selectedId);
     setUser(selectedUser);
     setOpen(false);
-    dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
+    if (can(currentUser, "user", "read")) {
+      dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
+    }
   };
 
   React.useEffect(() => {
+    if (can(currentUser, "user", "read")) {
       dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
+    }
   }, [dispatch]);
 
   return (

@@ -8,7 +8,9 @@ import Loading from "@/components/ui/loading";
 import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { can } from "@/functions/can";
 import { initStudents, selectStudentError, selectStudentLoading, selectStudents, selectStudentCount, selectStudentHasNextPage, selectStudentHasPreviousPage } from "@/store/features/studentSlice";
+import { selectCurrentUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaultFilterStudent } from "@/types/student";
 import { useRouter } from "next/navigation";
@@ -25,6 +27,7 @@ export default function StudentPage(){
     const error = useSelector(selectStudentError);
     const hasNextPage = useSelector(selectStudentHasNextPage);
     const hasPreviousPage = useSelector(selectStudentHasPreviousPage);
+    const currentUser = useSelector(selectCurrentUser);
 
     const [formData, setFormData] = useState(defaultFilterStudent);
 
@@ -42,7 +45,9 @@ export default function StudentPage(){
 
     const handleSearch = () => {
         if (currentPage === 1)  {
-            dispatch(initStudents({...formData, page: currentPage, limit: itemsPerPage }));
+            if (can(currentUser,"student","read")) {
+                dispatch(initStudents({...formData, page: currentPage, limit: itemsPerPage }));
+            }
         }
         else {
             setCurrentPage(1);
@@ -50,7 +55,9 @@ export default function StudentPage(){
     }
 
     useEffect(() => {
-        dispatch(initStudents({...formData, page: currentPage, limit: itemsPerPage }));
+        if (can(currentUser,"student","read")) {
+            dispatch(initStudents({...formData, page: currentPage, limit: itemsPerPage }));
+        }
     }, [dispatch, currentPage]);
     
     return (
@@ -176,7 +183,9 @@ export default function StudentPage(){
                     pageActivated={currentPage}
                 />
 
-                <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/create')}}>+</button>
+                {can(currentUser,"student","create") && (
+                    <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/create')}}>+</button>
+                )}
             </div>}
         </>
     )

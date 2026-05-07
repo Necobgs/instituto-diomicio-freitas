@@ -21,6 +21,8 @@ import { iEnterpriseForm } from "@/types/enterprise";
 import { initEnterprises, selectEnterprises } from "@/store/features/enterpriseSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 interface EnterpriseComboboxProps {
   enterprise: iEnterpriseForm | undefined;
@@ -43,10 +45,13 @@ export function EnterpriseCombobox({
 }: EnterpriseComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const enterprises = useSelector(selectEnterprises);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    dispatch(initEnterprises({ page:1, limit:200, name: search, enabled:'true' }))
+    if (can(currentUser, "enterprise", "read")) {
+      dispatch(initEnterprises({ page:1, limit:200, name: search, enabled:'true' }));
+    }
   };
 
   const handleSelect = (currentId: number) => {
@@ -55,11 +60,15 @@ export function EnterpriseCombobox({
     const selectedEnterprise = enterprises.find((enterprise) => enterprise.id == selectedId);
     setEnterprise(selectedEnterprise);
     setOpen(false);
-    dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+    if (can(currentUser, "enterprise", "read")) {
+      dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+    }
   };
 
   React.useEffect(() => {
+    if (can(currentUser, "enterprise", "read")) {
       dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+    }
   }, [dispatch]);
 
   return (

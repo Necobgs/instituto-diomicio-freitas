@@ -135,6 +135,9 @@ const userSlice = createSlice({
             })
             .addCase(getUserPermissionsById.fulfilled, (state, action: PayloadAction<iPermissionForm[]>) => {
                 state.userPermissions = action.payload;
+                if (state.user) {
+                    state.user.permissions = action.payload;
+                }
                 if (state.user?.id === state.currentUser?.id && state.currentUser) {
                     state.currentUser.permissions = action.payload;
                 }

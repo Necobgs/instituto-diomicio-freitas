@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { Combobox } from "@/components/ui/combo-box";
 import { Textarea } from "@/components/ui/textarea";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function StudentEditPage() {
 
@@ -29,6 +31,7 @@ export default function StudentEditPage() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const student = useSelector(selectStudent);
     const loading = useSelector(selectStudentLoading);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -232,10 +235,14 @@ export default function StudentEditPage() {
                             <div className="flex gap-3">
                                 {!student?.deleted_at &&
                                     <>
-                                        <Button type="submit">Salvar</Button>
-                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
-                                            Desabilitar
-                                        </Button>
+                                        {can(currentUser, "student", "update") && (
+                                            <Button type="submit">Salvar</Button>
+                                        )}
+                                        {can(currentUser, "student", "delete") && (
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                                Desabilitar
+                                            </Button>
+                                        )}
                                     </>
                                 }
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student')}>

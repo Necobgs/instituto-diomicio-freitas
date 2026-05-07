@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import { initJobs, selectJobError, selectJobLoading, selectJobs, selectJobCount, selectJobHasPreviousPage, selectJobHasNextPage } from "@/store/features/jobSlice";
 import { defaultFilterJob } from "@/types/job";
 import CardJob from "@/components/page/job/CardJob";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function JobPage() {
 
@@ -24,6 +26,7 @@ export default function JobPage() {
     const error = useSelector(selectJobError);
     const hasNextPage = useSelector(selectJobHasNextPage);
     const hasPreviousPage = useSelector(selectJobHasPreviousPage);
+    const currentUser = useSelector(selectCurrentUser);
 
     const [formData, setFormData] = useState(defaultFilterJob);
     const [currentPage, setCurrentPage] = useState(1);
@@ -36,7 +39,9 @@ export default function JobPage() {
 
     const handleSearch = () => {
         if (currentPage === 1)  {
-            dispatch(initJobs({...formData, page: currentPage, limit: itemsPerPage }));
+            if (can(currentUser, "job", "read")) {
+                dispatch(initJobs({...formData, page: currentPage, limit: itemsPerPage }));
+            }
         }
         else {
             setCurrentPage(1);
@@ -44,7 +49,9 @@ export default function JobPage() {
     }
 
     useEffect(() => {
-        dispatch(initJobs({...formData, page: currentPage, limit: itemsPerPage }));
+        if (can(currentUser, "job", "read")) {
+            dispatch(initJobs({...formData, page: currentPage, limit: itemsPerPage }));
+        }
     }, [dispatch, currentPage]);
 
     return (
@@ -105,10 +112,12 @@ export default function JobPage() {
                         pageActivated={currentPage}
                     />
 
-                    <button
-                        className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
-                        onClick={() => router.push('/job/create')}
-                    >+</button>
+                    {can(currentUser,"job","create") &&
+                        <button
+                            className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
+                            onClick={() => router.push('/job/create')}
+                        >+</button>
+                    }
                 </div>
             }
         </>

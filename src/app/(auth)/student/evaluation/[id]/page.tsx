@@ -16,6 +16,8 @@ import { UserCombobox } from "@/components/ui/combo-box-user";
 import { iUserForm } from "@/types/user";
 import { Question } from "@/components/ui/question";
 import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function EvaluationCreatePage() {
 
@@ -31,6 +33,7 @@ export default function EvaluationCreatePage() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const evaluation = useSelector(selectEvaluation);
     const loading = useSelector(selectEvaluationLoading);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,10 +232,14 @@ export default function EvaluationCreatePage() {
                             <div className="flex gap-3">
                                 {!evaluation?.deleted_at &&
                                     <>
-                                        <Button type="submit">Salvar</Button>
-                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
-                                            Desabilitar
-                                        </Button>
+                                        {can(currentUser, "evaluation", "update") && (
+                                            <Button type="submit">Salvar</Button>)
+                                        }
+                                        {can(currentUser, "evaluation", "delete") && (
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                                Desabilitar
+                                            </Button>
+                                        )}
                                     </>
                                 }
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student/evaluation')}>

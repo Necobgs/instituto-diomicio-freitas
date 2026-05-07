@@ -8,7 +8,8 @@ import Loading from "@/components/ui/loading";
 import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
-import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount, selectUserHasNextPage } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
+import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount, selectUserHasNextPage, selectCurrentUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaultFilterUser } from "@/types/user";
 import { useRouter } from "next/navigation";
@@ -26,7 +27,7 @@ export default function UserPage(){
     const error = useSelector(selectUserError);
     const hasNextPage = useSelector(selectUserHasNextPage);
     const hasPreviousPage = useSelector(selectUserHasNextPage);
-
+    const currentUser = useSelector(selectCurrentUser);
     const [formData, setFormData] = useState(defaultFilterUser);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +44,9 @@ export default function UserPage(){
 
     const handleSearch = () => {
         if (currentPage === 1)  {
-            dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
+            if (can(currentUser, "user", "read")) {
+                dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
+            }
         }
         else {
             setCurrentPage(1);
@@ -51,7 +54,9 @@ export default function UserPage(){
     }
 
     useEffect(() => {
-        dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
+        if (can(currentUser, "user", "read")) {
+            dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
+        }
     }, [dispatch, currentPage]);
 
     return (
@@ -132,7 +137,9 @@ export default function UserPage(){
                 pageActivated={currentPage}
             />
 
-            <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/user/create')}}>+</button>
+            {can(currentUser, "user", "create") && (
+                <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/user/create')}}>+</button>
+            )}
         </div>}
         </>
     )

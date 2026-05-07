@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import { initEnterprises, selectEnterpriseError, selectEnterpriseLoading, selectEnterprises, selectEnterpriseCount, selectEnterpriseHasPreviousPage, selectEnterpriseHasNextPage } from "@/store/features/enterpriseSlice";
 import MaskedInput from "@/components/ui/masked-input";
 import { defaultFilterEnterprise } from "@/types/enterprise";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function EnterprisePage() {
 
@@ -25,6 +27,7 @@ export default function EnterprisePage() {
     const error = useSelector(selectEnterpriseError);
     const hasNextPage = useSelector(selectEnterpriseHasNextPage);
     const hasPreviousPage = useSelector(selectEnterpriseHasPreviousPage);
+    const currentUser = useSelector(selectCurrentUser);
 
     const [formData, setFormData] = useState(defaultFilterEnterprise);
     const [currentPage, setCurrentPage] = useState(1);
@@ -41,7 +44,9 @@ export default function EnterprisePage() {
 
     const handleSearch = () => {
         if (currentPage === 1)  {
-            dispatch(initEnterprises({...formData, page: currentPage, limit: itemsPerPage }));
+            if (can(currentUser, "enterprise", "read")) {
+                dispatch(initEnterprises({...formData, page: currentPage, limit: itemsPerPage }));
+            }
         }
         else {
             setCurrentPage(1);
@@ -49,7 +54,9 @@ export default function EnterprisePage() {
     }
 
     useEffect(() => {
-        dispatch(initEnterprises({...formData, page: currentPage, limit: itemsPerPage }));
+        if (can(currentUser, "enterprise", "read")) {
+            dispatch(initEnterprises({...formData, page: currentPage, limit: itemsPerPage }));
+        }
     }, [dispatch, currentPage]);
 
     return (
@@ -125,11 +132,12 @@ export default function EnterprisePage() {
                         hasPreviousPage={hasPreviousPage}
                         pageActivated={currentPage}
                     />
-
-                    <button
-                        className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
-                        onClick={() => router.push('/enterprise/create')}
-                    >+</button>
+                    {can(currentUser, "enterprise", "create") &&
+                        <button
+                            className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
+                            onClick={() => router.push('/enterprise/create')}
+                        >+</button>
+                    }
                 </div>
             }
         </>

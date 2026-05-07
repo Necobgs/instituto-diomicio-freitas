@@ -17,6 +17,8 @@ import { iEnterpriseForm } from "@/types/enterprise";
 import { JobCombobox } from "@/components/ui/combo-box-job";
 import { iJobForm } from "@/types/job";
 import { formatDateForInput } from "@/lib/format";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function ReferralCreatePage() {
 
@@ -32,6 +34,7 @@ export default function ReferralCreatePage() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const referral = useSelector(selectReferral);
     const loading = useSelector(selectReferralLoading);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,10 +186,14 @@ export default function ReferralCreatePage() {
                             <div className="flex gap-3">
                                 {!referral?.deleted_at &&
                                     <>
-                                        <Button type="submit">Salvar</Button>
-                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
-                                            Desabilitar
-                                        </Button>
+                                        {can(currentUser, "referral", "update") && (
+                                            <Button type="submit">Salvar</Button>
+                                        )}
+                                        {can(currentUser, "referral", "delete") && (
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                                Desabilitar
+                                            </Button>
+                                        )}
                                     </>
                                 }                               
                                 <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>

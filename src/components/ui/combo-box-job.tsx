@@ -21,6 +21,8 @@ import { iJobForm } from "@/types/job";
 import { useSelector } from "react-redux";
 import { initJobs, selectJobs } from "@/store/features/jobSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 interface JobComboboxProps {
   job: iJobForm | undefined;
@@ -43,10 +45,13 @@ export function JobCombobox({
 }: JobComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const jobs = useSelector(selectJobs);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    dispatch(initJobs({ page:1, limit:200, name:search, enabled:'true' }));
+    if (can(currentUser, "job", "read")) {
+      dispatch(initJobs({ page:1, limit:200, name:search, enabled:'true' }));
+    }
   };
 
   const handleSelect = (currentValue: number) => {
@@ -55,11 +60,15 @@ export function JobCombobox({
     const selectedJob = jobs.find((job) => job?.id?.toString() == selectedId);
     setJob(selectedJob);
     setOpen(false);
-    dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
+    if (can(currentUser, "job", "read")) {
+      dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
+    }
   };
 
   React.useEffect(() => {
+    if (can(currentUser, "job", "read")) {
       dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
+    }
   }, [dispatch]);
 
   return (

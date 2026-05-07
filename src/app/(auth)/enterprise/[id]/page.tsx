@@ -11,6 +11,8 @@ import { editEnterprise, getEnterpriseById, removeEnterprise, selectEnterprise, 
 import MaskedInput from "@/components/ui/masked-input";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function EnterpriseCreatePage() {
 
@@ -26,6 +28,7 @@ export default function EnterpriseCreatePage() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const enterprise = useSelector(selectEnterprise);
     const loading = useSelector(selectEnterpriseLoading);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,10 +161,14 @@ export default function EnterpriseCreatePage() {
                             <div className="flex gap-3">
                                 {!enterprise?.deleted_at &&
                                     <>
-                                        <Button type="submit">Salvar</Button>
-                                        <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
-                                            Desabilitar
-                                        </Button>
+                                        {can(currentUser,"enterprise","update") && (
+                                            <Button type="submit">Salvar</Button>
+                                        )}
+                                        {can(currentUser,"enterprise","delete") && (
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                                Desabilitar
+                                            </Button>
+                                        )}
                                     </>
                                 }
                                 <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>

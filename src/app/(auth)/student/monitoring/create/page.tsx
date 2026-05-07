@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatDateForInput } from "@/lib/format";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function MonitoringEditPage() {
 
@@ -25,6 +27,7 @@ export default function MonitoringEditPage() {
   const [isError,setIsError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const loading = useSelector(selectMonitoringLoading);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -127,7 +130,9 @@ export default function MonitoringEditPage() {
                 />
               </div>
               <div className="flex gap-3">
-                <Button type="submit">Salvar</Button>
+                {can(currentUser, "monitoring", "create") && (
+                    <Button type="submit">Salvar</Button>
+                )}
                 <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
               </div>
             </form>

@@ -10,6 +10,8 @@ import { useAppDispatch } from "@/store/hooks";
 import { addJob, selectJobLoading } from "@/store/features/jobSlice";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export default function JobCreatePage() {
 
@@ -22,6 +24,7 @@ export default function JobCreatePage() {
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const loading = useSelector(selectJobLoading);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +90,9 @@ export default function JobCreatePage() {
                                 />
                             </div>
                             <div className="flex gap-3">
-                                <Button type="submit">Salvar</Button>
+                                {can(currentUser, "job", "create") && (
+                                    <Button type="submit">Salvar</Button>
+                                )}
                                 <Button type="button" variant="secondary" onClick={() => router.push('/job')}>
                                     Cancelar
                                 </Button>

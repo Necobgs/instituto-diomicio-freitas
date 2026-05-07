@@ -21,6 +21,8 @@ import { iStudentForm } from "@/types/student";
 import { useSelector } from "react-redux";
 import { initStudents, selectStudents } from "@/store/features/studentSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 interface StudentComboboxProps {
   student: iStudentForm | undefined;
@@ -43,10 +45,13 @@ export function StudentCombobox({
 }: StudentComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const students = useSelector(selectStudents);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const handleSearch = (search: string) => {
-    dispatch(initStudents({ page:1, limit:200, name:search, enabled:'true' }));
+    if (can(currentUser, "student", "read")) {
+      dispatch(initStudents({ page:1, limit:200, name:search, enabled:'true' }));
+    }
   };
 
   const handleSelect = (currentValue: number) => {
@@ -55,11 +60,15 @@ export function StudentCombobox({
     const selectedStudent = students.find((student) => student?.id?.toString() == selectedId);
     setStudent(selectedStudent);
     setOpen(false);
-    dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+    if (can(currentUser, "student", "read")) {
+      dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+    }
   };
 
   React.useEffect(() => {
+    if (can(currentUser, "student", "read")) {
       dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+    }
   }, [dispatch]);
 
   return (

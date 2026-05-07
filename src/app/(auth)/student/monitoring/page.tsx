@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { can } from "@/functions/can";
 import { initMonitorings, selectMonitoringError, selectMonitoringHasNextPage, selectMonitoringHasPreviousPage, selectMonitoringLoading, selectMonitorings, selectMonitoringCount } from "@/store/features/monitoringSlice";
+import { selectCurrentUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaulFilterMonitoring } from "@/types/monitoring";
 import { iStudentForm } from "@/types/student";
@@ -25,6 +27,7 @@ export default function MonitoringPage() {
   const error = useSelector(selectMonitoringError);
   const hasNextPage = useSelector(selectMonitoringHasNextPage);
   const hasPreviousPage = useSelector(selectMonitoringHasPreviousPage);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
   const [formData, setFormData] = useState(defaulFilterMonitoring);
@@ -38,7 +41,9 @@ export default function MonitoringPage() {
 
   const handleSearch = () => {
       if (currentPage === 1)  {
+        if (can(currentUser, "monitoring", "read")) {
           dispatch(initMonitorings({...formData, page: currentPage, limit: itemsPerPage }));
+        }
       }
       else {
           setCurrentPage(1);
@@ -46,7 +51,9 @@ export default function MonitoringPage() {
   }
 
   useEffect(() => {
+    if (can(currentUser, "monitoring", "read")) {
       dispatch(initMonitorings({...formData, page: currentPage, limit: itemsPerPage }));
+    }
   }, [dispatch, currentPage]);
 
   return (
@@ -125,13 +132,11 @@ export default function MonitoringPage() {
             pageActivated={currentPage}
         />
 
-        <button
-          className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
-          onClick={() => {
-            router.push("/student/monitoring/create");
-          }}
-        >+
-        </button>
+        {can(currentUser, "monitoring", "create") && (
+            <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => { router.push("/student/monitoring/create");}}>
+                +
+            </button>
+        )}
       </div>}
     </>
   );

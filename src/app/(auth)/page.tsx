@@ -7,7 +7,7 @@ export default function HomePage() {
   const currentUser = useSelector(selectCurrentUser);
 
   return (
-    <div className="flex-1 flex items-center justify-center w-full h-full">
+    <div className="flex-1 flex items-center justify-center w-full h-full font-bold text-1xl">
       {`Bem vindo(a) ${currentUser?.username ? currentUser?.username : ""}!`}
     </div>
   );

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/store/hooks";
 import { initPermissions, selectPermissionLoading, selectPermissions } from "@/store/features/permissionSlice";
@@ -9,6 +9,9 @@ import { iUserForm } from "@/types/user";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { UserCombobox } from "./combo-box-user";
+import { getUserPermissionsById, selectCurrentUser, selectUserPermissions } from "@/store/features/userSlice";
+import { can } from "@/functions/can";
 
 export type PermissionsByResource = Record<string, iPermissionForm[]>;
 
@@ -28,13 +31,18 @@ export function PermissionModal({
   const dispatch = useAppDispatch();
   const allPermissions = useSelector(selectPermissions) ?? [];
   const loading = useSelector(selectPermissionLoading);
+  const [userToCopy, setUserToCopy] = useState<iUserForm | undefined>();
+  const userCopyPermissions = useSelector(selectUserPermissions);
+  const currentUser = useSelector(selectCurrentUser);
 
   useEffect(() => {
     if (!open) {
       return;
     }
 
-    dispatch(initPermissions({ page: 1, limit: 500 }));
+    if (can(currentUser, "permission", "read")) {
+      dispatch(initPermissions({ page: 1, limit: 500 }));
+    }
   }, [dispatch, open]);
 
   const permissionsByResource = allPermissions.reduce<PermissionsByResource>((groups, permission) => {
@@ -47,16 +55,43 @@ export function PermissionModal({
   }, {});
 
   const handleToggle = (permissionId: number) => {
-    setFormData((prev) => {
-      const currentIds = prev.permissionsId ?? [];
-      return {
-        ...prev,
-        permissionsId: currentIds.includes(permissionId)
-          ? currentIds.filter((id) => id !== permissionId)
-          : [...currentIds, permissionId],
-      };
-    });
+
+    if (can(currentUser, "permission", "update")) {
+
+      setFormData((prev) => {
+        const currentIds = prev.permissionsId ?? [];
+        return {
+          ...prev,
+          permissionsId: currentIds.includes(permissionId)
+            ? currentIds.filter((id) => id !== permissionId)
+            : [...currentIds, permissionId],
+        };
+      });
+    };
   };
+
+  const getUserPermissions = async (id: number) => {
+      try {
+          await dispatch(getUserPermissionsById(id)).unwrap();
+      } catch (error: any) {
+          console.log(true,error?.message || 'Erro ao buscar permissões do usuário');
+      }
+  };
+
+  useEffect(() => {
+    if (userToCopy?.id) {
+      getUserPermissions(userToCopy.id);
+    }
+  },[userToCopy]);
+
+  useEffect(() => {
+
+      let permissionsId = userCopyPermissions?.map((perm) => (perm?.id ? perm.id : 0)) || [];
+
+      if (userCopyPermissions) {
+          setFormData((prev) => ({...prev, permissionsId: permissionsId}));
+      }
+  }, [userCopyPermissions]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,6 +102,20 @@ export function PermissionModal({
             As permissões estão agrupadas pela página/recurso. Marque apenas as ações desejadas e clique em salvar na tela principal.
           </DialogDescription>
         </DialogHeader>
+
+        {can(currentUser, "permission", "update") && (  
+          <div>
+              <label className="font-bold">Copiar permissões do usuário:</label>
+              <div className="max-w-md">
+                  <UserCombobox 
+                      user={userToCopy}
+                      setUser={(user: iUserForm | undefined) => {
+                          setUserToCopy({...user});
+                      }}
+                  />
+              </div>
+          </div>
+        )}
 
         <div className="mt-4 max-h-[70vh] overflow-y-auto pr-2">
           {loading ? (

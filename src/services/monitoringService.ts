@@ -8,7 +8,7 @@ const getMonitorings = async ({ page = 1, limit = 8, student, visitDateIni, visi
   
   const filter: string = buildFilterQuery([
     { key: 'studentId', value: student?.id, operator: '$eq' }, 
-    { key: 'visitDate', value: [visitDateIni, visitDateEnd], operator: ['$gte', '$lte'] },
+    { key: 'visitDate', value: [visitDateIni, visitDateEnd], operator: ['$gte', '$lt'] },
   ]);
 
   const response = await api.get(endpoint,{

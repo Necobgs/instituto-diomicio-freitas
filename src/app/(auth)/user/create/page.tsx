@@ -8,10 +8,11 @@ import { defaultUser, iUserForm } from "@/types/user";
 import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
 import MaskedInput from "@/components/ui/masked-input";
-import { addUser, selectUserLoading } from "@/store/features/userSlice";
-import { useSelector } from "react-redux";
+import { addUser, selectCurrentUser } from "@/store/features/userSlice";
 import Loading from "@/components/ui/loading";
 import { PermissionModal } from "@/components/ui/permission-modal";
+import { useSelector } from "react-redux";
+import { can } from "@/functions/can";
 
 export default function UserCreatePage() {
     const router = useRouter();
@@ -23,7 +24,8 @@ export default function UserCreatePage() {
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [permissionsOpen, setPermissionsOpen] = useState(false);
-    const loading = useSelector(selectUserLoading);
+    const [loading, setLoading] = useState(false);
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,10 +68,13 @@ export default function UserCreatePage() {
         }
 
         try {
+            setLoading(true);
             await dispatch(addUser(formData)).unwrap();
             handleAlert(false,'Usuário cadastrado com sucesso!');
+            setLoading(false);
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao cadastrar usuário');
+            setLoading(false);
         }
     };
 
@@ -98,7 +103,7 @@ export default function UserCreatePage() {
                                         value={formData?.username || ''}
                                         onChange={handleInputChange}
                                         placeholder="Nome do usuário"
-                                        error={errors.name}
+                                        error={errors.username}
                                     />
                                 </div>
                                 <div>
@@ -124,10 +129,14 @@ export default function UserCreatePage() {
                                     />
                                 </div>
                                 <div className="flex gap-3">
-                                    <Button type="submit">Salvar</Button>
-                                    <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
-                                        Permissões
-                                    </Button>
+                                    {can(currentUser, "user", "create") && (
+                                        <>
+                                            <Button type="submit">Salvar</Button>
+                                            <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
+                                                Permissões
+                                            </Button>
+                                        </>
+                                    )}
                                     <Button type="button" variant="secondary" onClick={() => router.back()}>
                                         Cancelar
                                     </Button>
