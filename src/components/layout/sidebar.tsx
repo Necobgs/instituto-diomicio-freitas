@@ -95,7 +95,7 @@ export default function AppSidebar() {
             <SidebarMenu>
               {/* Itens principais */}
               {items.filter((item) => {
-                return can(currentUser, item.identifier, "read") || can(currentUser, item.identifier, "create");
+                return item.identifier === "home" || can(currentUser, item.identifier, "read") || can(currentUser, item.identifier, "create");
               }).map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
