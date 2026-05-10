@@ -35,16 +35,6 @@ export function PermissionModal({
   const userCopyPermissions = useSelector(selectUserPermissions);
   const currentUser = useSelector(selectCurrentUser);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    if (can(currentUser, "permission", "read")) {
-      dispatch(initPermissions({ page: 1, limit: 500 }));
-    }
-  }, [dispatch, open]);
-
   const permissionsByResource = allPermissions.reduce<PermissionsByResource>((groups, permission) => {
     const resourceName = permission.resource?.name || "Sem recurso";
     if (!groups[resourceName]) {
@@ -78,6 +68,17 @@ export function PermissionModal({
       }
   };
 
+  
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    if (can(currentUser, "permission", "read")) {
+      dispatch(initPermissions({ page: 1, limit: 500 }));
+    }
+  }, [dispatch, open]);
+
   useEffect(() => {
     if (userToCopy?.id) {
       getUserPermissions(userToCopy.id);
@@ -85,12 +86,14 @@ export function PermissionModal({
   },[userToCopy]);
 
   useEffect(() => {
-
+    
+    if (userToCopy) {
       let permissionsId = userCopyPermissions?.map((perm) => (perm?.id ? perm.id : 0)) || [];
 
       if (userCopyPermissions) {
           setFormData((prev) => ({...prev, permissionsId: permissionsId}));
       }
+    }
   }, [userCopyPermissions]);
 
   return (
