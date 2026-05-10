@@ -159,14 +159,14 @@ export default function UserEditPage() {
                             </div>
                             <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                                 <div>
-                                    <label htmlFor="name" className="text-sm font-medium">Nome</label>
+                                    <label htmlFor="username" className="text-sm font-medium">Nome</label>
                                     <Input
-                                        id="name"
-                                        name="name"
+                                        id="username"
+                                        name="username"
                                         value={formData?.username || ''}
                                         onChange={handleInputChange}
                                         placeholder="Nome do usuário"
-                                        error={errors.name} 
+                                        error={errors.username} 
                                     />
                                 </div>
                                 <div>

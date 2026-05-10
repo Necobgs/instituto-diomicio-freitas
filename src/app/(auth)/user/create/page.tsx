@@ -132,9 +132,11 @@ export default function UserCreatePage() {
                                     {can(currentUser, "user", "create") && (
                                         <>
                                             <Button type="submit">Salvar</Button>
-                                            <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
-                                                Permissões
-                                            </Button>
+                                            {can(currentUser, "permission", "read") && (
+                                                <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
+                                                    Permissões
+                                                </Button>
+                                            )}
                                         </>
                                     )}
                                     <Button type="button" variant="secondary" onClick={() => router.back()}>
