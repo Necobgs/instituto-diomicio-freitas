@@ -119,7 +119,9 @@ export default function LoginPage() {
               className="w-80"
               type="password"
             />
-            <a href="/recovery-password" className="ml-1">Esqueci a minha senha</a>
+            <a href="/recovery-password" className="ml-4 text-blue-500 hover:underline">
+              Esqueci minha senha
+            </a>
             <Button className="w-80 mt-auto" onClick={handleSubmit}>Entrar</Button>
 
             <InfoAlertDialog
