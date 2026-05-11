@@ -90,11 +90,13 @@ export default function UserEditPage() {
             setLoading(true);
             await dispatch(removeUser(id)).unwrap();
             setLoading(false);
-            router.push('/user');
+            handleAlert(false,'Usuário desabilitado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar usuário');
+            handleAlert(true,error?.message || 'Erro ao desabilitar usuário');
             setLoading(false);
         }
+
+        setAlertOpen(false);
     };
 
     const getUser = async (id: number) => {

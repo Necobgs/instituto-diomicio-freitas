@@ -105,7 +105,7 @@ export default function EvaluationCreatePage() {
 
         try {
             await dispatch(removeEvaluation(id)).unwrap();
-            router.push('/student/evaluation');
+            handleAlert(false,'Avaliação desabilitada com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao desabilitar avaliação');
         }

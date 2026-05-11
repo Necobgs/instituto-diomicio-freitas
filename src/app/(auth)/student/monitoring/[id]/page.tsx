@@ -84,7 +84,7 @@ export default function MonitoringEditPage() {
 
       try {
           await dispatch(removeMonitoring(id)).unwrap();
-          router.push('/student/monitoring');
+          handleAlert(false,'Acompanhamento desabilitado com sucesso!');
       } catch (error: any) {
           handleAlert(true,error?.message || 'Erro ao desabilitar acompanhamento');
       }

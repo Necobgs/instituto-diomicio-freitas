@@ -89,7 +89,7 @@ export default function ReferralCreatePage() {
 
         try {
             await dispatch(removeReferral(id)).unwrap();
-            router.push('/student/referral');
+            handleAlert(false,'Encaminhamento desabilitado com sucesso!');
         } catch (error: any) {
             handleAlert(true,error?.message || 'Erro ao desabilitar encaminhamento');
         }
