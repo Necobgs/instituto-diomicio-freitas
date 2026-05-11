@@ -3,7 +3,6 @@ import { buildFilterQuery } from "@/functions/filter";
 import { iDefaultResponse } from "@/types/app";
 import { iPermissionForm } from "@/types/permission";
 import { iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iPasswordChangeForm } from "@/types/user";
-import { get } from "http";
 
 const endpoint = 'user';
 

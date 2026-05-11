@@ -13,6 +13,7 @@ import Loading from "@/components/ui/loading";
 import { PermissionModal } from "@/components/ui/permission-modal";
 import { useSelector } from "react-redux";
 import { can } from "@/functions/can";
+import { validateCPF } from "@/functions/validateCpf";
 
 export default function UserCreatePage() {
     const router = useRouter();
@@ -54,7 +55,7 @@ export default function UserCreatePage() {
         if (!formData.username?.trim()) newErrors.username = "Nome é obrigatório";
         if (!formData.email?.trim()) newErrors.email = "Email é obrigatório";
         if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
-        else if (formData.cpf.trim().length < 11) newErrors.cpf = "CPF inválido";
+        else if (!validateCPF(formData.cpf)) newErrors.cpf = "CPF inválido";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;

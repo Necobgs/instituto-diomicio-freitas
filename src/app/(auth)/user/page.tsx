@@ -9,7 +9,7 @@ import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { can } from "@/functions/can";
-import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount, selectUserHasNextPage, selectCurrentUser } from "@/store/features/userSlice";
+import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount, selectUserHasNextPage, selectCurrentUser, selectUserHasPreviousPage } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaultFilterUser } from "@/types/user";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ export default function UserPage(){
     const loading = useSelector(selectUserLoading);
     const error = useSelector(selectUserError);
     const hasNextPage = useSelector(selectUserHasNextPage);
-    const hasPreviousPage = useSelector(selectUserHasNextPage);
+    const hasPreviousPage = useSelector(selectUserHasPreviousPage);
     const currentUser = useSelector(selectCurrentUser);
     const [formData, setFormData] = useState(defaultFilterUser);
 

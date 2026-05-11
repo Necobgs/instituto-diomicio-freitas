@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { validateCNPJ } from "@/functions/validateCnpj";
 
 export default function EnterpriseCreatePage() {
 
@@ -56,7 +57,7 @@ export default function EnterpriseCreatePage() {
         if (!formData.phone?.trim()) newErrors.phone = "Telefone é obrigatório";
         else if (formData.phone?.trim().length < 10) newErrors.phone = "Telefone inválido";
         if (!formData.cnpj?.trim()) newErrors.cnpj = "CNPJ é obrigatório";
-        else if (formData.cnpj?.trim().length < 14) newErrors.cnpj = "CNPJ inválido";
+        else if (!validateCNPJ(formData.cnpj)) newErrors.cnpj = "CNPJ inválido";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;

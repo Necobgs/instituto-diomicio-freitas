@@ -16,6 +16,7 @@ import { Combobox } from "@/components/ui/combo-box";
 import { Textarea } from "@/components/ui/textarea";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { validateCPF } from "@/functions/validateCpf";
 
 export default function StudentEditPage() {
 
@@ -59,7 +60,7 @@ export default function StudentEditPage() {
         else if (formData.phone?.trim().length < 10) newErrors.phone = "Telefone inválido";
         if (!formData?.dateBirthday) newErrors.dateBirthday = "Data de nascimento é obrigatória";
         if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
-        else if (formData.cpf?.trim().length < 11) newErrors.cpf = "CPF inválido";
+        else if (!validateCPF(formData.cpf)) newErrors.cpf = "CPF inválido";
         if (!formData.responsibleName?.trim()) newErrors.responsibleName = "Nome do responsável é obrigatório";
         if (!formData.responsiblePhone?.trim()) newErrors.responsiblePhone = "Telefone do responsável é obrigatório";
         else if (formData.responsiblePhone?.trim().length < 10) newErrors.responsiblePhone = "Telefone do responsável inválido";

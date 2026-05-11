@@ -12,12 +12,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { passwordChange } from "@/store/features/userSlice";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function RecoveryPasswordPage() {
+function RecoveryPasswordPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();  
   const dispatch = useAppDispatch();
@@ -90,5 +90,13 @@ export default function RecoveryPasswordPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  );
+}
+
+export default function RecoveryPasswordPage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <RecoveryPasswordPageContent />
+    </Suspense>
   );
 }

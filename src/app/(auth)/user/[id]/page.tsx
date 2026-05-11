@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PermissionModal } from "@/components/ui/permission-modal";
 import { useParams, useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultUser, iUserForm } from "@/types/user";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/store/hooks";
 import MaskedInput from "@/components/ui/masked-input";
 import Loading from "@/components/ui/loading";
 import { can } from "@/functions/can";
+import { validateCPF } from "@/functions/validateCpf";
 
 export default function UserEditPage() {
 
@@ -59,7 +60,7 @@ export default function UserEditPage() {
         if (!formData.username?.trim()) newErrors.name = "Nome é obrigatório";
         if (!formData.email?.trim()) newErrors.email = "Email é obrigatório";
         if (!formData.cpf?.trim()) newErrors.cpf = "CPF é obrigatório";
-        else if (formData.cpf?.trim().length < 11) newErrors.cpf = "CPF inválido";
+        else if (!validateCPF(formData.cpf)) newErrors.cpf = "CPF inválido";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
