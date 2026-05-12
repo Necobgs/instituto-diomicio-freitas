@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { defaultJob, iJobForm } from "@/types/job";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { addJob, editJob, getJobById, removeJob, selectJob, selectJobLoading } from "@/store/features/jobSlice";
+import { addJob, editJob, getJobById, removeJob, restoreJob, selectJob, selectJobLoading } from "@/store/features/jobSlice";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { selectCurrentUser } from "@/store/features/userSlice";
@@ -64,14 +64,24 @@ export default function JobCreatePage() {
         }
     };
 
-    const handleDisable = async(e: React.FormEvent) => {
+    const handleEnableOrDisable = async(e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            await dispatch(removeJob(id)).unwrap();
-            handleAlert(false,'Cargo desabilitado com sucesso!');
-        } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar cargo');
+        if (!job?.deleted_at) {
+            try {
+                await dispatch(removeJob(id)).unwrap();
+                handleAlert(false,'Cargo desabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao desabilitar cargo');
+            }
+        }
+        else {
+            try {
+                await dispatch(restoreJob(id)).unwrap();
+                handleAlert(false,'Cargo reabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao reabilitar cargo');
+            }
         }
 
         setAlertOpen(false);
@@ -132,12 +142,23 @@ export default function JobCreatePage() {
                                             <Button type="submit">Salvar</Button>
                                         )}
                                         {can(currentUser,"job","delete") && (
-                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                                setAlertDesc("Tem certeza que deseja desabilitar este registro?");
+                                                setAlertOpen(true);
+                                            }}>
                                                 Desabilitar
                                             </Button>
                                         )}
                                     </>
                                 }
+                                {can(currentUser,"job","restore") && job?.deleted_at && (
+                                    <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                                        setAlertDesc("Tem certeza que deseja reabilitar este registro?");
+                                        setAlertOpen(true);
+                                    }}>
+                                        Reabilitar
+                                    </Button>
+                                )}
                                 <Button type="button" variant="secondary" onClick={() => router.push('/job')}>
                                     Cancelar
                                 </Button>
@@ -146,11 +167,11 @@ export default function JobCreatePage() {
                     </section>
 
                     <DefaultAlertDialog
-                        message="Tem certeza que deseja desabilitar este registro?" 
+                        message={alertDesc}
                         title="Confirmação" 
                         open={alertOpen} 
                         textBtn="Confirmar" 
-                        onClickBtn={handleDisable} 
+                        onClickBtn={handleEnableOrDisable} 
                         onOpenChange={setAlertOpen}
                     />
 

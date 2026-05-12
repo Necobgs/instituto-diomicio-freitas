@@ -24,6 +24,10 @@ export const removeMonitoring = createAsyncThunk('monitoring/remove', async (pay
     return await monitoringService.removeMonitoring(payload);
 });
 
+export const restoreMonitoring = createAsyncThunk('monitoring/restore', async (id: number) => {
+    return await monitoringService.restoreMonitoring(id);
+});
+
 const initialState: iMonitoringState = {
     monitorings: [],
     monitoring: null,
@@ -112,7 +116,21 @@ const monitoringSlice = createSlice({
             .addCase(removeMonitoring.rejected, (state) => {
                 state.error = "Erro ao remover registro";
                 state.loading = false;
+            })
+            .addCase(restoreMonitoring.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreMonitoring.fulfilled, (state, action: PayloadAction<iMonitoringForm>) => {
+                state.monitorings.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreMonitoring.rejected, (state) => {
+                state.error = "Erro ao restaurar acompanhamento";
+                state.loading = false;
             });
+
     },
 });
 

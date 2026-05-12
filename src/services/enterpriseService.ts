@@ -70,10 +70,21 @@ const removeEnterprise = async (id: number): Promise<iEnterpriseForm> => {
   }
 }
 
+const restoreEnterprise = async (id: number): Promise<iEnterpriseForm> => {
+  try {
+      const response = await api.patch(`${endpoint}/${id}/restore`);
+      return response.data as iEnterpriseForm;
+  } catch (error: any) {
+      console.log("Error restoring enterprise:", error);
+      throw error?.response?.data?.message || 'Erro ao restaurar empresa';
+  }
+}
+
 export default {
     getEnterprises,
     addEnterprise,
     editEnterprise,
     removeEnterprise,
-    getEnterpriseById
+    restoreEnterprise,
+    getEnterpriseById,
 };

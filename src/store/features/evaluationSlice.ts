@@ -24,6 +24,9 @@ export const removeEvaluation = createAsyncThunk('evaluation/remove', async (pay
     return payload;
 });
 
+export const restoreEvaluation = createAsyncThunk('evaluation/restore', async (id: number) => {
+    return await evaluationService.restoreEvaluation(id);
+});
 
 const initialState: iEvaluationState = {
     evaluations: [],
@@ -111,6 +114,19 @@ const evaluationSlice = createSlice({
             })
             .addCase(removeEvaluation.rejected, (state) => {
                 state.error = "Erro ao remover registro";
+                state.loading = false;
+            })
+            .addCase(restoreEvaluation.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreEvaluation.fulfilled, (state, action: PayloadAction<iEvaluationForm>) => {
+                state.evaluations.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreEvaluation.rejected, (state) => {
+                state.error = "Erro ao restaurar avaliação";
                 state.loading = false;
             });
     },

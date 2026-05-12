@@ -21,9 +21,13 @@ export const editReferral = createAsyncThunk('referral/edit', async (payload: iR
 });
 
 export const removeReferral = createAsyncThunk('referral/remove', async (payload: number) => {
-    await referralService.removeReferral(payload);
-    return payload;
+    return await referralService.removeReferral(payload);
 });
+
+export const restoreReferral = createAsyncThunk('referral/restore', async (payload: number) => {
+    return await referralService.restoreReferral(payload);
+});
+
 
 const initialState: iReferralState = {
     referrals: [],
@@ -104,7 +108,7 @@ const referralSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(removeReferral.fulfilled, (state, action: PayloadAction<number>) => {
+            .addCase(removeReferral.fulfilled, (state, action: PayloadAction<iReferralForm>) => {
                 state.referrals = state.referrals.filter((t) => t.id !== action.payload);
                 state.count = state.count - 1;
                 state.error = null;
@@ -112,6 +116,19 @@ const referralSlice = createSlice({
             })
             .addCase(removeReferral.rejected, (state) => {
                 state.error = "Erro ao remover registro";
+                state.loading = false;
+            })
+            .addCase(restoreReferral.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreReferral.fulfilled, (state, action: PayloadAction<iReferralForm>) => {
+                state.referrals.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreReferral.rejected, (state) => {
+                state.error = "Erro ao restaurar encaminhamento";
                 state.loading = false;
             });
     },

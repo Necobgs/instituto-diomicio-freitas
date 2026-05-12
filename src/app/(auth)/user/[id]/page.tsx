@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { defaultUser, iUserForm } from "@/types/user";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useSelector } from "react-redux";
-import { editUser, getUserById, getUserPermissionsById, removeUser, selectCurrentUser, selectUser, selectUserLoading, selectUserPermissions } from "@/store/features/userSlice";
+import { editUser, getUserById, getUserPermissionsById, removeUser, restoreUser, selectCurrentUser, selectUser, selectUserLoading, selectUserPermissions } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import MaskedInput from "@/components/ui/masked-input";
 import Loading from "@/components/ui/loading";
@@ -84,17 +84,30 @@ export default function UserEditPage() {
         }
     };
 
-    const handleDisable = async(e: React.FormEvent) => {
+    const handleEnableOrDisable = async(e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            setLoading(true);
-            await dispatch(removeUser(id)).unwrap();
-            setLoading(false);
-            handleAlert(false,'Usuário desabilitado com sucesso!');
-        } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar usuário');
-            setLoading(false);
+        if (!user?.deleted_at) {
+            try {
+                setLoading(true);
+                await dispatch(removeUser(id)).unwrap();
+                setLoading(false);
+                handleAlert(false,'Usuário desabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao desabilitar usuário');
+                setLoading(false);
+            }
+        }
+        else {
+            try {
+                setLoading(true);
+                await dispatch(restoreUser(id)).unwrap();
+                setLoading(false);
+                handleAlert(false,'Usuário reabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao reabilitar usuário');
+                setLoading(false);
+            }
         }
 
         setAlertOpen(false);
@@ -202,12 +215,23 @@ export default function UserEditPage() {
                                                     <Button type="submit">Salvar</Button>
                                                 )}
                                                 {can(currentUser, "user", "delete") && (
-                                                    <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                                    <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                                        setAlertDesc("Tem certeza que deseja desabilitar este registro?");
+                                                        setAlertOpen(true);
+                                                    }}>
                                                         Desabilitar
                                                     </Button>
                                                 )}
                                             </>
                                         }
+                                        {can(currentUser, "user", "restore") &&  user?.deleted_at && (
+                                            <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                                                setAlertDesc("Tem certeza que deseja reabilitar este registro?");
+                                                setAlertOpen(true);
+                                            }}>
+                                                Reabilitar
+                                            </Button>
+                                        )}
                                         {can(currentUser, "permission", "read") && (
                                             <Button type="button" className="bg-blue-600 hover:bg-blue-400" onClick={() => setPermissionsOpen(true)}>
                                                 Permissões
@@ -229,11 +253,11 @@ export default function UserEditPage() {
                         />
 
                         <DefaultAlertDialog
-                            message="Tem certeza que deseja desabilitar este registro?" 
+                            message={alertDesc}
                             title="Confirmação" 
                             open={alertOpen} 
                             textBtn="Confirmar" 
-                            onClickBtn={handleDisable} 
+                            onClickBtn={handleEnableOrDisable} 
                             onOpenChange={setAlertOpen}
                         />
 

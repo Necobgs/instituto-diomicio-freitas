@@ -75,10 +75,21 @@ const removeStudent = async (id: number): Promise<iStudentForm> => {
   }
 }
 
+const restoreStudent = async (id: number): Promise<iStudentForm> => {
+  try {
+    const response = await api.patch(`${endpoint}/${id}/restore`);
+    return response.data as iStudentForm;
+  } catch (error: any) {
+    console.log("Error restoring student:", error);
+    throw error?.response?.data?.message || 'Erro ao restaurar estudante';
+  }
+}
+
 export default {
   getStudents,
   addStudent,
   editStudent,
   removeStudent,
+  restoreStudent,
   getStudentById
 };

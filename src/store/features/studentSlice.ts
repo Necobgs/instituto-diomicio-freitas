@@ -24,6 +24,11 @@ export const removeStudent = createAsyncThunk('student/remove', async (id: numbe
     return response;
 });
 
+export const restoreStudent = createAsyncThunk('student/restore', async (id: number) => {
+    const response = await studentService.restoreStudent(id);
+    return response;
+});
+
 const initialState: iStudentState = {
     students: [],
     student: null,
@@ -110,6 +115,19 @@ const studentSlice = createSlice({
             })
             .addCase(removeStudent.rejected, (state) => {
                 state.error = "Erro ao remover registro";
+                state.loading = false;
+            })
+            .addCase(restoreStudent.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreStudent.fulfilled, (state, action: PayloadAction<iStudentForm>) => {
+                state.students.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreStudent.rejected, (state) => {
+                state.error = "Erro ao restaurar estudante";
                 state.loading = false;
             });
     },

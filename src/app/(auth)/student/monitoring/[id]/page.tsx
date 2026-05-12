@@ -8,7 +8,7 @@ import { defaultMonitoring, iMonitoringForm } from "@/types/monitoring";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { iStudentForm } from "@/types/student";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
-import { addMonitoring, editMonitoring, getMonitoringById, removeMonitoring, selectMonitoring, selectMonitoringLoading } from "@/store/features/monitoringSlice";
+import { addMonitoring, editMonitoring, getMonitoringById, removeMonitoring, restoreMonitoring, selectMonitoring, selectMonitoringLoading } from "@/store/features/monitoringSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDateForInput } from "@/lib/format";
@@ -79,14 +79,24 @@ export default function MonitoringEditPage() {
       }
   };
 
-  const handleDisable = async(e: React.FormEvent) => {
+  const handleEnableOrDisable = async(e: React.FormEvent) => {
       e.preventDefault();
 
-      try {
-          await dispatch(removeMonitoring(id)).unwrap();
-          handleAlert(false,'Acompanhamento desabilitado com sucesso!');
-      } catch (error: any) {
-          handleAlert(true,error?.message || 'Erro ao desabilitar acompanhamento');
+      if (!monitoring?.deleted_at) {
+        try {
+            await dispatch(removeMonitoring(id)).unwrap();
+            handleAlert(false,'Acompanhamento desabilitado com sucesso!');
+        } catch (error: any) {
+            handleAlert(true,error?.message || 'Erro ao desabilitar acompanhamento');
+        }
+      } 
+      else {
+        try {
+            await dispatch(restoreMonitoring(id)).unwrap();
+            handleAlert(false,'Acompanhamento reabilitado com sucesso!');
+        } catch (error: any) {
+            handleAlert(true,error?.message || 'Erro ao reabilitar acompanhamento');
+        }
       }
 
       setAlertOpen(false);
@@ -173,23 +183,34 @@ export default function MonitoringEditPage() {
                             <Button type="submit">Salvar</Button>
                         )}
                         {can(currentUser, "monitoring", "delete") && (
-                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                setAlertDesc("Tem certeza que deseja desabilitar este registro?");
+                                setAlertOpen(true);
+                            }}>
                                 Desabilitar
                             </Button>
                         )}
                     </>
                 }
+                {can(currentUser, "monitoring", "restore") && monitoring?.deleted_at && (
+                    <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                        setAlertDesc("Tem certeza que deseja reabilitar este registro?");
+                        setAlertOpen(true);
+                    }}>
+                        Reabilitar
+                    </Button>
+                )}
                 <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
               </div>
             </form>
           </section>
 
           <DefaultAlertDialog
-              message="Tem certeza que deseja desabilitar este registro?"
+              message={alertDesc}
               title="Confirmação"
               open={alertOpen}
               textBtn="Confirmar"
-              onClickBtn={handleDisable}
+              onClickBtn={handleEnableOrDisable}
               onOpenChange={setAlertOpen}
           />
 

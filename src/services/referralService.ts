@@ -72,10 +72,21 @@ const removeReferral = async (id: number): Promise<iReferralForm> => {
   }
 };
 
+const restoreReferral = async (id: number): Promise<iReferralForm> => {
+  try {
+    const response = await api.patch(`${endpoint}/${id}/restore`);
+    return response.data as iReferralForm;
+  } catch (error: any) {
+    console.log("Error restoring referral:", error);
+    throw error?.response?.data?.message || 'Erro ao restaurar encaminhamento';
+  }
+};
+
 export default {
     getReferrals,
     addReferral,
     editReferral,
     removeReferral,
+    restoreReferral,
     getReferralById
 };

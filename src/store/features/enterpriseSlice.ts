@@ -23,6 +23,10 @@ export const removeEnterprise = createAsyncThunk('enterprise/remove', async (id:
     return await enterpriseService.removeEnterprise(id);
 });
 
+export const restoreEnterprise = createAsyncThunk('enterprise/restore', async (id: number) => {
+    return await enterpriseService.restoreEnterprise(id);
+});
+
 const initialState: iEnterpriseState = {
     enterprises: [],
     enterprise: null,
@@ -103,6 +107,19 @@ const enterpriseSlice = createSlice({
             })
             .addCase(removeEnterprise.rejected, (state) => {
                 state.error = "Erro ao remover registro";
+                state.loading = false;
+            })
+            .addCase(restoreEnterprise.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreEnterprise.fulfilled, (state, action: PayloadAction<iEnterpriseForm>) => {
+                state.enterprises.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreEnterprise.rejected, (state) => {
+                state.error = "Erro ao restaurar empresa";
                 state.loading = false;
             })
     },

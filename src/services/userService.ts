@@ -82,6 +82,16 @@ const removeUser = async (id: number): Promise<iUserForm> => {
     }
 }
 
+const restoreUser = async (id: number): Promise<iUserForm> => {
+    try {
+        const response = await api.patch(`${endpoint}/${id}/restore`);
+        return response.data as iUserForm;
+    } catch (error: any) {
+        console.log("Error restoring user:", error);
+        throw error?.response?.data?.message || 'Erro ao restaurar usuário';
+    }
+}
+
 const passwordChange = async (credentials: iPasswordChangeForm): Promise<iDefaultResponse> => {
     try {
         const response = await api.post(`${endpoint}/password-change`, credentials);
@@ -144,6 +154,7 @@ export default {
     passwordChangeRequest,
     editUser,
     removeUser,
+    restoreUser,
     getUserById,
     getUserPermissionsById,
     login,

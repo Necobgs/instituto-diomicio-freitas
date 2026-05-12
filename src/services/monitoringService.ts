@@ -69,10 +69,21 @@ const removeMonitoring = async (id: number): Promise<iMonitoringForm> => {
   }
 };
 
+const restoreMonitoring = async (id: number): Promise<iMonitoringForm> => {
+  try {
+    const response = await api.patch(`${endpoint}/${id}/restore`);
+    return response.data as iMonitoringForm;
+  } catch (error: any) {
+    console.log("Error restoring monitoring:", error);
+    throw error?.response?.data?.message || 'Erro ao restaurar acompanhamento';
+  }
+};
+
 export default {
     getMonitorings,
     addMonitoring,
     editMonitoring,
     removeMonitoring,
+    restoreMonitoring,
     getMonitoringById
 };

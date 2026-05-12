@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
-import { editEvaluation, getEvaluationById, removeEvaluation, selectEvaluation, selectEvaluationLoading } from "@/store/features/evaluationSlice";
+import { editEvaluation, getEvaluationById, removeEvaluation, restoreEvaluation, selectEvaluation, selectEvaluationLoading } from "@/store/features/evaluationSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaultEvaluation, defaultQuestions, iEvaluationForm } from "@/types/evaluation";
 import { iStudentForm } from "@/types/student";
@@ -100,14 +100,24 @@ export default function EvaluationCreatePage() {
         handleAlert(false,'Avaliação alterada com sucesso!');
     };
 
-    const handleDisable = async(e: React.FormEvent) => {
+    const handleEnableOrDisable = async(e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            await dispatch(removeEvaluation(id)).unwrap();
-            handleAlert(false,'Avaliação desabilitada com sucesso!');
-        } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar avaliação');
+        if (!evaluation?.deleted_at) {
+            try {
+                await dispatch(removeEvaluation(id)).unwrap();
+                handleAlert(false,'Avaliação desabilitada com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao desabilitar avaliação');
+            }
+        }
+        else {
+            try {
+                await dispatch(restoreEvaluation(id)).unwrap();
+                handleAlert(false,'Avaliação reabilitada com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao reabilitar avaliação');
+            }
         }
 
         setAlertOpen(false);
@@ -236,12 +246,23 @@ export default function EvaluationCreatePage() {
                                             <Button type="submit">Salvar</Button>)
                                         }
                                         {can(currentUser, "evaluation", "delete") && (
-                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                                setAlertDesc("Tem certeza que deseja desabilitar este registro?");
+                                                setAlertOpen(true);
+                                            }}>
                                                 Desabilitar
                                             </Button>
                                         )}
                                     </>
                                 }
+                                {can(currentUser, "evaluation", "restore") && evaluation?.deleted_at && (
+                                    <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                                        setAlertDesc("Tem certeza que deseja reabilitar este registro?");
+                                        setAlertOpen(true);
+                                    }}>
+                                        Reabilitar
+                                    </Button>
+                                )}
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student/evaluation')}>
                                     Cancelar
                                 </Button>
@@ -250,11 +271,11 @@ export default function EvaluationCreatePage() {
                     </section>
 
                     <DefaultAlertDialog
-                        message="Tem certeza que deseja desabilitar este registro?" 
+                        message={alertDesc}
                         title="Confirmação" 
                         open={alertOpen} 
                         textBtn="Confirmar" 
-                        onClickBtn={handleDisable} 
+                        onClickBtn={handleEnableOrDisable} 
                         onOpenChange={setAlertOpen}
                     />
                     

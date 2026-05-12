@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { defaultReferral, iReferralForm } from "@/types/referral";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { editReferral, getReferralById, removeReferral, selectReferral, selectReferralLoading } from "@/store/features/referralSlice";
+import { editReferral, getReferralById, removeReferral, restoreReferral, selectReferral, selectReferralLoading } from "@/store/features/referralSlice";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
@@ -84,14 +84,24 @@ export default function ReferralCreatePage() {
         }
     };
 
-    const handleDisable = async(e: React.FormEvent) => {
+    const handleEnableOrDisable = async(e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            await dispatch(removeReferral(id)).unwrap();
-            handleAlert(false,'Encaminhamento desabilitado com sucesso!');
-        } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar encaminhamento');
+        if (!referral?.deleted_at) {
+            try {
+                await dispatch(removeReferral(id)).unwrap();
+                handleAlert(false,'Encaminhamento desabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao desabilitar encaminhamento');
+            }
+        }
+        else {
+            try {
+                await dispatch(restoreReferral(id)).unwrap();
+                handleAlert(false,'Encaminhamento reabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao reabilitar encaminhamento');
+            }
         }
 
         setAlertOpen(false);
@@ -190,23 +200,34 @@ export default function ReferralCreatePage() {
                                             <Button type="submit">Salvar</Button>
                                         )}
                                         {can(currentUser, "referral", "delete") && (
-                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                                setAlertDesc("Tem certeza que deseja desabilitar este registro?");
+                                                setAlertOpen(true);
+                                            }}>
                                                 Desabilitar
                                             </Button>
                                         )}
                                     </>
-                                }                               
+                                }  
+                                {can(currentUser, "referral", "restore") && referral?.deleted_at && (
+                                    <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                                        setAlertDesc("Tem certeza que deseja reabilitar este registro?"); 
+                                        setAlertOpen(true);
+                                    }}>
+                                        Reabilitar
+                                    </Button>
+                                )}                             
                                 <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
                             </div>
                         </form>
                     </section>
 
                     <DefaultAlertDialog
-                        message="Tem certeza que deseja desabilitar este registro?" 
+                        message={alertDesc} 
                         title="Confirmação" 
                         open={alertOpen} 
                         textBtn="Confirmar" 
-                        onClickBtn={handleDisable} 
+                        onClickBtn={handleEnableOrDisable} 
                         onOpenChange={setAlertOpen}
                     />
                     

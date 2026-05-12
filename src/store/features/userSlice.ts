@@ -30,6 +30,11 @@ export const removeUser = createAsyncThunk('user/remove', async (id: number) => 
     return response;
 });
 
+export const restoreUser = createAsyncThunk('user/restore', async (id: number) => {
+    const response = await userService.restoreUser(id);
+    return response;
+});
+
 export const passwordChange = createAsyncThunk('user/password-change', async (payload: iPasswordChangeForm) => {
     const response = await userService.passwordChange(payload);
     return response;
@@ -185,6 +190,20 @@ const userSlice = createSlice({
             })
             .addCase(removeUser.rejected, (state, action) => {
                 state.error = action.payload as string;
+                state.loading = false;
+            })
+            .addCase(restoreUser.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreUser.fulfilled, (state, action: PayloadAction<iUserForm>) => {
+                state.users.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreUser.rejected, (state) => {
+                state.error = "Erro ao restaurar usuário";
+                state.error = null;
                 state.loading = false;
             })
             .addCase(passwordChange.pending, (state) => {

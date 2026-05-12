@@ -68,10 +68,21 @@ const removeJob = async (id: number): Promise<iJobForm> => {
   }
 }
 
+const restoreJob = async (id: number): Promise<iJobForm> => {
+  try {
+    const response = await api.patch(`${endpoint}/${id}/restore`);
+    return response.data as iJobForm;
+  } catch (error: any) {
+    console.log("Error restoring job:", error);
+    throw error?.response?.data?.message || 'Erro ao restaurar cargo';
+  }
+}
+
 export default {
     getJobs,
     addJob,
     editJob,
     removeJob,
+    restoreJob,
     getJobById
 };

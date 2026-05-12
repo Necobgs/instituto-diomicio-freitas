@@ -24,6 +24,10 @@ export const removeJob = createAsyncThunk('job/remove', async (id: number) => {
     return response;
 });
 
+export const restoreJob = createAsyncThunk('job/restore', async (id: number) => {
+    return await jobService.restoreJob(id);
+});
+
 const initialState: iJobState = {
     jobs: [],
     job: null,
@@ -110,6 +114,19 @@ const jobSlice = createSlice({
             })
             .addCase(removeJob.rejected, (state) => {
                 state.error = "Erro ao remover registro";
+                state.loading = false;
+            })
+            .addCase(restoreJob.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+            })
+            .addCase(restoreJob.fulfilled, (state, action: PayloadAction<iJobForm>) => {
+                state.jobs.push(action.payload);
+                state.error = null;
+                state.loading = false;
+            })
+            .addCase(restoreJob.rejected, (state) => {
+                state.error = "Erro ao restaurar cargo";
                 state.loading = false;
             });
     },

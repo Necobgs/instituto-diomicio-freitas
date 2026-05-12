@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { defaultStudent, iStudentForm } from "@/types/student";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { editStudent, getStudentById, removeStudent, selectStudent, selectStudentLoading } from "@/store/features/studentSlice";
+import { editStudent, getStudentById, removeStudent, restoreStudent, selectStudent, selectStudentLoading } from "@/store/features/studentSlice";
 import MaskedInput from "@/components/ui/masked-input";
 import { formatDateForInput } from "@/lib/format";
 import { useSelector } from "react-redux";
@@ -87,14 +87,24 @@ export default function StudentEditPage() {
         }
     };
 
-    const handleDisable = async(e: React.FormEvent) => {
+    const handleEnableOrDisable = async(e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            await dispatch(removeStudent(id)).unwrap();
-            handleAlert(false,'Estudante desabilitado com sucesso!');
-        } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar estudante');
+        if (!student?.deleted_at) {
+            try {
+                await dispatch(removeStudent(id)).unwrap();
+                handleAlert(false,'Estudante desabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao desabilitar estudante');
+            }
+        }
+        else {
+            try {
+                await dispatch(restoreStudent(id)).unwrap();
+                handleAlert(false,'Estudante reabilitado com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao reabilitar estudante');
+            }
         }
 
         setAlertOpen(false);
@@ -240,12 +250,23 @@ export default function StudentEditPage() {
                                             <Button type="submit">Salvar</Button>
                                         )}
                                         {can(currentUser, "student", "delete") && (
-                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                                setAlertDesc("Tem certeza que deseja desabilitar este registro?"); 
+                                                setAlertOpen(true); 
+                                            }}>
                                                 Desabilitar
                                             </Button>
                                         )}
                                     </>
                                 }
+                                {can(currentUser, "student", "restore") && student?.deleted_at && (
+                                    <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                                        setAlertDesc("Tem certeza que deseja reabilitar este registro?"); 
+                                        setAlertOpen(true); 
+                                    }}>
+                                        Reabilitar
+                                    </Button>
+                                )}
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
                                     Cancelar
                                 </Button>
@@ -254,11 +275,11 @@ export default function StudentEditPage() {
                     </section>
 
                     <DefaultAlertDialog
-                        message="Tem certeza que deseja desabilitar este registro?" 
+                        message={alertDesc}
                         title="Confirmação" 
                         open={alertOpen} 
                         textBtn="Confirmar" 
-                        onClickBtn={handleDisable} 
+                        onClickBtn={handleEnableOrDisable} 
                         onOpenChange={setAlertOpen}
                     />
 

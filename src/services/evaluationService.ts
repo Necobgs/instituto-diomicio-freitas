@@ -70,10 +70,21 @@ const removeEvaluation = async (id: number): Promise<iEvaluationForm> => {
   }
 };
 
+const restoreEvaluation = async (id: number): Promise<iEvaluationForm> => {
+  try {
+    const response = await api.patch(`${endpoint}/${id}/restore`);
+    return response.data as iEvaluationForm;
+  } catch (error: any) {
+    console.log("Error restoring evaluation:", error);
+    throw error?.response?.data?.message || 'Erro ao restaurar avaliação';
+  }
+};
+
 export default {
     getEvaluations,
     addEvaluation,
     editEvaluation,
     removeEvaluation,
-    getEvaluationById
+    getEvaluationById,
+    restoreEvaluation,
 };

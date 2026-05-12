@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { defaultEnterprise, iEnterpriseForm } from "@/types/enterprise";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { editEnterprise, getEnterpriseById, removeEnterprise, selectEnterprise, selectEnterpriseLoading } from "@/store/features/enterpriseSlice";
+import { editEnterprise, getEnterpriseById, removeEnterprise, restoreEnterprise, selectEnterprise, selectEnterpriseLoading } from "@/store/features/enterpriseSlice";
 import MaskedInput from "@/components/ui/masked-input";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
@@ -78,14 +78,24 @@ export default function EnterpriseCreatePage() {
         }
     };
 
-    const handleDisable = async(e: React.FormEvent) => {
+    const handleEnableOrDisable = async(e: React.FormEvent) => {
         e.preventDefault();
-
-        try {
-            await dispatch(removeEnterprise(id)).unwrap();
-            handleAlert(false,'Empresa desabilitada com sucesso!');
-        } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao desabilitar empresa');
+        
+        if (!enterprise?.deleted_at) {
+            try {
+                await dispatch(removeEnterprise(id)).unwrap();
+                handleAlert(false,'Empresa desabilitada com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao desabilitar empresa');
+            }
+        }
+        else {
+            try {
+                await dispatch(restoreEnterprise(id)).unwrap();
+                handleAlert(false,'Empresa reabilitada com sucesso!');
+            } catch (error: any) {
+                handleAlert(true,error?.message || 'Erro ao reabilitar empresa');
+            }
         }
 
         setAlertOpen(false);
@@ -166,12 +176,23 @@ export default function EnterpriseCreatePage() {
                                             <Button type="submit">Salvar</Button>
                                         )}
                                         {can(currentUser,"enterprise","delete") && (
-                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => setAlertOpen(true)}>
+                                            <Button type="button" className="bg-red-500 hover:bg-red-400" onClick={() => {
+                                                setAlertDesc("Tem certeza que deseja desabilitar este registro?");
+                                                setAlertOpen(true);
+                                            }}>
                                                 Desabilitar
                                             </Button>
                                         )}
                                     </>
                                 }
+                                {can(currentUser,"enterprise","restore") && enterprise?.deleted_at && (
+                                    <Button type="button" className="bg-green-600 hover:bg-green-500" onClick={() => {
+                                        setAlertDesc("Tem certeza que deseja reabilitar este registro?");
+                                        setAlertOpen(true);
+                                    }}>
+                                        Reabilitar
+                                    </Button>
+                                )}
                                 <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                                     Cancelar
                                 </Button>
@@ -180,11 +201,11 @@ export default function EnterpriseCreatePage() {
                     </section>
 
                     <DefaultAlertDialog
-                        message="Tem certeza que deseja desabilitar este registro?" 
+                        message={alertDesc} 
                         title="Confirmação" 
                         open={alertOpen} 
                         textBtn="Confirmar" 
-                        onClickBtn={handleDisable} 
+                        onClickBtn={handleEnableOrDisable} 
                         onOpenChange={setAlertOpen}
                     />
                     
