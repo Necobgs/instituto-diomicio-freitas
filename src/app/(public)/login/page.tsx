@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { getApp } from "@/store/features/appSlice";
-import { getUserById, getUserPermissionsById, loginUser, selectCurrentUser, selectIdUser, selectUserLoading, setTokenFromStorage } from "@/store/features/userSlice";
+import { getUserById, getUserPermissionsById, loginUser, logoutUser, selectCurrentUser, selectIdUser, selectUserLoading, setTokenFromStorage } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -73,6 +73,7 @@ export default function LoginPage() {
           getUserPermissions(id);
       } catch (error: any) {
           handleAlert('Erro',error?.message || 'Erro ao buscar usuário');
+          await dispatch(logoutUser());
       }
   };
 
