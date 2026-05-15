@@ -98,7 +98,7 @@ export function PermissionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[95vh] h-[95vh] max-w-[90vw] w-[90vw] sm:max-w-5xl">
+      <DialogContent className="flex flex-col max-h-[95vh] h-[95vh] max-w-[90vw] w-[90vw] sm:max-w-5xl">
         <DialogHeader>
           <DialogTitle>Selecionar permissões</DialogTitle>
           <DialogDescription>
@@ -120,7 +120,7 @@ export function PermissionModal({
           </div>
         )}
 
-        <div className="mt-4 max-h-[70vh] overflow-y-auto pr-2">
+        <div className="mt-4 h-[100%] overflow-y-auto pr-2">
           {loading ? (
             <div className="text-sm text-muted-foreground">Carregando permissões...</div>
           ) : Object.keys(permissionsByResource).length === 0 ? (
