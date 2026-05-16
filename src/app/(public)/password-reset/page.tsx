@@ -56,22 +56,21 @@ function RecoveryPasswordPageContent() {
   };
 
   return (
-    <div className="bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
+    <div className="w-md max-w-[95%] bg-red-50 p-10 rounded-2xl shadow-2xl gap-5 flex items-center justify-start flex-col">
       <div className="flex justify-center items-center m-5">
         <Key />
       </div>
-      <p className="text-sm text-center">
-        Ao clicar em 'Atualizar a senha', a senha  referente a<br />
-        este e-mail será alterada para a nova senha digitada<br />
+      <p className="w-[100%] text-sm text-left">
+        Ao clicar em 'Atualizar a senha', a senha  referente a este e-mail será alterada para a nova senha digitada.
       </p>
       <Input
         placeholder="Digite a nova senha"
-        className="w-80"
+        className="w-[100%]"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button className="w-80" onClick={handleSubmit}>
+      <Button className="w-[100%]" onClick={handleSubmit}>
         Atualizar a senha
       </Button>
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

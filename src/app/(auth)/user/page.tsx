@@ -120,10 +120,8 @@ export default function UserPage(){
                             notFoundMessage="Nenhuma situação encontrada"
                         />
                     </div>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                            <Button className="w-full" onClick={handleSearch}>Buscar</Button>
-                        </div>
+                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                        <Button className="w-full" onClick={handleSearch}>Buscar</Button>
                     </div>
                 </div>
             </section>
@@ -162,7 +160,7 @@ export default function UserPage(){
                 rows={getExportRows()}
             />
 
-            <button className="fixed flex items-center justify-center bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+            <button className="flex items-center justify-center fixed bottom-5 right-22 max-[550px]:left-5 max-[550px]:right-auto text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
 
             {can(currentUser, "user", "create") && (
                 <button className="fixed flex items-center justify-center bottom-5 right-5  text-white p-4 rounded-full shadow-lg bg-red-400 hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/user/create')}}><Plus size={18}/></button>

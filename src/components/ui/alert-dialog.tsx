@@ -156,10 +156,10 @@ function DefaultAlertDialog(props:PropsDefaultAlertDialog){
     <AlertDialog open={props.open} onOpenChange={props.onOpenChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
+            <AlertDialogTitle className="text-left">
               {props.title}
             </AlertDialogTitle>
-            <AlertDialogDescription>{props.message}</AlertDialogDescription>
+            <AlertDialogDescription className="text-left">{props.message}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -185,10 +185,12 @@ function InfoAlertDialog(props:PropsInfoAlertDialog) {
     <AlertDialog open={props.open} onOpenChange={props.onOpenChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
+            <AlertDialogTitle className="text-left">
               {props.title}
             </AlertDialogTitle>
-            <AlertDialogDescription>{props.message}</AlertDialogDescription>
+            <AlertDialogDescription className="text-left">
+              {props.message}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             {props.onClickBtn 

@@ -99,7 +99,7 @@ export default function LoginPage() {
     <>
       {loading
         ?<Loading/>
-        :<div className="min-h-8/12 bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
+        :<div className="min-h-8/12 w-md max-w-[95%] bg-red-50 p-10 rounded-2xl shadow-2xl gap-5 flex items-center justify-start flex-col">
             <div className="flex justify-center items-center m-5">
               <User />
             </div>
@@ -109,7 +109,7 @@ export default function LoginPage() {
               value={formData?.email || ''}
               onChange={handleInputChange} 
               placeholder="Usuário" 
-              className="w-80"
+              className="w-[100%]"
             />
             <Input 
               id="password"
@@ -117,13 +117,13 @@ export default function LoginPage() {
               value={formData?.password || ''}
               onChange={handleInputChange} 
               placeholder="Senha" 
-              className="w-80"
+              className="w-[100%]"
               type="password"
             />
             <a href="/recovery-password" className="ml-4 text-blue-500 hover:underline">
               Esqueci minha senha
             </a>
-            <Button className="w-80 mt-auto" onClick={handleSubmit}>Entrar</Button>
+            <Button className="w-[100%] mt-auto" onClick={handleSubmit}>Entrar</Button>
 
             <InfoAlertDialog
                 message={alertDesc} 

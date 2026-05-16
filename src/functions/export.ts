@@ -1,3 +1,5 @@
+import * as XLSX from "xlsx";
+
 export const exportToPDF = (title: string, rows: (string | number)[][]) => {
     if (!rows || rows.length === 0) return;
 
@@ -21,16 +23,18 @@ export const exportToPDF = (title: string, rows: (string | number)[][]) => {
 };
 
 export const exportToExcel = (name: string, rows: (string | number)[][]) => {
-    const tableHtml = rows.map((row) =>
-        `<tr>${row.map((cell) => `<td>${String(cell).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>`).join("")}</tr>`
-    ).join("");
+    if (!rows || rows.length === 0) return;
 
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><table>${tableHtml}</table></body></html>`;
-    const blob = new Blob(["\ufeff", html], { type: "application/vnd.ms-excel" });
+    const worksheet = XLSX.utils.aoa_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([wbout], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = name ? `${name}.xls` : `ieedf_export.xls`;
+    link.download = name ? `${name}.xlsx` : `ieedf_export.xlsx`;
     document.body.appendChild(link);
     link.click();
     link.remove();

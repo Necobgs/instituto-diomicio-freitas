@@ -19,7 +19,7 @@ import {
 import Link from "next/link"; // Importe o Link para navegação
 import { useAppDispatch } from "@/store/hooks";
 import { logoutUser, selectCurrentUser } from "@/store/features/userSlice";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { can } from "@/functions/can";
 import { useSelector } from "react-redux";
 
@@ -79,7 +79,27 @@ export default function AppSidebar() {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const currentUser = useSelector(selectCurrentUser);
+
+  const routes = [
+    ...items.map((item) => item.url),
+    ...collapsibleItems.map((item) => item.url),
+  ];
+
+  const matchesRoute = (url: string) => {
+    if (url === "/") {
+      return pathname === "/";
+    }
+    return pathname === url || pathname.startsWith(`${url}/`);
+  };
+
+  const activeRoute = routes.reduce((best, url) => {
+    if (matchesRoute(url) && url.length > best.length) {
+      return url;
+    }
+    return best;
+  }, "");
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -98,7 +118,7 @@ export default function AppSidebar() {
                 return item.identifier === "home" || can(currentUser, item.identifier, "read") || can(currentUser, item.identifier, "create");
               }).map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={activeRoute === item.url}>
                     <Link href={item.url}>
                       <div className="relative">
                         <item.icon className="h-5 w-5"/>
@@ -124,7 +144,7 @@ export default function AppSidebar() {
                         return can(currentUser, item.identifier, "read") || can(currentUser, item.identifier, "create");
                       }).map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuButton asChild>
+                          <SidebarMenuButton asChild isActive={activeRoute === subItem.url}>
                             <Link href={subItem.url} className="pl-8">
                               <span>{subItem.title}</span>
                             </Link>

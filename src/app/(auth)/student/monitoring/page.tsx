@@ -156,8 +156,8 @@ export default function MonitoringPage() {
             rows={getExportRows()}
         />
         
-        <button className="flex items-center justify-center fixed bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
-
+        <button className="flex items-center justify-center fixed bottom-5 right-22 max-[550px]:left-5 max-[550px]:right-auto text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+        
         {can(currentUser, "monitoring", "create") && (
             <button className="flex items-center justify-center fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => { router.push("/student/monitoring/create");}}>
                 <Plus size={18}/>

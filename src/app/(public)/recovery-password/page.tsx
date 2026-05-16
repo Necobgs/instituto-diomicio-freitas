@@ -55,25 +55,24 @@ export default function RecoveryPasswordPage() {
   };
 
   return (
-    <div className="bg-red-50 p-10 rounded shadow-2xl gap-5 flex items-center justify-start flex-col">
-        <a className="flex items-center justify-start w-full gap-2" href="/login">
+    <div className="w-md max-w-[95%] bg-red-50 p-10 rounded-2xl shadow-2xl gap-5 flex items-center justify-start flex-col">
+        <a className="flex items-center justify-start w-[100%] min-w-full gap-2" href="/login">
             <ArrowLeft size={20}/>
             <span className="text-sm">Voltar</span>
         </a>
       <div className="flex justify-center items-center m-5">
         <Key />
       </div>
-      <p className="text-sm text-center">
-        Ao clicar em 'Recuperar a senha', um e-mail será <br />
-        enviado com instruções para redefinir sua senha
+      <p className="w-[100%] text-sm text-left">
+        Ao clicar em 'Recuperar a senha', um e-mail será enviado com instruções para redefinir sua senha.
       </p>
       <Input
         placeholder="E-mail"
-        className="w-80"
+        className="w-[100%]"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <Button className="w-80" onClick={handlePasswordRecovery}>
+      <Button className="w-[100%]" onClick={handlePasswordRecovery}>
         Recuperar a senha
       </Button>
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

@@ -100,8 +100,8 @@ export function PermissionModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col max-h-[95vh] h-[95vh] max-w-[90vw] w-[90vw] sm:max-w-5xl">
         <DialogHeader>
-          <DialogTitle>Selecionar permissões</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-left">Selecionar permissões</DialogTitle>
+          <DialogDescription className="text-left">
             As permissões estão agrupadas pela página/recurso. Marque apenas as ações desejadas e clique em salvar na tela principal.
           </DialogDescription>
         </DialogHeader>
