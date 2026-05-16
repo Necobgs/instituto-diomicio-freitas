@@ -89,7 +89,7 @@ export default function JobCreatePage() {
                                     error={errors.name}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {can(currentUser, "job", "create") && (
                                     <Button type="submit">Salvar</Button>
                                 )}

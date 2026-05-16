@@ -48,7 +48,8 @@ export default function EvaluationCreatePage() {
             d: "Raras vezes",
         };
         const rows: (string | number)[][] = [
-            ["Estudante", source.student?.name || ""],
+            ["Informação","Dados"],
+            ["Aluno", source.student?.name || ""],
             ["Professor", source.user?.username || ""],
             ["Data da avaliação", formatExportDate(source.date)],
             ["Nota entrevista com os pais", String(source.interviewNote ?? "")],
@@ -87,7 +88,7 @@ export default function EvaluationCreatePage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.student) newErrors.student = "Estudante é obrigatório";
+        if (!formData.student) newErrors.student = "Aluno é obrigatório";
         if (!formData.date) newErrors.date = "Data da avaliação é obrigatória";
         if (!formData?.user) newErrors.user = "Professor é obrigatório";
         if (!formData?.interviewNote && formData?.interviewNote !== 0) newErrors.interviewNote = "Nota da entrevista com os pais é obrigatória";
@@ -191,7 +192,7 @@ export default function EvaluationCreatePage() {
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                             <div>
-                                <label className="font-bold">Estudante</label>
+                                <label className="font-bold">Aluno</label>
                                 <div className="max-w-md">
                                     <StudentCombobox
                                         student={formData?.student}
@@ -269,7 +270,7 @@ export default function EvaluationCreatePage() {
                                     ))
                                 }
                             </div>
-                            <div className="flex gap-3"> {!evaluation?.deleted_at &&
+                            <div className="flex flex-wrap gap-3"> {!evaluation?.deleted_at &&
                                     <>
                                         {can(currentUser, "evaluation", "update") && (
                                             <Button type="submit">Salvar</Button>)

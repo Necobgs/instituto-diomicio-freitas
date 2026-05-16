@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { defaultJob, iJobForm } from "@/types/job";
 import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/store/hooks";
-import { addJob, editJob, getJobById, removeJob, restoreJob, selectJob, selectJobLoading } from "@/store/features/jobSlice";
+import { editJob, getJobById, removeJob, restoreJob, selectJob, selectJobLoading } from "@/store/features/jobSlice";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { selectCurrentUser } from "@/store/features/userSlice";
@@ -36,6 +36,7 @@ export default function JobCreatePage() {
         const source = formData?.id === job?.id ? formData : job || {};
 
         const rows: (string | number)[][] = [
+            ["Informação","Dados"],
             ["Nome", source.name || ""],
         ];
 
@@ -147,7 +148,7 @@ export default function JobCreatePage() {
                                     error={errors.name}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {!job?.deleted_at &&
                                     <>
                                         {can(currentUser,"job","update") && (

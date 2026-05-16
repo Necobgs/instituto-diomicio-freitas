@@ -60,13 +60,13 @@ export function UserCombobox({
     setUser(selectedUser);
     setOpen(false);
     if (can(currentUser, "user", "read")) {
-      dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
+      dispatch(initUsers({ page:1, limit:500, enabled:'true' }));
     }
   };
 
   React.useEffect(() => {
     if (can(currentUser, "user", "read")) {
-      dispatch(initUsers({ page:1, limit:200, enabled:'true' }));
+      dispatch(initUsers({ page:1, limit:500, enabled:'true' }));
     }
   }, [dispatch]);
 

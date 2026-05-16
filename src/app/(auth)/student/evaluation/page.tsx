@@ -41,7 +41,7 @@ export default function EvaluationPage(){
     const itemsPerPage = 8;
 
     const getExportRows = () => {
-        const header = ["Aluno", "Professor", "Data da avaliação", "Nota entrevista com os pais", "Nota da avaliação", "Status"];
+        const header = ["Aluno", "Professor", "Data da avaliação", "Nota entrevista com os pais", "Nota da avaliação", "Situação"];
         const rows = evaluations.map(evaluation => [
             evaluation.student?.name || "",
             evaluation.user?.username || "",

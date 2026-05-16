@@ -45,7 +45,7 @@ export default function MonitoringEditPage() {
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-    if (!formData.student) newErrors.student = "Estudante é obrigatório";
+    if (!formData.student) newErrors.student = "Aluno é obrigatório";
     if (!formData.visitDate) newErrors.visitDate = "Data da visita é obrigatória";
     if (!formData.observations) newErrors.observations = "Observações são obrigatórias";
 
@@ -97,7 +97,7 @@ export default function MonitoringEditPage() {
             >
               <div className="flex flex-col gap-2">
                 <label htmlFor="student" className="text-sm font-medium">
-                  Estudante
+                  Aluno
                 </label>
                 <StudentCombobox
                   student={formData.student}
@@ -129,7 +129,7 @@ export default function MonitoringEditPage() {
                   error={errors.observations}
                 />
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 {can(currentUser, "monitoring", "create") && (
                     <Button type="submit">Salvar</Button>
                 )}

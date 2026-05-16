@@ -16,6 +16,9 @@ import MaskedInput from "@/components/ui/masked-input";
 import { defaultFilterEnterprise } from "@/types/enterprise";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { formatCpf, formatPhone } from "@/lib/format";
+import { ExportModal } from "@/components/ui/export-modal";
+import { Download, Plus } from "lucide-react";
 
 export default function EnterprisePage() {
 
@@ -28,10 +31,23 @@ export default function EnterprisePage() {
     const hasNextPage = useSelector(selectEnterpriseHasNextPage);
     const hasPreviousPage = useSelector(selectEnterpriseHasPreviousPage);
     const currentUser = useSelector(selectCurrentUser);
+    const [exportOpen,setExportOpen] = useState(false);
 
     const [formData, setFormData] = useState(defaultFilterEnterprise);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
+
+    const getExportRows = () => {
+        const header = ["Nome", "CNPJ", "Telefone", "Situação"];
+        const rows = enterprises.map(enterprise => [
+            enterprise.name || "",
+            formatCpf(enterprise.cnpj) || "",
+            formatPhone(enterprise.phone) || "",
+            enterprise.deleted_at ? "Inativo" : "Ativo"
+        ]);
+
+        return [header, ...rows];
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -132,11 +148,19 @@ export default function EnterprisePage() {
                         hasPreviousPage={hasPreviousPage}
                         pageActivated={currentPage}
                     />
+
+                    <ExportModal
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
+                        name="empresas"
+                        title="Empresas"
+                        rows={getExportRows()}
+                    />
+
+                    <button className="flex items-center justify-center fixed bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+
                     {can(currentUser, "enterprise", "create") &&
-                        <button
-                            className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
-                            onClick={() => router.push('/enterprise/create')}
-                        >+</button>
+                        <button className="flex items-center justify-center fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => router.push('/enterprise/create')}><Plus size={18}/></button>
                     }
                 </div>
             }

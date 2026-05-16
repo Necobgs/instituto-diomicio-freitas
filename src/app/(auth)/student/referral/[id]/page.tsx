@@ -44,7 +44,8 @@ export default function ReferralCreatePage() {
         const source = formData?.id === referral?.id ? formData : referral || {};
 
         const rows: (string | number)[][] = [
-            ["Estudante", source.student?.name || ""],
+            ["Informação","Dados"],
+            ["Aluno", source.student?.name || ""],
             ["Empresa", source.enterprise?.name || ""],
             ["Cargo", source.job?.name || ""],
             ["Data da admissão", formatExportDate(source.admissionDate)],
@@ -67,7 +68,7 @@ export default function ReferralCreatePage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.student) newErrors.student = "Estudante é obrigatório";
+        if (!formData.student) newErrors.student = "Aluno é obrigatório";
         if (!formData.enterprise) newErrors.enterprise = "Empresa é obrigatória";
         if (!formData.job) newErrors.job = "Cargo é obrigatório";
         if (!formData.admissionDate) newErrors.admissionDate = "Data da admissão é obrigatória";
@@ -163,7 +164,7 @@ export default function ReferralCreatePage() {
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
-                                <label htmlFor="student" className="text-sm font-medium">Estudante</label>
+                                <label htmlFor="student" className="text-sm font-medium">Aluno</label>
                                 <StudentCombobox
                                     student={formData.student}
                                     setStudent={(student: iStudentForm | undefined) =>
@@ -211,7 +212,7 @@ export default function ReferralCreatePage() {
                                     error={errors.terminationDateIeedf}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {!referral?.deleted_at &&
                                     <>
                                         {can(currentUser, "referral", "update") && (

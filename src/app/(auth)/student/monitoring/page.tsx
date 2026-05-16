@@ -5,16 +5,19 @@ import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialo
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combo-box";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
+import { ExportModal } from "@/components/ui/export-modal";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { can } from "@/functions/can";
+import { formatExportDate } from "@/functions/export";
 import { initMonitorings, selectMonitoringError, selectMonitoringHasNextPage, selectMonitoringHasPreviousPage, selectMonitoringLoading, selectMonitorings, selectMonitoringCount } from "@/store/features/monitoringSlice";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaulFilterMonitoring } from "@/types/monitoring";
 import { iStudentForm } from "@/types/student";
+import { Download, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -29,10 +32,23 @@ export default function MonitoringPage() {
   const hasPreviousPage = useSelector(selectMonitoringHasPreviousPage);
   const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
+  const [exportOpen,setExportOpen] = useState(false);
 
   const [formData, setFormData] = useState(defaulFilterMonitoring);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+
+  const getExportRows = () => {
+      const header = ["Aluno", "Data da visita", "Observações", "Situação"];
+      const rows = monitorings?.map((monitoring) => [
+          monitoring.student?.name || "",
+          formatExportDate(monitoring.visitDate),
+          monitoring.observations || "",
+          monitoring.deleted_at ? "Inativo" : "Ativo"
+      ]) || [];
+
+      return [header, ...rows];
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -132,9 +148,19 @@ export default function MonitoringPage() {
             pageActivated={currentPage}
         />
 
+        <ExportModal
+            open={exportOpen}
+            onOpenChange={setExportOpen}
+            name="acompanhamentos"
+            title="Acompanhamentos"
+            rows={getExportRows()}
+        />
+        
+        <button className="flex items-center justify-center fixed bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+
         {can(currentUser, "monitoring", "create") && (
-            <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => { router.push("/student/monitoring/create");}}>
-                +
+            <button className="flex items-center justify-center fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => { router.push("/student/monitoring/create");}}>
+                <Plus size={18}/>
             </button>
         )}
       </div>}

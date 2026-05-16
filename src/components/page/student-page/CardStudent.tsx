@@ -26,13 +26,13 @@ export default function CardStudent(student:iStudentForm) {
             </CardHeader>
             <CardContent>
                 <CardDescription>
-                    <div className="text-black/80"><span className="font-semibold">Usa medicamentos:</span> {student.useMedicine ? "Sim" : "Não"}</div>
+                    <div className="text-black/80"><span className="font-semibold">CPF:</span> {formatCpf(student.cpf)}</div>
+                    <div className="text-black/80"><span className="font-semibold">Data de nascimento:</span> {formatDate(student.dateBirthday)}</div>
+                    <div className="text-black/80"><span className="font-semibold">Telefone:</span> {formatPhone(student.phone)}</div>
                     <div className="text-black/80"><span className="font-semibold">Responsável:</span> {student.responsibleName}</div>
                     <div className="text-black/80"><span className="font-semibold">Telefone Resp.:</span> {formatPhone(student.responsiblePhone)}</div>
                     <div className="text-black/80"><span className="font-semibold">Data de entrada:</span> {formatDate(student.dateEntry)}</div>
-                    <div className="text-black/80"><span className="font-semibold">Data de nascimento:</span> {formatDate(student.dateBirthday)}</div>
-                    <div className="text-black/80"><span className="font-semibold">Telefone:</span> {formatPhone(student.phone)}</div>
-                    <div className="text-black/80"><span className="font-semibold">CPF:</span> {formatCpf(student.cpf)}</div>
+                    <div className="text-black/80"><span className="font-semibold">Usa medicamentos:</span> {student.useMedicine ? "Sim" : "Não"}</div>
                     <div className="text-black/80">
                         <span className="flex items-center gap-1 h-6 font-semibold">Info. medicamentos:
                             <Tooltip>

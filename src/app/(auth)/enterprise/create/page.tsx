@@ -124,7 +124,7 @@ export default function EnterpriseCreatePage() {
                                     error={errors.cnpj}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {can(currentUser,"enterprise","create") && 
                                     <Button type="submit">Salvar</Button>
                                 }

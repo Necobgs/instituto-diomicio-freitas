@@ -55,7 +55,7 @@ const items = [
 const collapsibleItems = [
   {
     identifier:'student',
-    title: "Visualizar estudantes",
+    title: "Visualizar alunos",
     url: "/student",
   },
   {
@@ -114,7 +114,7 @@ export default function AppSidebar() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
                       <Users className="h-5 w-5" />
-                      <span>Estudantes</span>
+                      <span>Alunos</span>
                       <ChevronDown className="ml-auto h-5 w-5 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>

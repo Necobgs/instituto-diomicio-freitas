@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { initReferrals, selectReferralError, selectReferralLoading, selectReferrals, selectReferralCount, selectReferralHasPreviousPage, selectReferralHasNextPage } from "@/store/features/referralSlice";
-import MaskedInput from "@/components/ui/masked-input";
 import { defaultFilterReferral } from "@/types/referral";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { iStudentForm } from "@/types/student";
@@ -22,6 +21,9 @@ import { JobCombobox } from "@/components/ui/combo-box-job";
 import { iJobForm } from "@/types/job";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { formatExportDate } from "@/functions/export";
+import { ExportModal } from "@/components/ui/export-modal";
+import { Download, Plus } from "lucide-react";
 
 export default function ReferralPage() {
 
@@ -34,19 +36,30 @@ export default function ReferralPage() {
     const hasNextPage = useSelector(selectReferralHasNextPage);
     const hasPreviousPage = useSelector(selectReferralHasPreviousPage);
     const currentUser = useSelector(selectCurrentUser);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const [formData, setFormData] = useState(defaultFilterReferral);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
+    const getExportRows = () => {
+        const header = ["Aluno", "Empresa", "Cargo", "Data da admissão", "Provável data desligamento IEEDF", "Situação"];
+        const rows = referrals?.map((referral) => [
+            referral.student?.name || "",
+            referral.enterprise?.name || "",
+            referral.job?.name || "",
+            formatExportDate(referral.admissionDate),
+            formatExportDate(referral.terminationDateIeedf),
+            referral.deleted_at ? "Inativo" : "Ativo"
+        ]) || [];
+
+        return [header, ...rows];
+    };
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
-
-    const handleMaskedInputChange = (name: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    }
 
     const handleSearch = () => {
         if (currentPage === 1)  {
@@ -180,9 +193,19 @@ export default function ReferralPage() {
                         pageActivated={currentPage}
                     />
 
+                    <ExportModal
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
+                        name="encaminhamentos"
+                        title="Encaminhamentos"
+                        rows={getExportRows()}
+                    />
+
+                    <button className="fixed flex items-center justify-center bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+
                     {can(currentUser,"referral","create") && (
-                        <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => router.push('/student/referral/create')}>
-                        +
+                        <button className="flex items-center justify-center fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => router.push('/student/referral/create')}>
+                            <Plus size={18}/>
                         </button>
                     )}
                 </div>

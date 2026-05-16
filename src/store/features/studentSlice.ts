@@ -58,7 +58,7 @@ const studentSlice = createSlice({
                 state.hasPreviousPage = action.payload.hasPreviousPage;
             })
             .addCase(initStudents.rejected, (state) => {
-                state.error = "Erro ao carregar lista de estudantes";
+                state.error = "Erro ao carregar lista de alunos";
                 state.loading = false;
                 state.students = [];
                 state.count = 0;
@@ -75,7 +75,7 @@ const studentSlice = createSlice({
                 state.loading = false;
             })
             .addCase(getStudentById.rejected, (state) => {
-                state.error = "Erro ao buscar estudante";
+                state.error = "Erro ao buscar aluno";
                 state.loading = false;
             })
             .addCase(addStudent.pending, (state) => {
@@ -88,7 +88,7 @@ const studentSlice = createSlice({
                 state.loading = false;
             })
             .addCase(addStudent.rejected, (state) => {
-                state.error = "Erro ao adicionar estudante";
+                state.error = "Erro ao adicionar aluno";
                 state.loading = false;
             })
             .addCase(editStudent.pending, (state) => {
@@ -101,7 +101,7 @@ const studentSlice = createSlice({
                 state.loading = false;
             })
             .addCase(editStudent.rejected, (state) => {
-                state.error = "Erro ao editar estudante";
+                state.error = "Erro ao editar aluno";
                 state.loading = false;
             })
             .addCase(removeStudent.pending, (state) => {
@@ -126,7 +126,7 @@ const studentSlice = createSlice({
                 state.loading = false;
             })
             .addCase(restoreStudent.rejected, (state) => {
-                state.error = "Erro ao restaurar estudante";
+                state.error = "Erro ao restaurar aluno";
                 state.loading = false;
             });
     },

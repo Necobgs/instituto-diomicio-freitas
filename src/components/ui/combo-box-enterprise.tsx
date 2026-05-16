@@ -61,13 +61,13 @@ export function EnterpriseCombobox({
     setEnterprise(selectedEnterprise);
     setOpen(false);
     if (can(currentUser, "enterprise", "read")) {
-      dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+      dispatch(initEnterprises({ page:1, limit:500, enabled:'true' }));
     }
   };
 
   React.useEffect(() => {
     if (can(currentUser, "enterprise", "read")) {
-      dispatch(initEnterprises({ page:1, limit:200, enabled:'true' }));
+      dispatch(initEnterprises({ page:1, limit:500, enabled:'true' }));
     }
   }, [dispatch]);
 

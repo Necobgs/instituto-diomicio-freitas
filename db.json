@@ -1,7 +1,7 @@
 {
   "notification": [
     {
-      "text": "Lucas Rosa da Conceição adicionou um acompanhamento para o estudante Estudante 3.",
+      "text": "Lucas Rosa da Conceição adicionou um acompanhamento para o aluno Aluno 3.",
       "read": true,
       "date": "2025-11-03T00:29:47.932Z",
       "created_at": "2025-11-03T00:29:47.932Z",
@@ -9,7 +9,7 @@
       "id": 1
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 3, que obteve nota 5.",
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o aluno Aluno 3, que obteve nota 5.",
       "read": true,
       "date": "2025-11-03T01:24:03.497Z",
       "created_at": "2025-11-03T01:24:03.497Z",
@@ -17,7 +17,7 @@
       "id": 2
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou um acompanhamento para o estudante Estudante 5.",
+      "text": "Lucas Rosa da Conceição adicionou um acompanhamento para o aluno Aluno 5.",
       "read": true,
       "date": "2025-11-03T01:27:59.354Z",
       "created_at": "2025-11-03T01:27:59.354Z",
@@ -25,7 +25,7 @@
       "id": 3
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 5, que obteve nota 9.",
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o aluno Aluno 5, que obteve nota 9.",
       "read": true,
       "date": "2025-11-03T01:30:08.994Z",
       "created_at": "2025-11-03T01:30:08.994Z",
@@ -33,7 +33,7 @@
       "id": 4
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou um acompanhamento para o estudante Estudante 3.",
+      "text": "Lucas Rosa da Conceição adicionou um acompanhamento para o aluno Aluno 3.",
       "read": true,
       "date": "2025-11-03T01:31:56.618Z",
       "created_at": "2025-11-03T01:31:56.618Z",
@@ -41,7 +41,7 @@
       "id": 5
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 1, que obteve nota 0.",
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o aluno Aluno 1, que obteve nota 0.",
       "read": true,
       "date": "2025-11-03T22:21:28.231Z",
       "created_at": "2025-11-03T22:21:28.231Z",
@@ -49,7 +49,7 @@
       "id": 6
     },
     {
-      "text": "undefined adicionou um acompanhamento para o estudante Pedro Tavares.",
+      "text": "undefined adicionou um acompanhamento para o aluno Pedro Tavares.",
       "read": true,
       "date": "2025-11-03T22:51:13.989Z",
       "created_at": "2025-11-03T22:51:13.989Z",
@@ -57,7 +57,7 @@
       "id": 7
     },
     {
-      "text": "undefined adicionou uma avaliação para o estudante Estudante 3, que obteve nota 9.",
+      "text": "undefined adicionou uma avaliação para o aluno Aluno 3, que obteve nota 9.",
       "read": true,
       "date": "2025-11-03T22:54:28.774Z",
       "created_at": "2025-11-03T22:54:28.774Z",
@@ -65,7 +65,7 @@
       "id": 8
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 1, que obteve nota 0.",
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o aluno Aluno 1, que obteve nota 0.",
       "read": true,
       "date": "2025-11-04T00:18:44.912Z",
       "created_at": "2025-11-04T00:18:44.912Z",
@@ -73,7 +73,7 @@
       "id": 9
     },
     {
-      "text": "undefined adicionou um acompanhamento para o estudante Pedro Tavares.",
+      "text": "undefined adicionou um acompanhamento para o aluno Pedro Tavares.",
       "read": true,
       "date": "2025-11-04T00:31:12.043Z",
       "created_at": "2025-11-04T00:31:12.043Z",
@@ -81,7 +81,7 @@
       "id": 10
     },
     {
-      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o estudante Estudante 4, que obteve nota 0.",
+      "text": "Lucas Rosa da Conceição adicionou uma avaliação para o aluno Aluno 4, que obteve nota 0.",
       "read": false,
       "date": "2025-11-11T01:30:37.717Z",
       "created_at": "2025-11-11T01:30:37.717Z",
@@ -2544,7 +2544,7 @@
   "evaluation": [
     {
       "student": {
-        "name": "Estudante 3",
+        "name": "Aluno 3",
         "phone": "12345996789",
         "date_of_birth": "2005-11-10T00:00:00.000Z",
         "cpf": "11111111111",
@@ -2562,7 +2562,7 @@
     },
     {
       "student": {
-        "name": "Estudante 5",
+        "name": "Aluno 5",
         "phone": "48899556555",
         "date_of_birth": "2025-10-21T00:00:00.000Z",
         "cpf": "11212222222",
@@ -2580,7 +2580,7 @@
     },
     {
       "student": {
-        "name": "Estudante 3",
+        "name": "Aluno 3",
         "phone": "12345996789",
         "date_of_birth": "2005-11-10T00:00:00.000Z",
         "cpf": "11111111111",
@@ -2598,7 +2598,7 @@
     },
     {
       "student": {
-        "name": "Estudante 1",
+        "name": "Aluno 1",
         "phone": "48991111123",
         "date_of_birth": "2003-10-15T00:00:00.000Z",
         "cpf": "22222222222",
@@ -2616,7 +2616,7 @@
     },
     {
       "student": {
-        "name": "Estudante 4",
+        "name": "Aluno 4",
         "phone": "99999999999",
         "date_of_birth": "2002-06-20T00:00:00.000Z",
         "cpf": "22222222222",
@@ -2636,7 +2636,7 @@
   "monitoring": [
     {
       "student": {
-        "name": "Estudante 3",
+        "name": "Aluno 3",
         "phone": "12345996789",
         "date_of_birth": "2005-11-10T00:00:00.000Z",
         "cpf": "11111111111",
@@ -2666,7 +2666,7 @@
     },
     {
       "student": {
-        "name": "Estudante 3",
+        "name": "Aluno 3",
         "phone": "12345996789",
         "date_of_birth": "2005-11-10T00:00:00.000Z",
         "cpf": "11111111111",
@@ -2757,7 +2757,7 @@
   ],
   "student": [
     {
-      "name": "Estudante 1",
+      "name": "Aluno 1",
       "phone": "48991111123",
       "date_of_birth": "2003-10-15T00:00:00.000Z",
       "cpf": "22222222222",
@@ -2767,7 +2767,7 @@
       "id": 1
     },
     {
-      "name": "Estudante 2",
+      "name": "Aluno 2",
       "phone": "48991122222",
       "date_of_birth": "2002-10-23T00:00:00.000Z",
       "cpf": "33333333333",
@@ -2777,7 +2777,7 @@
       "id": 2
     },
     {
-      "name": "Estudante 3",
+      "name": "Aluno 3",
       "phone": "12345996789",
       "date_of_birth": "2005-11-10T00:00:00.000Z",
       "cpf": "11111111111",
@@ -2787,7 +2787,7 @@
       "id": 3
     },
     {
-      "name": "Estudante 4",
+      "name": "Aluno 4",
       "phone": "99999999999",
       "date_of_birth": "2002-06-20T00:00:00.000Z",
       "cpf": "22222222222",
@@ -2797,7 +2797,7 @@
       "id": 4
     },
     {
-      "name": "Estudante 5",
+      "name": "Aluno 5",
       "phone": "48899556555",
       "date_of_birth": "2025-10-21T00:00:00.000Z",
       "cpf": "11212222222",

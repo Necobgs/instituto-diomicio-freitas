@@ -20,7 +20,7 @@ export const ExportModal = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-md">
+            <DialogContent className="w-md max-w-[95%]">
                 <DialogHeader>
                     <DialogTitle>Exportar registro(s)</DialogTitle>
                     <DialogDescription>

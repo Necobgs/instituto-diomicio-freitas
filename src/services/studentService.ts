@@ -41,7 +41,7 @@ const getStudentById = async (id: number): Promise<iStudentForm> => {
     return response.data as iStudentForm;
   } catch (error: any) {
     console.log("Error fetching student:", error);
-    throw error?.response?.data?.message || 'Erro ao buscar estudante';
+    throw error?.response?.data?.message || 'Erro ao buscar aluno';
   }
 };
 
@@ -51,7 +51,7 @@ const addStudent = async (newStudent: iStudentForm): Promise<iStudentForm> => {
     return response.data as iStudentForm;
   } catch (error: any) {
     console.log("Error adding student:", error);
-    throw error?.response?.data?.message || 'Erro ao adicionar estudante';
+    throw error?.response?.data?.message || 'Erro ao adicionar aluno';
   }
 }
 
@@ -61,7 +61,7 @@ const editStudent = async (dataStudent: iStudentForm): Promise<iStudentForm> => 
     return response.data as iStudentForm;
   } catch (error: any) {
     console.log("Error editing student:", error);
-    throw error?.response?.data?.message || 'Erro ao editar estudante';
+    throw error?.response?.data?.message || 'Erro ao editar aluno';
   }
 }
 
@@ -71,7 +71,7 @@ const removeStudent = async (id: number): Promise<iStudentForm> => {
     return response.data as iStudentForm;
   } catch (error: any) {
     console.log("Error removing student:", error);
-    throw error?.response?.data?.message || 'Erro ao remover estudante';
+    throw error?.response?.data?.message || 'Erro ao remover aluno';
   }
 }
 
@@ -81,7 +81,7 @@ const restoreStudent = async (id: number): Promise<iStudentForm> => {
     return response.data as iStudentForm;
   } catch (error: any) {
     console.log("Error restoring student:", error);
-    throw error?.response?.data?.message || 'Erro ao restaurar estudante';
+    throw error?.response?.data?.message || 'Erro ao restaurar aluno';
   }
 }
 

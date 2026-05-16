@@ -9,7 +9,7 @@ import { DefaultAlertDialog, InfoAlertDialog } from "@/components/ui/alert-dialo
 import { useAppDispatch } from "@/store/hooks";
 import { editStudent, getStudentById, removeStudent, restoreStudent, selectStudent, selectStudentLoading } from "@/store/features/studentSlice";
 import MaskedInput from "@/components/ui/masked-input";
-import { formatDateForInput } from "@/lib/format";
+import { formatCpf, formatDateForInput, formatPhone } from "@/lib/format";
 import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { Combobox } from "@/components/ui/combo-box";
@@ -42,12 +42,13 @@ export default function StudentEditPage() {
         const source = formData?.id === student?.id ? formData : student || {};
 
         const rows: (string | number)[][] = [
+            ["Informação","Dados"],
             ["Nome", source.name || ""],
-            ["Telefone", source.phone || ""],
+            ["Telefone", formatPhone(source.phone) || ""],
             ["Data de nascimento", formatExportDate(source.dateBirthday)],
-            ["CPF", source.cpf || ""],
+            ["CPF", formatCpf(source.cpf)],
             ["Nome do responsável", source.responsibleName || ""],
-            ["Telefone do responsável", source.responsiblePhone || ""],
+            ["Telefone do responsável", formatPhone(source.responsiblePhone) || ""],
             ["Data de entrada", formatExportDate(source.dateEntry)],
             ["Usa medicamentos?", source.useMedicine ? "Sim" : "Não"],
             ["Informações sobre medicamentos", source.infoMedicine || ""]
@@ -102,9 +103,9 @@ export default function StudentEditPage() {
 
         try {
             await dispatch(editStudent(formData)).unwrap();
-            handleAlert(false,'Estudante editado com sucesso!');
+            handleAlert(false,'Aluno editado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao editar estudante');
+            handleAlert(true,error?.message || 'Erro ao editar aluno');
         }
     };
 
@@ -114,17 +115,17 @@ export default function StudentEditPage() {
         if (!student?.deleted_at) {
             try {
                 await dispatch(removeStudent(id)).unwrap();
-                handleAlert(false,'Estudante desabilitado com sucesso!');
+                handleAlert(false,'Aluno desabilitado com sucesso!');
             } catch (error: any) {
-                handleAlert(true,error?.message || 'Erro ao desabilitar estudante');
+                handleAlert(true,error?.message || 'Erro ao desabilitar aluno');
             }
         }
         else {
             try {
                 await dispatch(restoreStudent(id)).unwrap();
-                handleAlert(false,'Estudante reabilitado com sucesso!');
+                handleAlert(false,'Aluno reabilitado com sucesso!');
             } catch (error: any) {
-                handleAlert(true,error?.message || 'Erro ao reabilitar estudante');
+                handleAlert(true,error?.message || 'Erro ao reabilitar aluno');
             }
         }
 
@@ -135,7 +136,7 @@ export default function StudentEditPage() {
         try {
             await dispatch(getStudentById(id)).unwrap();
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao buscar estudante');
+            handleAlert(true,error?.message || 'Erro ao buscar aluno');
         }
     };
 
@@ -165,7 +166,7 @@ export default function StudentEditPage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Editar Estudante</h1>
+                            <h1 className="text-2xl">Editar Aluno</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -175,7 +176,7 @@ export default function StudentEditPage() {
                                     name="name"
                                     value={formData?.name || ''}
                                     onChange={handleInputChange}
-                                    placeholder="Nome do estudante"
+                                    placeholder="Nome do aluno"
                                     error={errors.name}
                                 />
                             </div>
@@ -183,7 +184,7 @@ export default function StudentEditPage() {
                                 <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
                                 <MaskedInput
                                     value={formData?.phone || ''}
-                                    placeholder="Telefone do estudante"
+                                    placeholder="Telefone do aluno"
                                     mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
                                     onChange={(val) => handleMaskedInputChange("phone",val)}
                                     error={errors.phone} 
@@ -204,7 +205,7 @@ export default function StudentEditPage() {
                                 <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
                                 <MaskedInput
                                     value={formData?.cpf || ''}
-                                    placeholder="CPF do estudante"
+                                    placeholder="CPF do aluno"
                                     mask="000.000.000-00"
                                     onChange={(val) => handleMaskedInputChange("cpf",val)}
                                     error={errors.cpf}
@@ -264,7 +265,7 @@ export default function StudentEditPage() {
                                     error={errors.infoMedicine}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {!student?.deleted_at &&
                                     <>
                                         {can(currentUser, "student", "update") && (
@@ -316,8 +317,8 @@ export default function StudentEditPage() {
                     />
 
                     <ExportModal
-                        name={`estudante${student?.id}`}
-                        title="Estudante"
+                        name={`aluno${student?.id}`}
+                        title="Aluno"
                         rows={getExportRows()}
                         open={exportOpen}
                         onOpenChange={setExportOpen}

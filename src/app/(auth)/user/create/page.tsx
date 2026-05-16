@@ -129,7 +129,7 @@ export default function UserCreatePage() {
                                         error={errors.cpf}
                                     />
                                 </div>
-                                <div className="flex gap-3">
+                                <div className="flex flex-wrap gap-3">
                                     {can(currentUser, "user", "create") && (
                                         <>
                                             <Button type="submit">Salvar</Button>

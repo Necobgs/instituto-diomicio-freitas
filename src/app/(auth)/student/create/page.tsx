@@ -78,9 +78,9 @@ export default function StudentEditPage() {
 
         try {
             await dispatch(addStudent(formData)).unwrap();
-            handleAlert(false,'Estudante cadastrado com sucesso!');
+            handleAlert(false,'Aluno cadastrado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao cadastrar estudante');
+            handleAlert(true,error?.message || 'Erro ao cadastrar aluno');
         }
     };
 
@@ -98,7 +98,7 @@ export default function StudentEditPage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Cadastrar Estudante</h1>
+                            <h1 className="text-2xl">Cadastrar Aluno</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -108,7 +108,7 @@ export default function StudentEditPage() {
                                     name="name"
                                     value={formData?.name || ''}
                                     onChange={handleInputChange}
-                                    placeholder="Nome do estudante"
+                                    placeholder="Nome do aluno"
                                     error={errors.name}
                                 />
                             </div>
@@ -116,7 +116,7 @@ export default function StudentEditPage() {
                                 <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
                                 <MaskedInput
                                     value={formData?.phone || ''}
-                                    placeholder="Telefone do estudante"
+                                    placeholder="Telefone do aluno"
                                     mask={[{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]}
                                     onChange={(val) => handleMaskedInputChange("phone",val)}
                                     error={errors.phone} 
@@ -137,7 +137,7 @@ export default function StudentEditPage() {
                                 <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
                                 <MaskedInput
                                     value={formData?.cpf || ''}
-                                    placeholder="CPF do estudante"
+                                    placeholder="CPF do aluno"
                                     mask="000.000.000-00"
                                     onChange={(val) => handleMaskedInputChange("cpf",val)}
                                     error={errors.cpf}
@@ -197,7 +197,7 @@ export default function StudentEditPage() {
                                     error={errors.infoMedicine}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {can(currentUser, "student", "create") && (
                                     <Button type="submit">Salvar</Button>
                                 )}

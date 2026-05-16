@@ -37,9 +37,9 @@ interface StudentComboboxProps {
 export function StudentCombobox({
   student,
   setStudent,
-  placeholder = "Selecione o estudante...",
-  searchPlaceholder = "Nome do estudante...",
-  notFoundMessage = "Nenhum estudante encontrado.",
+  placeholder = "Selecione o aluno...",
+  searchPlaceholder = "Nome do aluno...",
+  notFoundMessage = "Nenhum aluno encontrado.",
   width = "200px",
   error = "",
 }: StudentComboboxProps) {
@@ -61,13 +61,13 @@ export function StudentCombobox({
     setStudent(selectedStudent);
     setOpen(false);
     if (can(currentUser, "student", "read")) {
-      dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+      dispatch(initStudents({ page:1, limit:500, enabled:'true' }));
     }
   };
 
   React.useEffect(() => {
     if (can(currentUser, "student", "read")) {
-      dispatch(initStudents({ page:1, limit:200, enabled:'true' }));
+      dispatch(initStudents({ page:1, limit:500, enabled:'true' }));
     }
   }, [dispatch]);
 

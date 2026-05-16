@@ -15,6 +15,7 @@ import Loading from "@/components/ui/loading";
 import { can } from "@/functions/can";
 import { validateCPF } from "@/functions/validateCpf";
 import { ExportModal } from "@/components/ui/export-modal";
+import { formatCpf } from "@/lib/format";
 
 export default function UserEditPage() {
 
@@ -40,9 +41,10 @@ export default function UserEditPage() {
         const source = formData?.id === user?.id ? formData : user || {};
 
         const rows: (string | number)[][] = [
+            ["Informação","Dados"],
             ["Nome", source.username || ""],
             ["Email", source.email || ""],
-            ["CPF", source.cpf || ""],
+            ["CPF", formatCpf(source.cpf)],
         ];
 
         return rows;

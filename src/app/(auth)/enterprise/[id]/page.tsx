@@ -38,6 +38,7 @@ export default function EnterpriseCreatePage() {
         const source = formData?.id === enterprise?.id ? formData : enterprise || {};
 
         const rows: (string | number)[][] = [
+            ["Informação","Dados"],
             ["Nome", source.name || ""],
             ["Telefone", source.phone || ""],
             ["CNPJ", source.cnpj || ""],
@@ -183,7 +184,7 @@ export default function EnterpriseCreatePage() {
                                     error={errors.cnpj}
                                 />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {!enterprise?.deleted_at &&
                                     <>
                                         {can(currentUser,"enterprise","update") && (

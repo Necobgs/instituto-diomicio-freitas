@@ -17,6 +17,7 @@ import { defaultFilterUser } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { formatCpf } from "@/lib/format";
 
 export default function UserPage(){
     
@@ -34,6 +35,18 @@ export default function UserPage(){
     const [currentPage, setCurrentPage] = useState(1);
     const [exportOpen, setExportOpen] = useState(false);
     const itemsPerPage = 8;
+
+    const getExportRows = () => {
+        const header = ["Nome", "Email", "CPF", "Situação"];
+        const rows = users?.map((user) => [
+            user.username || "",
+            user.email || "",
+            formatCpf(user.cpf),
+            user.deleted_at ? "Inativo" : "Ativo",
+        ]) || [];
+
+        return [header, ...rows];
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -60,18 +73,6 @@ export default function UserPage(){
             dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
         }
     }, [dispatch, currentPage]);
-
-    const getExportRows = () => {
-        const header = ["Nome", "Email", "CPF", "Status"];
-        const rows = users?.map((user) => [
-            user.username || "",
-            user.email || "",
-            user.cpf || "",
-            user.deleted_at ? "Inativo" : "Ativo",
-        ]) || [];
-
-        return [header, ...rows];
-    };
 
     return (
         <>

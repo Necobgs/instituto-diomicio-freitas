@@ -15,6 +15,8 @@ import { defaultFilterJob } from "@/types/job";
 import CardJob from "@/components/page/job/CardJob";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { ExportModal } from "@/components/ui/export-modal";
+import { Download, Plus } from "lucide-react";
 
 export default function JobPage() {
 
@@ -27,10 +29,21 @@ export default function JobPage() {
     const hasNextPage = useSelector(selectJobHasNextPage);
     const hasPreviousPage = useSelector(selectJobHasPreviousPage);
     const currentUser = useSelector(selectCurrentUser);
+    const [exportOpen,setExportOpen] = useState(false);
 
     const [formData, setFormData] = useState(defaultFilterJob);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
+
+    const getExportRows = () => {
+        const header = ["Nome", "Situação"];
+        const rows = jobs.map(job => [
+            job.name || "",
+            job.deleted_at ? "Inativo" : "Ativo"
+        ]);
+
+        return [header, ...rows];
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -112,11 +125,21 @@ export default function JobPage() {
                         pageActivated={currentPage}
                     />
 
+                    <ExportModal
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
+                        name="cargos"
+                        title="Cargos"
+                        rows={getExportRows()}
+                    />
+
+                    <button className="flex items-center justify-center fixed bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+
                     {can(currentUser,"job","create") &&
                         <button
-                            className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
+                            className="flex items-center justify-center fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"
                             onClick={() => router.push('/job/create')}
-                        >+</button>
+                        ><Plus size={18}/></button>
                     }
                 </div>
             }

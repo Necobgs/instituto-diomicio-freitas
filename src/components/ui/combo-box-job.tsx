@@ -61,13 +61,13 @@ export function JobCombobox({
     setJob(selectedJob);
     setOpen(false);
     if (can(currentUser, "job", "read")) {
-      dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
+      dispatch(initJobs({ page:1, limit:500, enabled:'true' }));
     }
   };
 
   React.useEffect(() => {
     if (can(currentUser, "job", "read")) {
-      dispatch(initJobs({ page:1, limit:200, enabled:'true' }));
+      dispatch(initJobs({ page:1, limit:500, enabled:'true' }));
     }
   }, [dispatch]);
 

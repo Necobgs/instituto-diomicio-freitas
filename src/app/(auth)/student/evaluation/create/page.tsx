@@ -54,7 +54,7 @@ export default function EvaluationCreatePage() {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        if (!formData.student) newErrors.student = "Estudante é obrigatório";
+        if (!formData.student) newErrors.student = "Aluno é obrigatório";
         if (!formData.date) newErrors.date = "Data da avaliação é obrigatória";
         if (!formData?.user) newErrors.user = "Professor é obrigatório";
         if (!formData?.interviewNote && formData?.interviewNote !== 0) newErrors.interviewNote = "Nota da entrevista com os pais é obrigatória";
@@ -115,7 +115,7 @@ export default function EvaluationCreatePage() {
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                             <div>
-                                <label className="font-bold">Estudante</label>
+                                <label className="font-bold">Aluno</label>
                                 <div className="max-w-md">
                                     <StudentCombobox
                                         student={formData?.student}
@@ -193,7 +193,7 @@ export default function EvaluationCreatePage() {
                                     ))
                                 }
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 {can(currentUser, "evaluation", "create") && (
                                     <Button type="submit">Salvar</Button>
                                 )}
