@@ -1,4 +1,5 @@
 import * as XLSX from "xlsx";
+import { Document, HeadingLevel, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType } from "docx";
 
 export const exportToPDF = (title: string, rows: (string | number)[][]) => {
     if (!rows || rows.length === 0) return;
@@ -20,6 +21,79 @@ export const exportToPDF = (title: string, rows: (string | number)[][]) => {
     newWindow.document.close();
     newWindow.focus();
     newWindow.print();
+};
+
+export const exportToDocx = async (name: string, title: string, rows: (string | number)[][]) => {
+    if (!rows || rows.length === 0) return;
+
+    const headerRow = rows[0];
+    const bodyRows = rows.slice(1);
+
+    const tableRows = [
+        new TableRow({
+            children: headerRow.map((cell) =>
+                new TableCell({
+                    children: [
+                        new Paragraph({
+                            children: [
+                                new TextRun({ text: String(cell), bold: true }),
+                            ],
+                        }),
+                    ],
+                })
+            ),
+        }),
+        ...bodyRows.map((row) =>
+            new TableRow({
+                children: row.map((cell) =>
+                    new TableCell({
+                        children: [
+                            new Paragraph({
+                                children: [new TextRun({ text: String(cell) })],
+                            }),
+                        ],
+                    })
+                ),
+            })
+        ),
+    ];
+
+    const doc = new Document({
+        sections: [
+            {
+                children: [
+                    new Paragraph({
+                        heading: HeadingLevel.HEADING_1,
+                        children: [
+                            new TextRun({
+                                text: title,
+                                bold: true,
+                                color: "000000",
+                            }),
+                        ],
+                    }),
+                    new Paragraph({ text: "" }),
+                    new Table({
+                        rows: tableRows,
+                        width: {
+                            size: 100,
+                            type: WidthType.PERCENTAGE,
+                        },
+                    }),
+                ],
+            },
+        ],
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = name ? `${name}.docx` : `ieedf_export.docx`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
 };
 
 export const exportToExcel = (name: string, rows: (string | number)[][]) => {

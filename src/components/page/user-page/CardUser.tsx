@@ -9,6 +9,7 @@ import {
 import { formatCpf } from "@/lib/format"
 import { iUserForm } from "@/types/user"
 import React from "react"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 interface iProps{
   user:iUserForm,
@@ -18,7 +19,14 @@ interface iProps{
 export default function CardUser({user, onClick} : iProps) {
   return (
     <Card className="w-full hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={onClick}>
-      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!user.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+      <Tooltip>
+          <TooltipTrigger asChild>
+              <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!user.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+          </TooltipTrigger>
+          <TooltipContent className="break-words max-w-[260px]">
+              {user.deleted_at ? " Inativo" : "Ativo"}
+          </TooltipContent>
+      </Tooltip>
       <CardHeader>
         <CardTitle>{user.username}</CardTitle>
       </CardHeader>

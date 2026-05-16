@@ -11,6 +11,7 @@ import {
 import { formatDate } from "@/lib/format";
 import { iReferralForm } from "@/types/referral";
 import { useRouter } from "next/navigation"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function CardReferral(referral:iReferralForm) {
 
@@ -18,7 +19,14 @@ export default function CardReferral(referral:iReferralForm) {
 
   return (
     <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`referral/${referral.id}`)}}>
-      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!referral.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!referral.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+        </TooltipTrigger>
+        <TooltipContent className="break-words max-w-[260px]">
+          {referral.deleted_at ? " Inativo" : "Ativo"}
+        </TooltipContent>
+      </Tooltip>
       <CardHeader>
         <CardTitle>{referral?.student?.name}</CardTitle>
       </CardHeader>

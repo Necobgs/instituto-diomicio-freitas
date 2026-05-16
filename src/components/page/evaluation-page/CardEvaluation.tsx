@@ -11,6 +11,7 @@ import {
 import { formatDate } from "@/lib/format";
 import { iEvaluationForm } from "@/types/evaluation";
 import { useRouter } from "next/navigation"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function CardEvaluation(evaluation:iEvaluationForm) {
 
@@ -18,7 +19,14 @@ export default function CardEvaluation(evaluation:iEvaluationForm) {
 
   return (
     <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`evaluation/${evaluation.id}`)}}>
-      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!evaluation.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!evaluation.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+        </TooltipTrigger>
+        <TooltipContent className="break-words max-w-[260px]">
+          {evaluation.deleted_at ? " Inativo" : "Ativo"}
+        </TooltipContent>
+      </Tooltip>
       <CardHeader>
         <CardTitle>{evaluation?.student?.name}</CardTitle>
       </CardHeader>

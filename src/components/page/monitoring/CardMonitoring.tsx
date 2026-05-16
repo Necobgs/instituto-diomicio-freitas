@@ -20,7 +20,14 @@ export default function CardMonitoring(monitoring:iMonitoringForm) {
 
   return (
     <Card className="w-full max-w-sm hover:scale-110 transition-all ease-in cursor-pointer relative" onClick={() => {router.push(`monitoring/${monitoring.id}`)}}>
-      <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!monitoring.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+      <Tooltip>
+          <TooltipTrigger asChild>
+              <div className={`absolute top-2 right-2 px-2 py-1 rounded-full ${!monitoring.deleted_at ? 'bg-green-700' : 'bg-red-500'}`}></div>
+          </TooltipTrigger>
+          <TooltipContent className="break-words max-w-[260px]">
+              {monitoring.deleted_at ? " Inativo" : "Ativo"}
+          </TooltipContent>
+      </Tooltip>
       <CardHeader>
         <CardTitle>{monitoring?.student?.name}</CardTitle>
       </CardHeader>
@@ -31,7 +38,7 @@ export default function CardMonitoring(monitoring:iMonitoringForm) {
               <span className="flex items-center gap-1 h-6 font-semibold">Observaçõess:
                   <Tooltip>
                       <TooltipTrigger asChild>
-                          <span className="cursor-help">
+                          <span className="cursor-default">
                               <Info size={18}/>
                           </span>
                       </TooltipTrigger>

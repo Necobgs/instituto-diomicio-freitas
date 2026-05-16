@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { exportToExcel, exportToPDF } from "@/functions/export";
+import { FileSpreadsheet, FileText, Printer } from "lucide-react";
+import { exportToExcel, exportToPDF, exportToDocx } from "@/functions/export";
 
 interface ExportModalProps {
     open: boolean;
@@ -28,10 +29,16 @@ export const ExportModal = ({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3 pt-4">
-                    <Button type="button" onClick={() => { exportToExcel(name, rows); onOpenChange(false); }}>
+                    <Button className="flex align-center justify-center gap-2 bg-green-800 hover:bg-green-700" type="button" onClick={() => { exportToExcel(name, rows); onOpenChange(false); }}>
+                        <FileSpreadsheet size={18}/>
                         Exportar para Excel
                     </Button>
-                    <Button type="button" onClick={() => { exportToPDF(title, rows); onOpenChange(false); }}>
+                    <Button className="flex align-center justify-center gap-2  bg-blue-900 hover:bg-blue-800" type="button" onClick={() => { exportToDocx(name, title, rows); onOpenChange(false); }}>
+                        <FileText size={18}/>
+                        Exportar para Word
+                    </Button>
+                    <Button className="flex align-center justify-center gap-2 bg-red-700 hover:bg-red-600" type="button" onClick={() => { exportToPDF(title, rows); onOpenChange(false); }}>
+                        <Printer size={18}/>
                         Exportar para PDF
                     </Button>
                 </div>

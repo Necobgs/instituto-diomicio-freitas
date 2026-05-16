@@ -3,15 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Key } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { isValidEmail } from "@/app/utils/validations";
 import { useAppDispatch } from "@/store/hooks";
@@ -19,39 +11,34 @@ import { passwordChangeRequest } from "@/store/features/userSlice";
 
 export default function RecoveryPasswordPage() {
   const [email, setEmail] = useState<string>("");
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [dialogMessage, setDialogMessage] = useState<string>("");
-  const [isSuccess, setIsSuccess] = useState<boolean>(true);
+  const [alertTitle, setAlertTitle] = useState<string>("");
+  const [alertDesc, setAlertDesc] = useState<string>("");
+  const [infoAlertInfoOpen, setInfoAlertOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-  // Função para lidar com a recuperação de senha
   const handlePasswordRecovery = async () => {
-    // Validação: campo vazio
     if (!email) {
-      setDialogMessage("Por favor, insira um e-mail.");
-      setIsSuccess(false);
-      setIsDialogOpen(true);
+      handleAlert(true, "Por favor, insira um e-mail.");
       return;
     }
 
-    // Validação: e-mail válido
     if (!isValidEmail(email)) {
-      setDialogMessage("Por favor, insira um e-mail válido.");
-      setIsSuccess(false);
-      setIsDialogOpen(true);
+      handleAlert(true, "Por favor, insira um e-mail válido.");
       return;
     }
 
     try {
       const response = await dispatch(passwordChangeRequest(email)).unwrap();
-      setDialogMessage(response?.message || `Um e-mail foi enviado para ${email} com instruções para redefinir sua senha.`);
-      setIsSuccess(true);
-      setIsDialogOpen(true);
+      handleAlert(false, response?.message || `Um e-mail foi enviado para ${email} com instruções para redefinir sua senha.`);
     } catch (error: any) {
-      setDialogMessage(error?.message || "Ocorreu um erro ao enviar o e-mail. Tente novamente.");
-      setIsSuccess(false);
-      setIsDialogOpen(true);
+      handleAlert(true, error?.message || "Ocorreu um erro ao enviar o e-mail. Tente novamente.");
     }
+  };
+
+  const handleAlert = (error: boolean, message: string) => {
+      setAlertTitle(error ? "Erro" : "Sucesso");
+      setAlertDesc(message)
+      setInfoAlertOpen(true);
   };
 
   return (
@@ -70,28 +57,19 @@ export default function RecoveryPasswordPage() {
         placeholder="E-mail"
         className="w-[100%]"
         value={email}
+        type="email"
         onChange={(e) => setEmail(e.target.value)}
       />
       <Button className="w-[100%]" onClick={handlePasswordRecovery}>
         Recuperar a senha
       </Button>
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-left">
-              {isSuccess ? "Sucesso!" : "Erro"}
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-left">
-              {dialogMessage}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setIsDialogOpen(false)}>
-              OK
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+
+      <InfoAlertDialog
+          message={alertDesc} 
+          title={alertTitle} 
+          open={infoAlertInfoOpen} 
+          onOpenChange={setInfoAlertOpen}
+      />
     </div>
   );
 }

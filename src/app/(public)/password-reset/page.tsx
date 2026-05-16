@@ -3,15 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Key } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { InfoAlertDialog } from "@/components/ui/alert-dialog";
 import { Suspense, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { passwordChange } from "@/store/features/userSlice";
@@ -23,36 +15,34 @@ function RecoveryPasswordPageContent() {
   const dispatch = useAppDispatch();
   const token = searchParams.get("token") || "";
   const [password, setPassword] = useState<string>("");
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [dialogMessage, setDialogMessage] = useState<string>("");
-  const [isSuccess, setIsSuccess] = useState<boolean>(true);
+  const [alertTitle, setAlertTitle] = useState<string>("");
+  const [alertDesc, setAlertDesc] = useState<string>("");
+  const [infoAlertInfoOpen, setInfoAlertOpen] = useState<boolean>(false);
 
   const handleSubmit= async () => {
     if (!password) {
-      setDialogMessage("Por favor, insira uma senha.");
-      setIsSuccess(false);
-      setIsDialogOpen(true);
+      handleAlert(true, "Por favor, insira uma senha.");
       return;
     }
 
     if (password.length < 6) {
-      setDialogMessage("A senha deve ter pelo menos 6 caracteres.");
-      setIsSuccess(false);
-      setIsDialogOpen(true);
+      handleAlert(true, "A senha deve ter pelo menos 6 caracteres.");
       return;
     }
 
     try {
       const response = await dispatch(passwordChange({ newPassword: password, token: token })).unwrap();
-      setDialogMessage(response?.message || `Senha alterada com sucesso!`);
-      setIsSuccess(true);
-      setIsDialogOpen(true);
+      handleAlert(false, response?.message || `Senha alterada com sucesso!`);
       router.push('/login');
     } catch (error: any) {
-      setDialogMessage(error?.message || "Ocorreu um erro ao alterar a senha.");
-      setIsSuccess(false);
-      setIsDialogOpen(true);
+      handleAlert(true, error?.message || "Ocorreu um erro ao alterar a senha.");
     }
+  };
+
+  const handleAlert = (error: boolean, message: string) => {
+      setAlertTitle(error ? "Erro" : "Sucesso");
+      setAlertDesc(message)
+      setInfoAlertOpen(true);
   };
 
   return (
@@ -73,23 +63,13 @@ function RecoveryPasswordPageContent() {
       <Button className="w-[100%]" onClick={handleSubmit}>
         Atualizar a senha
       </Button>
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-left">
-              {isSuccess ? "Sucesso!" : "Erro"}
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-left">
-              {dialogMessage}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setIsDialogOpen(false)}>
-              OK
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+
+      <InfoAlertDialog
+          message={alertDesc} 
+          title={alertTitle} 
+          open={infoAlertInfoOpen} 
+          onOpenChange={setInfoAlertOpen}
+      />
     </div>
   );
 }
