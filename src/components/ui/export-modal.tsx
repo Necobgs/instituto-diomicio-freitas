@@ -22,8 +22,8 @@ export const ExportModal = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="w-md max-w-[95%]">
                 <DialogHeader>
-                    <DialogTitle>Exportar registro(s)</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="text-left">Exportar registro(s)</DialogTitle>
+                    <DialogDescription className="text-left">
                         Escolha o formato para exportar os dados desta registro(s).
                     </DialogDescription>
                 </DialogHeader>
