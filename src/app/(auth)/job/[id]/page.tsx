@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function JobCreatePage() {
 
@@ -23,12 +24,23 @@ export default function JobCreatePage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [exportOpen,setExportOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const job = useSelector(selectJob);
     const loading = useSelector(selectJobLoading);
     const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
+
+    const getExportRows = () => {
+        const source = formData?.id === job?.id ? formData : job || {};
+
+        const rows: (string | number)[][] = [
+            ["Nome", source.name || ""],
+        ];
+
+        return rows;
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -57,9 +69,9 @@ export default function JobCreatePage() {
 
         try {
             await dispatch(editJob(formData)).unwrap();
-            handleAlert(false,'Cargo alterado com sucesso!');
+            handleAlert(false,'Cargo editado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar cargo');
+            handleAlert(true,error?.message || 'Erro ao editar cargo');
             console.log(error)
         }
     };
@@ -103,13 +115,13 @@ export default function JobCreatePage() {
     };
 
     useEffect(() => {
-        return () => {
+        if (id) {
             getJob(id);
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
-        if (job) {
+        if (job?.id === id) {
             setFormData({...job});
         }
     }, [job]);
@@ -121,7 +133,7 @@ export default function JobCreatePage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Alterar Cargo</h1>
+                            <h1 className="text-2xl">Editar Cargo</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -159,6 +171,9 @@ export default function JobCreatePage() {
                                         Reabilitar
                                     </Button>
                                 )}
+                                <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                                    Exportar
+                                </Button>
                                 <Button type="button" variant="secondary" onClick={() => router.push('/job')}>
                                     Cancelar
                                 </Button>
@@ -181,6 +196,14 @@ export default function JobCreatePage() {
                         open={infoAlertOpen}
                         onOpenChange={setInfoAlertOpen}
                         onClickBtn={() => {isError ? "" : router.push('/job');}}
+                    />
+
+                    <ExportModal
+                        name={`cargo${job?.id}`}
+                        title="Cargo"
+                        rows={getExportRows()}
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
                     />
                 </div>
             }

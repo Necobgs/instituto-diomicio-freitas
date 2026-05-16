@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { Eye, EyeOff, Info } from "lucide-react"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 function Input({ className, type, error, ...props }: React.ComponentProps<"input"> & { error?: string }) {
 
@@ -23,8 +24,25 @@ function Input({ className, type, error, ...props }: React.ComponentProps<"input
           )}
           {...props}
         />
-        {type === "date" && props.placeholder ? <div className="absolute right-2" title={props.placeholder}><Info size={18}/></div> : ""}
-        {type === "password" ? <div className="absolute right-2" onClick={() => setVisiblePassword(!visiblePassword)}>{ visiblePassword ? <EyeOff size={20}/> : <Eye size={20}/>}</div> : ""}
+        {type === "date" && props.placeholder && (
+          <div className="absolute right-2 top-2">
+            <Tooltip>
+              <TooltipTrigger>
+                <div>
+                  <Info size={18}/>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{props.placeholder}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
+        {type === "password" && (
+          <div className="absolute right-2" onClick={() => setVisiblePassword(!visiblePassword)}>
+            {visiblePassword ? <EyeOff size={20}/> : <Eye size={20}/>}
+          </div>
+        )}
       </div>
       {error && <p className="text-destructive text-sm mt-1">{error}</p>}
     </div>

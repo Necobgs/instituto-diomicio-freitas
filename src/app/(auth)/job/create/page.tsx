@@ -75,7 +75,7 @@ export default function JobCreatePage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Criar Cargo</h1>
+                            <h1 className="text-2xl">Cadastrar Cargo</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>

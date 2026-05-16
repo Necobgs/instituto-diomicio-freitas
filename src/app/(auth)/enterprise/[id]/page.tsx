@@ -14,6 +14,7 @@ import Loading from "@/components/ui/loading";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
 import { validateCNPJ } from "@/functions/validateCnpj";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function EnterpriseCreatePage() {
 
@@ -25,12 +26,25 @@ export default function EnterpriseCreatePage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [exportOpen,setExportOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const enterprise = useSelector(selectEnterprise);
     const loading = useSelector(selectEnterpriseLoading);
     const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
+
+    const getExportRows = () => {
+        const source = formData?.id === enterprise?.id ? formData : enterprise || {};
+
+        const rows: (string | number)[][] = [
+            ["Nome", source.name || ""],
+            ["Telefone", source.phone || ""],
+            ["CNPJ", source.cnpj || ""],
+        ];
+
+        return rows;
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -72,9 +86,9 @@ export default function EnterpriseCreatePage() {
 
         try {
             await dispatch(editEnterprise(formData)).unwrap();
-            handleAlert(false,'Empresa alterada com sucesso!');
+            handleAlert(false,'Empresa editada com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar empresa');
+            handleAlert(true,error?.message || 'Erro ao editar empresa');
         }
     };
 
@@ -117,13 +131,13 @@ export default function EnterpriseCreatePage() {
     }
 
     useEffect(() => {
-        return () => {
+        if (id) {
             getEnterprise(id);
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
-        if (enterprise) {
+        if (enterprise?.id === id) {
             setFormData({...enterprise});
         }
     }, [enterprise]);
@@ -135,7 +149,7 @@ export default function EnterpriseCreatePage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Alterar Empresa</h1>
+                            <h1 className="text-2xl">Editar Empresa</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -193,6 +207,9 @@ export default function EnterpriseCreatePage() {
                                         Reabilitar
                                     </Button>
                                 )}
+                                <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                                    Exportar
+                                </Button>
                                 <Button type="button" variant="secondary" onClick={() => router.push('/enterprise')}>
                                     Cancelar
                                 </Button>
@@ -215,6 +232,14 @@ export default function EnterpriseCreatePage() {
                         open={infoAlertOpen} 
                         onOpenChange={setInfoAlertOpen}
                         onClickBtn={() => {isError ? "" : router.push('/enterprise');}}
+                    />
+
+                    <ExportModal
+                        name={`empresa${enterprise?.id}`}
+                        title="Empresa"
+                        rows={getExportRows()}
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
                     />
                 </div>
             }

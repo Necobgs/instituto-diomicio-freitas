@@ -111,7 +111,7 @@ export default function EvaluationCreatePage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Gerar Avaliação</h1>
+                            <h1 className="text-2xl">Cadastrar Avaliação</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                             <div>

@@ -122,7 +122,6 @@ const monitoringSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreMonitoring.fulfilled, (state, action: PayloadAction<iMonitoringForm>) => {
-                state.monitorings.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })

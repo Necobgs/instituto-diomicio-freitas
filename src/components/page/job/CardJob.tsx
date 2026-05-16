@@ -2,13 +2,9 @@
 
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
 import { iJobForm } from "@/types/job"
 import { useRouter } from "next/navigation"
 

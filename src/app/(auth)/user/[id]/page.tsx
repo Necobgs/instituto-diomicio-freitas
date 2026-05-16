@@ -14,6 +14,7 @@ import MaskedInput from "@/components/ui/masked-input";
 import Loading from "@/components/ui/loading";
 import { can } from "@/functions/can";
 import { validateCPF } from "@/functions/validateCpf";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function UserEditPage() {
 
@@ -30,9 +31,22 @@ export default function UserEditPage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [exportOpen,setExportOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [permissionsOpen, setPermissionsOpen] = useState(false);
     const currentUser = useSelector(selectCurrentUser);
+
+    const getExportRows = () => {
+        const source = formData?.id === user?.id ? formData : user || {};
+
+        const rows: (string | number)[][] = [
+            ["Nome", source.username || ""],
+            ["Email", source.email || ""],
+            ["CPF", source.cpf || ""],
+        ];
+
+        return rows;
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -77,9 +91,9 @@ export default function UserEditPage() {
             setLoading(true);
             await dispatch(editUser({...formData})).unwrap();
             setLoading(false);
-            handleAlert(false,'Usuário alterado com sucesso!');
+            handleAlert(false,'Usuário editado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar usuário');
+            handleAlert(true,error?.message || 'Erro ao editar usuário');
             setLoading(false);
         }
     };
@@ -150,7 +164,7 @@ export default function UserEditPage() {
     }, [id]);
 
     useEffect(() => {
-        if (user) {
+        if (user?.id === id) {
             setFormData({...user});
         }
     }, [user]);
@@ -173,7 +187,7 @@ export default function UserEditPage() {
                             <div className="text-left">
                                 <h1 className="text-2xl">Editar Usuário</h1>
                             </div>
-                            <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-prose">
                                 <div>
                                     <label htmlFor="username" className="text-sm font-medium">Nome</label>
                                     <Input
@@ -237,6 +251,9 @@ export default function UserEditPage() {
                                                 Permissões
                                             </Button>
                                         )}
+                                        <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                                            Exportar
+                                        </Button> 
                                         <Button type="button" variant="secondary" onClick={() => router.back()}>
                                             Cancelar
                                         </Button>
@@ -267,6 +284,14 @@ export default function UserEditPage() {
                             open={infoAlertOpen} 
                             onOpenChange={setInfoAlertOpen}
                             onClickBtn={() => {isError ? "" : router.push('/user');}}
+                        />
+
+                        <ExportModal
+                            name={`usuario${user?.id}`}
+                            title="Usuário"
+                            rows={getExportRows()}
+                            open={exportOpen}
+                            onOpenChange={setExportOpen}
                         />
                     </div>
             }

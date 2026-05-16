@@ -8,11 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
 import { formatDate } from "@/lib/format";
 import { iMonitoringForm } from "@/types/monitoring";
 import { Info } from "lucide-react";
 import { useRouter } from "next/navigation"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function CardMonitoring(monitoring:iMonitoringForm) {
 
@@ -27,7 +27,20 @@ export default function CardMonitoring(monitoring:iMonitoringForm) {
       <CardContent>
         <CardDescription>
           <div className="text-black/80"><span className="font-semibold">Data da visita:</span> {formatDate(monitoring?.visitDate)}</div>
-          <div className="text-black/80" title={monitoring?.observations || "Nenhuma observação"}><span className="flex items-center gap-1 h-6 font-semibold">Observações: <Info size={18}/></span></div>
+          <div className="text-black/80">
+              <span className="flex items-center gap-1 h-6 font-semibold">Observaçõess:
+                  <Tooltip>
+                      <TooltipTrigger asChild>
+                          <span className="cursor-help">
+                              <Info size={18}/>
+                          </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="break-words max-w-[260px]">
+                          {monitoring?.observations || "Nenhuma observação"}
+                      </TooltipContent>
+                  </Tooltip>
+              </span>
+          </div>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex-col gap-2">

@@ -5,17 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combo-box";
 import { StudentCombobox } from "@/components/ui/combo-box-student";
 import { UserCombobox } from "@/components/ui/combo-box-user";
+import { ExportModal } from "@/components/ui/export-modal";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { can } from "@/functions/can";
+import { formatExportDate } from "@/functions/export";
 import { initEvaluations, selectEvaluationCount, selectEvaluationError, selectEvaluationHasNextPage, selectEvaluationHasPreviousPage, selectEvaluationLoading, selectEvaluations } from "@/store/features/evaluationSlice";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { defaultFilterEvaluation } from "@/types/evaluation";
 import { iStudentForm } from "@/types/student";
 import { iUserForm } from "@/types/user";
+import { Download, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -31,10 +34,25 @@ export default function EvaluationPage(){
     const hasNextPage = useSelector(selectEvaluationHasNextPage);
     const hasPreviousPage = useSelector(selectEvaluationHasPreviousPage);
     const currentUser = useSelector(selectCurrentUser);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const [formData, setFormData] = useState(defaultFilterEvaluation);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
+
+    const getExportRows = () => {
+        const header = ["Aluno", "Professor", "Data da avaliação", "Nota entrevista com os pais", "Nota da avaliação", "Status"];
+        const rows = evaluations.map(evaluation => [
+            evaluation.student?.name || "",
+            evaluation.user?.username || "",
+            formatExportDate(evaluation.date),
+            String(evaluation.interviewNote ?? ""),
+            String(evaluation.note ?? ""),
+            evaluation.deleted_at ? "Inativo" : "Ativo"
+        ]);
+
+        return [header, ...rows];
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -142,9 +160,19 @@ export default function EvaluationPage(){
                     pageActivated={currentPage}
                 />
 
+                <ExportModal
+                    open={exportOpen}
+                    onOpenChange={setExportOpen}
+                    name="avaliacoes"
+                    title="Avaliações"
+                    rows={getExportRows()}
+                />
+
+                <button className="fixed flex items-center justify-center bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+
                 {can(currentUser, "evaluation", "create") && (
-                    <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/evaluation/create')}}>
-                        +
+                    <button className="fixed flex items-center justify-center bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/student/evaluation/create')}}>
+                        <Plus size={18}/>
                     </button>
                 )}
             </div>}

@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import Loading from "@/components/ui/loading";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { formatExportDate } from "@/functions/export";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function MonitoringEditPage() {
 
@@ -27,12 +29,24 @@ export default function MonitoringEditPage() {
   const [alertDesc,setAlertDesc] = useState('');
   const [alertOpen,setAlertOpen] = useState(false);
   const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+  const [exportOpen,setExportOpen] = useState(false);
   const [isError,setIsError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const monitoring = useSelector(selectMonitoring);
   const loading = useSelector(selectMonitoringLoading);
   const currentUser = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
+
+  const getExportRows = () => {
+      const source = formData?.id === monitoring?.id ? formData : monitoring || {};
+
+      const rows: (string | number)[][] = [
+          ["Data da visita", formatExportDate(source.visitDate)],
+          ["Observações", source.observations || ""]
+      ];
+
+      return rows;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -73,9 +87,9 @@ export default function MonitoringEditPage() {
           };
 
           await dispatch(editMonitoring({...dataToSubmit})).unwrap();
-          handleAlert(false,'Acompanhamento alterado com sucesso!');
+          handleAlert(false,'Acompanhamento editado com sucesso!');
       } catch (error: any) {
-          handleAlert(true,error?.message || 'Erro ao cadastrar acompanhamento');
+          handleAlert(true,error?.message || 'Erro ao editar acompanhamento');
       }
   };
 
@@ -118,13 +132,13 @@ export default function MonitoringEditPage() {
   }
 
   useEffect(() => {
-      return () => {
+      if (id) {
           getMonitoring(id);
       }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
-      if (monitoring) {
+      if (monitoring?.id === id) {
           setFormData({...monitoring});
       }
   }, [monitoring]);
@@ -136,7 +150,7 @@ export default function MonitoringEditPage() {
           ? <Loading/>
           : <div className="w-full h-full p-4">
           <section className="min-h-16 flex flex-col gap-5">
-            <h1 className="text-2xl">Alterar acompanhamento</h1>
+            <h1 className="text-2xl">Editar acompanhamento</h1>
 
             <form
               onSubmit={handleSubmit}
@@ -200,6 +214,9 @@ export default function MonitoringEditPage() {
                         Reabilitar
                     </Button>
                 )}
+                <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                    Exportar
+                </Button>
                 <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
               </div>
             </form>
@@ -221,6 +238,15 @@ export default function MonitoringEditPage() {
               onOpenChange={setInfoAlertOpen}
               onClickBtn={() => {isError ? "" : router.push('/student/monitoring');}}
           />
+
+          <ExportModal
+              name={`acompanhamento${monitoring?.id}`}
+              title="Acompanhamento"
+              rows={getExportRows()}
+              open={exportOpen}
+              onOpenChange={setExportOpen}
+          />
+          
         </div>
       }
     </>

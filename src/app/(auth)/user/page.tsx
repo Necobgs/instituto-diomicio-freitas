@@ -3,11 +3,13 @@
 import CardUser from "@/components/page/user-page/CardUser";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combo-box";
+import { Download, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import MaskedInput from "@/components/ui/masked-input";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { ExportModal } from "@/components/ui/export-modal";
 import { can } from "@/functions/can";
 import { initUsers, selectUserError, selectUserLoading, selectUsers, selectUserCount, selectUserHasNextPage, selectCurrentUser, selectUserHasPreviousPage } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/store/hooks";
@@ -15,7 +17,6 @@ import { defaultFilterUser } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 
 export default function UserPage(){
     
@@ -31,6 +32,7 @@ export default function UserPage(){
     const [formData, setFormData] = useState(defaultFilterUser);
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [exportOpen, setExportOpen] = useState(false);
     const itemsPerPage = 8;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +60,18 @@ export default function UserPage(){
             dispatch(initUsers({...formData, page: currentPage, limit: itemsPerPage }));
         }
     }, [dispatch, currentPage]);
+
+    const getExportRows = () => {
+        const header = ["Nome", "Email", "CPF", "Status"];
+        const rows = users?.map((user) => [
+            user.username || "",
+            user.email || "",
+            user.cpf || "",
+            user.deleted_at ? "Inativo" : "Ativo",
+        ]) || [];
+
+        return [header, ...rows];
+    };
 
     return (
         <>
@@ -105,14 +119,16 @@ export default function UserPage(){
                             notFoundMessage="Nenhuma situação encontrada"
                         />
                     </div>
-                    <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(50%-1rem)] md:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
-                        <Button className="w-full" onClick={handleSearch}>Buscar</Button>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <div className="flex-1 min-w-[200px] max-w-full sm:max-w-[calc(33.33%-1rem)] lg:max-w-[calc(20%-1rem)]">
+                            <Button className="w-full" onClick={handleSearch}>Buscar</Button>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <Separator className="mt-6"/>
-            
+            <Separator className="mt-6" />
+
             <section className="mt-4 flex-auto">
                 { !users?.[0] || error
                 ?<div>
@@ -137,8 +153,18 @@ export default function UserPage(){
                 pageActivated={currentPage}
             />
 
+            <ExportModal
+                open={exportOpen}
+                onOpenChange={setExportOpen}
+                name="usuarios"
+                title="Usuários"
+                rows={getExportRows()}
+            />
+
+            <button className="fixed flex items-center justify-center bottom-5 right-22  text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
+
             {can(currentUser, "user", "create") && (
-                <button className="fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/user/create')}}>+</button>
+                <button className="fixed flex items-center justify-center bottom-5 right-5  text-white p-4 rounded-full shadow-lg bg-red-400 hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {router.push('/user/create')}}><Plus size={18}/></button>
             )}
         </div>}
         </>

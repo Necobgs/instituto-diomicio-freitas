@@ -17,6 +17,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
 import { validateCPF } from "@/functions/validateCpf";
+import { formatExportDate } from "@/functions/export";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function StudentEditPage() {
 
@@ -28,12 +30,31 @@ export default function StudentEditPage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [exportOpen,setExportOpen] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const student = useSelector(selectStudent);
     const loading = useSelector(selectStudentLoading);
     const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
+
+    const getExportRows = () => {
+        const source = formData?.id === student?.id ? formData : student || {};
+
+        const rows: (string | number)[][] = [
+            ["Nome", source.name || ""],
+            ["Telefone", source.phone || ""],
+            ["Data de nascimento", formatExportDate(source.dateBirthday)],
+            ["CPF", source.cpf || ""],
+            ["Nome do responsável", source.responsibleName || ""],
+            ["Telefone do responsável", source.responsiblePhone || ""],
+            ["Data de entrada", formatExportDate(source.dateEntry)],
+            ["Usa medicamentos?", source.useMedicine ? "Sim" : "Não"],
+            ["Informações sobre medicamentos", source.infoMedicine || ""]
+        ];
+
+        return rows;
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -81,9 +102,9 @@ export default function StudentEditPage() {
 
         try {
             await dispatch(editStudent(formData)).unwrap();
-            handleAlert(false,'Estudante atualizado com sucesso!');
+            handleAlert(false,'Estudante editado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao atualizar estudante');
+            handleAlert(true,error?.message || 'Erro ao editar estudante');
         }
     };
 
@@ -126,13 +147,13 @@ export default function StudentEditPage() {
     };
 
     useEffect(() => {
-        return () => {
+        if (id) {
             getStudent(id);
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
-        if (student) {
+        if (student?.id === id) {
             setFormData({...student});
         }
     }, [student]);
@@ -144,7 +165,7 @@ export default function StudentEditPage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Alterar Estudante</h1>
+                            <h1 className="text-2xl">Editar Estudante</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -267,6 +288,9 @@ export default function StudentEditPage() {
                                         Reabilitar
                                     </Button>
                                 )}
+                                <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                                    Exportar
+                                </Button>
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student')}>
                                     Cancelar
                                 </Button>
@@ -289,6 +313,14 @@ export default function StudentEditPage() {
                         open={infoAlertOpen} 
                         onOpenChange={setInfoAlertOpen}
                         onClickBtn={() => {isError ? "" : router.push('/student');}}
+                    />
+
+                    <ExportModal
+                        name={`estudante${student?.id}`}
+                        title="Estudante"
+                        rows={getExportRows()}
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
                     />
                 </div>
         }

@@ -8,10 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
 import { formatCpf, formatDate, formatPhone } from "@/lib/format";
 import { iStudentForm } from "@/types/student"
+import { Info } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function CardStudent(student:iStudentForm) {
 
@@ -32,6 +33,20 @@ export default function CardStudent(student:iStudentForm) {
                     <div className="text-black/80"><span className="font-semibold">Data de nascimento:</span> {formatDate(student.dateBirthday)}</div>
                     <div className="text-black/80"><span className="font-semibold">Telefone:</span> {formatPhone(student.phone)}</div>
                     <div className="text-black/80"><span className="font-semibold">CPF:</span> {formatCpf(student.cpf)}</div>
+                    <div className="text-black/80">
+                        <span className="flex items-center gap-1 h-6 font-semibold">Info. medicamentos:
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span className="cursor-help">
+                                        <Info size={18}/>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom" className="break-words max-w-[260px]">
+                                    {student.infoMedicine || "Nenhuma informação sobre medicamentos"}
+                                </TooltipContent>
+                            </Tooltip>
+                        </span>
+                    </div>
                 </CardDescription>
             </CardContent>
             <CardFooter className="flex-col gap-2">

@@ -123,7 +123,6 @@ const referralSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreReferral.fulfilled, (state, action: PayloadAction<iReferralForm>) => {
-                state.referrals.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })

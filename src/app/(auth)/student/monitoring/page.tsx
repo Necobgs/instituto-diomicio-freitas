@@ -80,7 +80,7 @@ export default function MonitoringPage() {
                 name="visitDateIni"
                 value={formData?.visitDateIni || ''}
                 onChange={handleInputChange}
-                placeholder="Data Início Visita" 
+                placeholder="Data da visita início" 
                 type="date"
               />
             </div>
@@ -90,7 +90,7 @@ export default function MonitoringPage() {
                 name="visitDateEnd"
                 value={formData?.visitDateEnd || ''}
                 onChange={handleInputChange}
-                placeholder="Data Fim Visita" 
+                placeholder="Data da visita fim" 
                 type="date"
               />
             </div>

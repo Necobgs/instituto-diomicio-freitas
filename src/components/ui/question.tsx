@@ -24,15 +24,18 @@ export function Question({
 
     // Renderiza o conteúdo baseado no type da questão
     const renderContent = () => (
-        
         <div>
             <label className="font-bold block mb-5">
                 {question.key.replace('q','')}. {question.title}
             </label>
             {question.type === "alternative" && (
-                <div className={`flex items-center justify-between gap-4 w-full p-1 box-border rounded`}>
+                <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
                     {options.map((option) => (
-                        <label key={option.value} className="flex items-center gap-2">
+                        <label
+                            key={option.value}
+                            htmlFor={`${question.key}-${option.value}`}
+                            className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2 transition ${value === option.value ? 'border-blue-600 bg-blue-50' : 'border-slate-200 bg-white hover:border-slate-400'}`}
+                        >
                             <input
                                 id={`${question.key}-${option.value}`}
                                 name={question.key}
@@ -40,8 +43,9 @@ export function Question({
                                 checked={value === option.value}
                                 onChange={() => onChange(question.key, option.value)}
                                 type="radio"
+                                className="h-4 w-4 text-blue-600"
                             />
-                            <span className="">{option.label}</span>
+                            <span className="text-sm">{option.label}</span>
                         </label>
                     ))}
                 </div>

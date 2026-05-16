@@ -18,6 +18,8 @@ import { Question } from "@/components/ui/question";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { formatExportDate } from "@/functions/export";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function EvaluationCreatePage() {
 
@@ -29,12 +31,40 @@ export default function EvaluationCreatePage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [exportOpen,setExportOpen] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const evaluation = useSelector(selectEvaluation);
     const loading = useSelector(selectEvaluationLoading);
     const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
+
+    const getExportRows = () => {
+        const source = formData?.id === evaluation?.id ? formData : evaluation || {};
+        const optionLabels: Record<string, string> = {
+            a: "Sim",
+            b: "Não",
+            c: "Maioria das vezes",
+            d: "Raras vezes",
+        };
+        const rows: (string | number)[][] = [
+            ["Estudante", source.student?.name || ""],
+            ["Professor", source.user?.username || ""],
+            ["Data da avaliação", formatExportDate(source.date)],
+            ["Nota entrevista com os pais", String(source.interviewNote ?? "")],
+            ["Nota da avaliação", String(source.note ?? "")],
+        ];
+
+        defaultQuestions.map((question) => {
+            const rawValue = source[question.key as keyof iEvaluationForm] as string | number | undefined;
+            const value = question.type === "alternative"
+                ? optionLabels[String(rawValue)] ?? String(rawValue ?? "")
+                : String(rawValue ?? "");
+            rows.push([question.title ? `${question.key.replace('q','')}. ${question.title}` : question.key, value]);
+        });
+
+        return rows;
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
@@ -91,13 +121,13 @@ export default function EvaluationCreatePage() {
 
             await dispatch(editEvaluation({...dataToSubmit})).unwrap();
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao alterar avaliação');
+            handleAlert(true,error?.message || 'Erro ao editar avaliação');
             errorResponse = true;
         }
 
         if (errorResponse) return;
 
-        handleAlert(false,'Avaliação alterada com sucesso!');
+        handleAlert(false,'Avaliação editada com sucesso!');
     };
 
     const handleEnableOrDisable = async(e: React.FormEvent) => {
@@ -139,13 +169,13 @@ export default function EvaluationCreatePage() {
     }
 
     useEffect(() => {
-        return () => {
+        if (id) {
             getEvaluation(id);
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
-        if (evaluation) {
+        if (evaluation?.id === id) {
             setFormData({...evaluation});
         }
     }, [evaluation]);
@@ -157,7 +187,7 @@ export default function EvaluationCreatePage() {
                 :<div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Alterar Avaliação</h1>
+                            <h1 className="text-2xl">Editar Avaliação</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                             <div>
@@ -239,8 +269,7 @@ export default function EvaluationCreatePage() {
                                     ))
                                 }
                             </div>
-                            <div className="flex gap-3">
-                                {!evaluation?.deleted_at &&
+                            <div className="flex gap-3"> {!evaluation?.deleted_at &&
                                     <>
                                         {can(currentUser, "evaluation", "update") && (
                                             <Button type="submit">Salvar</Button>)
@@ -263,6 +292,9 @@ export default function EvaluationCreatePage() {
                                         Reabilitar
                                     </Button>
                                 )}
+                                <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                                    Exportar
+                                </Button>
                                 <Button type="button" variant="secondary" onClick={() => router.push('/student/evaluation')}>
                                     Cancelar
                                 </Button>
@@ -285,6 +317,14 @@ export default function EvaluationCreatePage() {
                         open={infoAlertOpen} 
                         onOpenChange={setInfoAlertOpen}
                         onClickBtn={() => {isError ? "" : router.push('/student/evaluation');}}
+                    />
+
+                    <ExportModal
+                        name={`avaliacao${evaluation?.id}`}
+                        title="Avaliação"
+                        rows={getExportRows()}
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
                     />
                 </div>
             }

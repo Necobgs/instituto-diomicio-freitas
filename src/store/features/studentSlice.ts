@@ -122,7 +122,6 @@ const studentSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreStudent.fulfilled, (state, action: PayloadAction<iStudentForm>) => {
-                state.students.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })

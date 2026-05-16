@@ -6,10 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
 import { formatCpf } from "@/lib/format"
 import { iUserForm } from "@/types/user"
-import React, { MouseEventHandler } from "react"
+import React from "react"
 
 interface iProps{
   user:iUserForm,

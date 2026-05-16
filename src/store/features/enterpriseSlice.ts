@@ -114,7 +114,6 @@ const enterpriseSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreEnterprise.fulfilled, (state, action: PayloadAction<iEnterpriseForm>) => {
-                state.enterprises.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })

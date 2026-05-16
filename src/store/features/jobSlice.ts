@@ -121,7 +121,6 @@ const jobSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreJob.fulfilled, (state, action: PayloadAction<iJobForm>) => {
-                state.jobs.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })

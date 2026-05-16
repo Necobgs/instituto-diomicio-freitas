@@ -19,6 +19,8 @@ import { iJobForm } from "@/types/job";
 import { formatDateForInput } from "@/lib/format";
 import { selectCurrentUser } from "@/store/features/userSlice";
 import { can } from "@/functions/can";
+import { formatExportDate } from "@/functions/export";
+import { ExportModal } from "@/components/ui/export-modal";
 
 export default function ReferralCreatePage() {
 
@@ -30,12 +32,28 @@ export default function ReferralCreatePage() {
     const [alertDesc,setAlertDesc] = useState('');
     const [alertOpen,setAlertOpen] = useState(false);
     const [infoAlertOpen,setInfoAlertOpen] = useState(false);
+    const [exportOpen,setExportOpen] = useState(false);
     const [isError,setIsError] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const referral = useSelector(selectReferral);
     const loading = useSelector(selectReferralLoading);
     const currentUser = useSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
+
+    const getExportRows = () => {
+        const source = formData?.id === referral?.id ? formData : referral || {};
+
+        const rows: (string | number)[][] = [
+            ["Estudante", source.student?.name || ""],
+            ["Empresa", source.enterprise?.name || ""],
+            ["Cargo", source.job?.name || ""],
+            ["Data da admissão", formatExportDate(source.admissionDate)],
+            ["Provável data desligamento IEEDF", formatExportDate(source.terminationDateIeedf)]    
+        ];
+
+        return rows;
+    };
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -77,9 +95,9 @@ export default function ReferralCreatePage() {
             };
 
             await dispatch(editReferral({...dataToSubmit})).unwrap();
-            handleAlert(false,'Encaminhamento alterado com sucesso!');
+            handleAlert(false,'Encaminhamento editado com sucesso!');
         } catch (error: any) {
-            handleAlert(true,error?.message || 'Erro ao cadastrar encaminhamento');
+            handleAlert(true,error?.message || 'Erro ao editar encaminhamento');
             console.log(error)
         }
     };
@@ -123,13 +141,13 @@ export default function ReferralCreatePage() {
     };
 
     useEffect(() => {
-        return () => {
+        if (id) {
             getReferral(id);
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
-        if (referral) {
+        if (referral?.id === id) {
             setFormData({...referral});
         }
     }, [referral]);
@@ -141,7 +159,7 @@ export default function ReferralCreatePage() {
                 : <div className="w-full h-full p-4">
                     <section className="min-h-16 flex flex-col gap-5">
                         <div className="text-left">
-                            <h1 className="text-2xl">Alterar Encaminhamento</h1>
+                            <h1 className="text-2xl">Editar Encaminhamento</h1>
                         </div>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
                             <div>
@@ -216,7 +234,10 @@ export default function ReferralCreatePage() {
                                     }}>
                                         Reabilitar
                                     </Button>
-                                )}                             
+                                )}   
+                                <Button type="button" className="bg-gray-500 hover:bg-gray-400" onClick={() => setExportOpen(true)}>
+                                    Exportar
+                                </Button>                          
                                 <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
                             </div>
                         </form>
@@ -237,6 +258,14 @@ export default function ReferralCreatePage() {
                         open={infoAlertOpen} 
                         onOpenChange={setInfoAlertOpen}
                         onClickBtn={() => {isError ? "" : router.push('/student/referral');}}
+                    />
+
+                    <ExportModal
+                        name={`encaminhamento${referral?.id}`}
+                        title="Encaminhamento"
+                        rows={getExportRows()}
+                        open={exportOpen}
+                        onOpenChange={setExportOpen}
                     />
                 </div>
             }

@@ -121,7 +121,6 @@ const evaluationSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreEvaluation.fulfilled, (state, action: PayloadAction<iEvaluationForm>) => {
-                state.evaluations.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })

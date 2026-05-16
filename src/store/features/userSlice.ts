@@ -197,7 +197,6 @@ const userSlice = createSlice({
                 state.loading = true;
             })
             .addCase(restoreUser.fulfilled, (state, action: PayloadAction<iUserForm>) => {
-                state.users.push(action.payload);
                 state.error = null;
                 state.loading = false;
             })
