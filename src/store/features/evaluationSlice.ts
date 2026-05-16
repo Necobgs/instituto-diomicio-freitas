@@ -3,7 +3,7 @@ import evaluationService from "@/services/evaluationService";
 import { iEvaluationForm, iEvaluationState, iPaginationEvaluation, iParamsEvaluation } from "@/types/evaluation";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initEvaluations = createAsyncThunk('evaluation/fetch', async ({ page = 1, limit = 8, user, student, dateIni, dateEnd, enabled }: iParamsEvaluation = {})  => {
+export const initEvaluations = createAsyncThunk('evaluation/fetch', async ({ page = 1, limit = 20, user, student, dateIni, dateEnd, enabled }: iParamsEvaluation = {})  => {
     return await evaluationService.getEvaluations({page, limit, user, dateIni, dateEnd, student, enabled});
 });
 

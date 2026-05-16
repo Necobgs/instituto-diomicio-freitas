@@ -4,7 +4,7 @@ import { iJobForm, iPaginationJob, iParamsJob } from "@/types/job";
 
 const endpoint = 'job';
 
-const getJobs = async ({ page = 1, limit = 8, name, enabled }: iParamsJob = {}): Promise<iPaginationJob> => {
+const getJobs = async ({ page = 1, limit = 20, name, enabled }: iParamsJob = {}): Promise<iPaginationJob> => {
   
   const filter: string = buildFilterQuery([
     { key: 'name', value: name, operator: '$ilike' },

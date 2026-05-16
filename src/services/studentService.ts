@@ -4,7 +4,7 @@ import { iStudentForm, iPaginationStudent, iParamsStudent } from "@/types/studen
 
 const endpoint = 'student';
 
-const getStudents = async ({ page = 1, limit = 8, name, cpf, phone, responsibleName, responsiblePhone, useMedicine, dateBirthdayIni, dateBirthdayEnd, dateEntryIni, dateEntryEnd, enabled }: iParamsStudent = {}): Promise<iPaginationStudent> => {
+const getStudents = async ({ page = 1, limit = 20, name, cpf, phone, responsibleName, responsiblePhone, useMedicine, dateBirthdayIni, dateBirthdayEnd, dateEntryIni, dateEntryEnd, enabled }: iParamsStudent = {}): Promise<iPaginationStudent> => {
   
   const filter: string = buildFilterQuery([
     { key: 'name', value: name, operator: '$ilike' }, 

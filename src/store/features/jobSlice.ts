@@ -3,7 +3,7 @@ import jobService from "@/services/jobService";
 import { iJobForm, iJobState, iPaginationJob, iParamsJob } from "@/types/job";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initJobs = createAsyncThunk('job/fetch', async ({ page = 1, limit = 8, name, enabled }: iParamsJob = {})  => {
+export const initJobs = createAsyncThunk('job/fetch', async ({ page = 1, limit = 20, name, enabled }: iParamsJob = {})  => {
     return await jobService.getJobs({page, limit, name, enabled});
 });
 

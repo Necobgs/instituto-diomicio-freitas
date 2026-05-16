@@ -38,7 +38,7 @@ export default function EvaluationPage(){
 
     const [formData, setFormData] = useState(defaultFilterEvaluation);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
     const getExportRows = () => {
         const header = ["Aluno", "Professor", "Data da avaliação", "Nota entrevista com os pais", "Nota da avaliação", "Situação"];

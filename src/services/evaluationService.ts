@@ -5,7 +5,7 @@ import { iMonitoringForm } from "@/types/monitoring";
 
 const endpoint = 'evaluation';
 
-const getEvaluations = async ({ page = 1, limit = 8, user, student, dateIni, dateEnd, enabled }: iParamsEvaluation = {}): Promise<iPaginationEvaluation> => {
+const getEvaluations = async ({ page = 1, limit = 20, user, student, dateIni, dateEnd, enabled }: iParamsEvaluation = {}): Promise<iPaginationEvaluation> => {
   const filter: string = buildFilterQuery([
     { key: 'user_id', value: user?.id, operator: '$eq' }, 
     { key: 'student_id', value: student?.id, operator: '$eq' },

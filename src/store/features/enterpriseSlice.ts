@@ -3,7 +3,7 @@ import enterpriseService from "@/services/enterpriseService";
 import { iEnterpriseForm, iEnterpriseState, iPaginationEnterprise, iParamsEnterprise } from "@/types/enterprise";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initEnterprises = createAsyncThunk('enterprise/fetch', async ({ page = 1, limit = 8, name, cnpj, phone, enabled }: iParamsEnterprise = {})  => {
+export const initEnterprises = createAsyncThunk('enterprise/fetch', async ({ page = 1, limit = 20, name, cnpj, phone, enabled }: iParamsEnterprise = {})  => {
     return await enterpriseService.getEnterprises({page, limit, name, cnpj, phone, enabled});
 });
 

@@ -3,7 +3,7 @@ import permissionService from "@/services/permissionService";
 import { iPermissionForm, iPermissionState, iPaginationPermission, iParamsPermission } from "@/types/permission";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initPermissions = createAsyncThunk('permission/fetch', async ({ page = 1, limit = 8 }: iParamsPermission = {})  => {
+export const initPermissions = createAsyncThunk('permission/fetch', async ({ page = 1, limit = 20 }: iParamsPermission = {})  => {
     return await permissionService.getPermissions({page, limit });
 });
 

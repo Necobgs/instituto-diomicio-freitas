@@ -5,7 +5,7 @@ import { iPermissionForm } from "@/types/permission";
 import { iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iUserState, iPasswordChangeForm } from "@/types/user";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initUsers = createAsyncThunk('user/fetch', async ({ page = 1, limit = 8, username, cpf, email, enabled }: iParamsUser = {})  => {
+export const initUsers = createAsyncThunk('user/fetch', async ({ page = 1, limit = 20, username, cpf, email, enabled }: iParamsUser = {})  => {
     return await userService.getUsers({page, limit, username, cpf, email, enabled});
 });
 

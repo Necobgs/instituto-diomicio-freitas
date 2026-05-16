@@ -37,7 +37,7 @@ export default function StudentPage(){
     const [formData, setFormData] = useState(defaultFilterStudent);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
     const getExportRows = () => {
         const header = ["Nome", "CPF", "Data de nascimento", "Telefone", "Nome do responsável", "Telefone do responsável", "Data de entrada", "Usa medicamentos?", "Informações sobre medicamentos", "Situação"];

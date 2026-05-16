@@ -3,7 +3,7 @@ import studentService from "@/services/studentService";
 import { iStudentForm, iPaginationStudent, iParamsStudent, iStudentState } from "@/types/student";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initStudents = createAsyncThunk('student/fetch', async ({ page = 1, limit = 8, name, cpf, phone, responsibleName, responsiblePhone, useMedicine, dateBirthdayIni, dateBirthdayEnd, dateEntryIni, dateEntryEnd, enabled }: iParamsStudent = {})  => {
+export const initStudents = createAsyncThunk('student/fetch', async ({ page = 1, limit = 20, name, cpf, phone, responsibleName, responsiblePhone, useMedicine, dateBirthdayIni, dateBirthdayEnd, dateEntryIni, dateEntryEnd, enabled }: iParamsStudent = {})  => {
     return await studentService.getStudents({page, limit, name, cpf, phone, responsibleName, responsiblePhone, useMedicine, dateBirthdayIni, dateBirthdayEnd, dateEntryIni, dateEntryEnd, enabled});
 });
 

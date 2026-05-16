@@ -33,7 +33,7 @@ export default function JobPage() {
 
     const [formData, setFormData] = useState(defaultFilterJob);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
     const getExportRows = () => {
         const header = ["Nome", "Situação"];
@@ -134,7 +134,7 @@ export default function JobPage() {
                     />
 
                     <button className="flex items-center justify-center fixed bottom-5 right-22 max-[550px]:left-5 max-[550px]:right-auto text-white p-4 rounded-full shadow-lg bg-gray-400 hover:bg-gray-500 w-15 h-15 font-semibold text-lg cursor-pointer" onClick={() => {setExportOpen(true)}}><Download size={18}/></button>
-                    
+
                     {can(currentUser,"job","create") &&
                         <button
                             className="flex items-center justify-center fixed bottom-5 right-5 bg-red-400 text-white p-4 rounded-full shadow-lg hover:bg-red-500 w-15 h-15 font-semibold text-lg cursor-pointer"

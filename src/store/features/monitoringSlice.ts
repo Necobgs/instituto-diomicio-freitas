@@ -4,7 +4,7 @@ import monitoringService from "@/services/monitoringService";
 import { iMonitoringForm, iMonitoringState, iPaginationMonitoring, iParamsMonitoring } from "@/types/monitoring";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initMonitorings = createAsyncThunk('monitoring/fetch', async ({ page = 1, limit = 8, student, visitDateIni, visitDateEnd, enabled }: iParamsMonitoring = {})  => {
+export const initMonitorings = createAsyncThunk('monitoring/fetch', async ({ page = 1, limit = 20, student, visitDateIni, visitDateEnd, enabled }: iParamsMonitoring = {})  => {
     return await monitoringService.getMonitorings({page, limit, student, visitDateIni, visitDateEnd, enabled });
 });
 

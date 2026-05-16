@@ -4,7 +4,7 @@ import referralService from "@/services/referralService";
 import { iReferralForm, iReferralState, iPaginationReferral, iParamsReferral } from "@/types/referral";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initReferrals = createAsyncThunk('referral/fetch', async ({ page = 1, limit = 8, student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled }: iParamsReferral = {})  => {
+export const initReferrals = createAsyncThunk('referral/fetch', async ({ page = 1, limit = 20, student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled }: iParamsReferral = {})  => {
     return await referralService.getReferrals({ page, limit,  student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled});
 });
 

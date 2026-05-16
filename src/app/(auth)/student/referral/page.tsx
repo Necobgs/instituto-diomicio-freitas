@@ -40,7 +40,7 @@ export default function ReferralPage() {
 
     const [formData, setFormData] = useState(defaultFilterReferral);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
     const getExportRows = () => {
         const header = ["Aluno", "Empresa", "Cargo", "Data da admissão", "Provável data desligamento IEEDF", "Situação"];

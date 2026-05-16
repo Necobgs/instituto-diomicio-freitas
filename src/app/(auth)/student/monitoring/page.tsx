@@ -36,7 +36,7 @@ export default function MonitoringPage() {
 
   const [formData, setFormData] = useState(defaulFilterMonitoring);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 20;
 
   const getExportRows = () => {
       const header = ["Aluno", "Data da visita", "Observações", "Situação"];

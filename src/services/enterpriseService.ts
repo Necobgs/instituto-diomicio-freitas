@@ -4,7 +4,7 @@ import { iEnterpriseForm, iPaginationEnterprise, iParamsEnterprise } from "@/typ
 
 const endpoint = 'enterprise';
 
-const getEnterprises = async ({ page = 1, limit = 8, name, cnpj, phone, enabled }: iParamsEnterprise = {}): Promise<iPaginationEnterprise> => {
+const getEnterprises = async ({ page = 1, limit = 20, name, cnpj, phone, enabled }: iParamsEnterprise = {}): Promise<iPaginationEnterprise> => {
   
   const filter: string = buildFilterQuery([
     { key: 'name', value: name, operator: '$ilike' }, 

@@ -34,7 +34,7 @@ export default function UserPage(){
 
     const [currentPage, setCurrentPage] = useState(1);
     const [exportOpen, setExportOpen] = useState(false);
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
     const getExportRows = () => {
         const header = ["Nome", "Email", "CPF", "Situação"];

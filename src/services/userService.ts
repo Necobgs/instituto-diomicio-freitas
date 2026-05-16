@@ -6,7 +6,7 @@ import { iUserForm, iPaginationUser, iParamsUser, iLoginCredentials, iPasswordCh
 
 const endpoint = 'user';
 
-const getUsers = async ({ page = 1, limit = 8, username, cpf, email, enabled }: iParamsUser = {}): Promise<iPaginationUser> => {
+const getUsers = async ({ page = 1, limit = 20, username, cpf, email, enabled }: iParamsUser = {}): Promise<iPaginationUser> => {
   
   const filter: string = buildFilterQuery([
     { key: 'username', value: username, operator: '$ilike' }, 

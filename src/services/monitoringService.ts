@@ -4,7 +4,7 @@ import { iMonitoringForm, iPaginationMonitoring, iParamsMonitoring } from "@/typ
 
 const endpoint = 'monitoring';
 
-const getMonitorings = async ({ page = 1, limit = 8, student, visitDateIni, visitDateEnd, enabled }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
+const getMonitorings = async ({ page = 1, limit = 20, student, visitDateIni, visitDateEnd, enabled }: iParamsMonitoring = {}): Promise<iPaginationMonitoring> => {
   
   const filter: string = buildFilterQuery([
     { key: 'studentId', value: student?.id, operator: '$eq' }, 

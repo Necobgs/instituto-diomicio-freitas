@@ -35,7 +35,7 @@ export default function EnterprisePage() {
 
     const [formData, setFormData] = useState(defaultFilterEnterprise);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
     const getExportRows = () => {
         const header = ["Nome", "CNPJ", "Telefone", "Situação"];

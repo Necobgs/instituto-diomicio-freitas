@@ -4,7 +4,7 @@ import { iReferralForm, iPaginationReferral, iParamsReferral } from "@/types/ref
 
 const endpoint = 'referral';
 
-const getReferrals = async ({ page = 1, limit = 8, student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled }: iParamsReferral = {}): Promise<iPaginationReferral> => {
+const getReferrals = async ({ page = 1, limit = 20, student, enterprise, job, admissionDateIni, admissionDateEnd, terminationDateIeedfIni, terminationDateIeedfEnd, enabled }: iParamsReferral = {}): Promise<iPaginationReferral> => {
   
   const filter: string = buildFilterQuery([
     { key: 'studentId', value: student?.id, operator: '$eq' }, 
