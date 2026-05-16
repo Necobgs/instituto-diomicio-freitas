@@ -25,7 +25,7 @@ export const ExportModal = ({
                 <DialogHeader>
                     <DialogTitle className="text-left">Exportar registro(s)</DialogTitle>
                     <DialogDescription className="text-left">
-                        Escolha o formato para exportar os dados desta registro(s).
+                        Escolha o formato para exportar os dados deste(s) registro(s).
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3 pt-4">
