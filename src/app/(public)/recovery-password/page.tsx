@@ -78,10 +78,12 @@ export default function RecoveryPasswordPage() {
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
+            <AlertDialogTitle className="text-left">
               {isSuccess ? "Sucesso!" : "Erro"}
             </AlertDialogTitle>
-            <AlertDialogDescription>{dialogMessage}</AlertDialogDescription>
+            <AlertDialogDescription className="text-left">
+              {dialogMessage}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => setIsDialogOpen(false)}>
